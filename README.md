@@ -20,3 +20,5 @@ permet de mieux comprendre le contexte des données récoltées par rapport aux 
 capteurs traditionnels.
 
 test
+
+oui
