@@ -7,9 +7,8 @@ analyser, estimer ou prédire.
 Le projet “Crowdsensing” nous a été proposé en semestre 3 par M.Chbeir et M.Allani,
 ce n’est donc pas une reprise du projet de 1ère année. Ce projet est une petite partie d’un
 plus gros projet nommé OpenCEMS visant à apporter des solutions concrètes à la collecte de
-données massives dans un environnement connecté ou un réseau électrique en anticipation
-de l’arrivée de la 5G notamment grâce aux objets connectés et d’automatiser la prise de
-décision.
+données massives dans un environnement connecté en anticipation de l’arrivée de la 5G
+notamment grâce aux objets connectés et d’automatiser la prise de décision.
 
 Dans ce cadre, le projet Crowdsensing permettra de récolter les données d’une foule de
 capteurs présents dans les smartphones et/ou les montres connectées.
