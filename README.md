@@ -18,3 +18,5 @@ d’informations.
 De plus, la mobilité des humains aide à couvrir une plus grande zone et son intelligence
 permet de mieux comprendre le contexte des données récoltées par rapport aux réseaux de
 capteurs traditionnels.
+
+C'est un testeeeaaa
