@@ -1,4 +1,4 @@
-# crowdsensing
+# Crowdsensing
 Le Crowdsensing est une technique dans laquelle un grand groupe d'individus
 possédant des appareils mobiles capables de collecter des informations (tels que le GPS, la
 luminosité, la caméra...) partagent collectivement ces données pour mesurer, cartographier,
