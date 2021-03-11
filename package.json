@@ -13,7 +13,11 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
-    "react-native-web": "~0.13.12"
+    "react-native-gesture-handler": "~1.8.0",
+    "react-native-web": "^0.15.0",
+    "react-navigation": "^4.4.4",
+    "react-navigation-stack": "^2.10.4",
+    "watchman": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"
