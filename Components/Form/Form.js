@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-class FormList extends React.Component{
+class Form extends React.Component{
     render(){
         const form = this.props.navigation.state.params.form;
         return(
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FormList;
+export default Form;
