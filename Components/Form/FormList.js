@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, FlatList } from 'react-native'
-import forms from '../../Helpers/formData'
+import forms from '../../Helpers/FormData'
 import FormListItem from './FormListItem';
 
 class FormList extends React.Component{
