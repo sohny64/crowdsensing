@@ -19,7 +19,7 @@ De plus, la mobilité des humains aide à couvrir une plus grande zone et son in
 permet de mieux comprendre le contexte des données récoltées par rapport aux réseaux de
 capteurs traditionnels.
 
-C'est un testeeeaaa
-test
-
-oui
+yarn
+react-navigation
+react-native-gesture-handler
+react-navigation-start
