@@ -5,8 +5,6 @@ import FormList from '../Components/Form/FormList';
 import FormDescription from '../Components/Form/FormDescription';
 import Form from '../Components/Form/Form';
 import Location from '../Components/Location/Location'
-import { BorderlessButton } from 'react-native-gesture-handler';
-import { StyleSheet } from 'react-native'
 
 const TabNavigator = createMaterialTopTabNavigator(
     {
