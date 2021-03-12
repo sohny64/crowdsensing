@@ -17,12 +17,15 @@ class FormList extends React.Component{
                 renderItem={({item}) => <FormListItem form={item} displayFormDescription={this.displayFormDescription}/>}
             />
         );
-    };
+    }
+}
+
+FormList.navigationOptions={
+
 }
 
 const styles = StyleSheet.create({
     main_container: {
-        backgroundColor: '#97a0ad',
         width: '100%'
     }
 });

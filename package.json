@@ -14,9 +14,12 @@
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-reanimated": "~1.13.0",
+    "react-native-screens": "~2.15.2",
     "react-native-web": "^0.15.0",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
+    "react-navigation-tabs": "^2.11.0",
     "watchman": "^1.0.0"
   },
   "devDependencies": {
