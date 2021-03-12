@@ -19,7 +19,9 @@ De plus, la mobilité des humains aide à couvrir une plus grande zone et son in
 permet de mieux comprendre le contexte des données récoltées par rapport aux réseaux de
 capteurs traditionnels.
 
-yarn
-react-navigation
-react-native-gesture-handler
-react-navigation-start
+Modules à installer :
+    react-navigation
+    react-native-gesture-handler
+    react-navigation-start
+    react-native-screens
+    react-native-reanimated
