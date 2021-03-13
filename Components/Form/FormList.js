@@ -20,10 +20,6 @@ class FormList extends React.Component{
     }
 }
 
-FormList.navigationOptions={
-
-}
-
 const styles = StyleSheet.create({
     main_container: {
         width: '100%'
