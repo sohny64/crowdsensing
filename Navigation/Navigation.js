@@ -5,6 +5,7 @@ import FormList from '../Components/Form/FormList';
 import FormDescription from '../Components/Form/FormDescription';
 import Form from '../Components/Form/Form';
 import UserLocation from '../Components/Location/UserLocation'
+import LocationHistory from '../Components/Location/LocationHistory'
 
 const TabNavigator = createMaterialTopTabNavigator(
     {
@@ -20,7 +21,7 @@ const TabNavigator = createMaterialTopTabNavigator(
             headerShown: false,
         },
         tabBarOptions: {
-            style: {backgroundColor: '#ffffff', paddingTop: 50, borderBottomLeftRadius: 80},
+            style: {backgroundColor: '#ffffff', paddingTop: 50}, //borderBottomLeftRadius: 80
             labelStyle: { color: '#000000'},
             indicatorStyle: { backgroundColor: '#ababab'}
         }
@@ -38,6 +39,9 @@ const FormStackNavigator = createStackNavigator(
         },
         Form: {
             screen: Form
+        },
+        LocationHistory:{
+            screen: LocationHistory
         }
     }
 );
