@@ -4,7 +4,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import FormList from '../Components/Form/FormList';
 import FormDescription from '../Components/Form/FormDescription';
 import Form from '../Components/Form/Form';
-import Location from '../Components/Location/Location'
+import UserLocation from '../Components/Location/UserLocation'
 
 const TabNavigator = createMaterialTopTabNavigator(
     {
@@ -12,7 +12,7 @@ const TabNavigator = createMaterialTopTabNavigator(
             screen: FormList
         },
         Location: {
-            screen: Location
+            screen: UserLocation
         }
     },
     {
