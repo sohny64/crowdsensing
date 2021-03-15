@@ -22,6 +22,5 @@ capteurs traditionnels.
 Modules à installer :
     react-navigation
     react-native-gesture-handler
-    react-navigation-start
     react-native-screens
     react-native-reanimated
