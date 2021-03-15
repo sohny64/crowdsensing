@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
+import * as Permissions from 'expo-permissions';
 
 
 class Sensors extends React.Component{
@@ -12,28 +13,87 @@ class Sensors extends React.Component{
         this.state = {
             smartphoneData: smartphoneSensorData,
             watchData: watchSensorData,
-            selectedSensors:[]
+            selectedSensors:[],
+            permissionsNeeded:[],
         }
     }
 
 
     onCheckedSmartphone(id){
         const data=this.state.smartphoneData
-        const index=data.findIndex(x => x.id === id);
+        const index=data.findIndex(x => x.id === id)
         data[index].checked = !data[index].checked
+        if (data[index].checked==true){
+            this.state.selectedSensors.push(data[index].name)
+            if(!this.state.permissionsNeeded.includes(data[index].permissions)){
+                this.state.permissionsNeeded.push(data[index].permissions)
+            }
+        }
+        else{
+            this.state.selectedSensors.splice(data[index].name, 1)
+            this.state.permissionsNeeded.splice(data[index].permissions, 1)
+            
+        }
         this.setState(data)
     }
 
     onCheckedWatch(id){
         const data=this.state.watchData
-        const index=data.findIndex(x => x.id === id);
+        const index=data.findIndex(x => x.id === id)
         data[index].checked = !data[index].checked
+        if (data[index].checked==true){
+            this.state.selectedSensors.push(data[index].name)
+            if(!this.state.permissionsNeeded.includes(data[index].permissions)){
+                this.state.permissionsNeeded.push(data[index].permissions)
+            }
+        }
+        else{
+            this.state.selectedSensors.splice(data[index].name, 1)
+            this.state.permissionsNeeded.splice(data[index].permissions, 1)
+        }
         this.setState(data)
+
     }
 
-
     getSelectedSensors(){
+        console.log(this.state.selectedSensors)
+    }
 
+    getPermissionsNeeded(){
+        console.log(this.state.permissionsNeeded)
+    }
+
+    _displayRecord = (selectedSensors) => {
+        this.checkSensors()
+            this.props.navigation.navigate("Record", { selectedSensors: selectedSensors });
+    }
+
+    checkSensors = async () => {
+        var nbPermissions = this.state.permissionsNeeded.length 
+        for (let i=0; i< nbPermissions; i++){ 
+            var perm = this.state.permissionsNeeded[i]
+            switch(perm){
+                case 'MOTION':
+                    const {status} = await Permissions.askAsync(Permissions.MOTION);
+                     if(status != 'granted'){
+                        console.log('PERMISSION NOT GRANTED')
+                     }
+                case 'SYSTEM_BRIGHTNESS':
+                    const {status2} = await Permissions.askAsync(Permissions.SYSTEM_BRIGHTNESS);
+                     if(status2 != 'granted'){
+                        console.log('PERMISSION NOT GRANTED')
+                     }
+                case 'AUDIO_RECORDING':
+                    const {status3} = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+                    if(status3 != 'granted'){
+                       console.log('PERMISSION NOT GRANTED')
+                    }
+
+            }
+            
+            
+               
+        }
     }
 
     renderSmartphoneSensors(){
@@ -77,9 +137,19 @@ class Sensors extends React.Component{
                     <Text style={styles.subhead}>Watch Sensors :</Text>
                     {this.renderWatchSensors()}
                 </View>
-                <TouchableOpacity style={styles.button} >
-                        <Text style={styles.text_button}>START</Text>
+                <View style={styles.button_container}>
+                <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
+                        <Text style={styles.text_button}>Sart recording</Text>
                 </TouchableOpacity>
+                <TouchableOpacity 
+                        style={styles.button_history}
+                    >
+                        <Image
+                            source={require('../../Images/book.png')}
+                            style={styles.icon}
+                        />
+                    </TouchableOpacity>
+                    </View>
             </View>
             
         );
@@ -100,8 +170,15 @@ const styles = StyleSheet.create({
         description_container: {
             backgroundColor: '#441d59',
             borderRadius: 20,
-            margin: 20,
+            margin: 10,
             padding: 10
+        },
+        button_container:{
+            flexDirection: "row",
+            bottom: 20,
+            right: 20,
+            position: 'absolute',
+            marginTop: 'auto',
         },
         checkbox: {
             marginLeft: 5,
@@ -117,19 +194,31 @@ const styles = StyleSheet.create({
             color: '#ffffff'
         },
         button: {
-            padding: 10,
-            backgroundColor: '#862db3',
-            borderRadius: 20,
-            width: '70%',
-            alignItems: 'center',
-            alignSelf: 'center',
-            marginTop: 'auto',
-            marginBottom: 40
+        padding: 10,
+        backgroundColor: '#862db3',
+        borderRadius: 20,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '60%',
+        marginLeft:80
         },
         text_button:{
         color: '#ffffff',
         fontSize: 20
     },
+    button_history: {
+        marginLeft: 20,
+        padding: 10,
+        backgroundColor: '#ffffff',
+        borderRadius: 100,
+    },
+
+    icon: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
+        alignItems: 'center',
+    }
 });
 
 
