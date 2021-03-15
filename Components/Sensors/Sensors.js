@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
-import * as Permissions from 'expo-permissions';
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 
 
 class Sensors extends React.Component{
@@ -63,37 +63,11 @@ class Sensors extends React.Component{
         console.log(this.state.permissionsNeeded)
     }
 
-    _displayRecord = (selectedSensors) => {
-        this.checkSensors()
-            this.props.navigation.navigate("Record", { selectedSensors: selectedSensors });
-    }
-
-    checkSensors = async () => {
-        var nbPermissions = this.state.permissionsNeeded.length 
-        for (let i=0; i< nbPermissions; i++){ 
-            var perm = this.state.permissionsNeeded[i]
-            switch(perm){
-                case 'MOTION':
-                    const {status} = await Permissions.askAsync(Permissions.MOTION);
-                     if(status != 'granted'){
-                        console.log('PERMISSION NOT GRANTED')
-                     }
-                case 'SYSTEM_BRIGHTNESS':
-                    const {status2} = await Permissions.askAsync(Permissions.SYSTEM_BRIGHTNESS);
-                     if(status2 != 'granted'){
-                        console.log('PERMISSION NOT GRANTED')
-                     }
-                case 'AUDIO_RECORDING':
-                    const {status3} = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-                    if(status3 != 'granted'){
-                       console.log('PERMISSION NOT GRANTED')
-                    }
-
-            }
-            
-            
-               
-        }
+    _displayRecord = () => {
+            this.props.navigation.navigate("Record", { 
+                                            selectedSensors: this.state.selectedSensors,
+                                            permissionsNeeded: this.state.permissionsNeeded 
+                                          });
     }
 
     renderSmartphoneSensors(){
@@ -194,17 +168,17 @@ const styles = StyleSheet.create({
             color: '#ffffff'
         },
         button: {
-        padding: 10,
-        backgroundColor: '#862db3',
-        borderRadius: 20,
-        alignItems: 'center',
-        alignSelf: 'center',
-        width: '60%',
-        marginLeft:80
+            padding: 10,
+            backgroundColor: '#862db3',
+            borderRadius: 20,
+            alignItems: 'center',
+            alignSelf: 'center',
+            width: '60%',
+            marginLeft:80
         },
         text_button:{
-        color: '#ffffff',
-        fontSize: 20
+            color: '#ffffff',
+            fontSize: 20
     },
     button_history: {
         marginLeft: 20,
