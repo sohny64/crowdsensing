@@ -6,6 +6,8 @@ import FormDescription from '../Components/Form/FormDescription';
 import Form from '../Components/Form/Form';
 import UserLocation from '../Components/Location/UserLocation'
 import LocationHistory from '../Components/Location/LocationHistory'
+import Sensors from '../Components/Sensors/Sensors'
+
 
 const TabNavigator = createMaterialTopTabNavigator(
     {
@@ -14,6 +16,9 @@ const TabNavigator = createMaterialTopTabNavigator(
         },
         Location: {
             screen: UserLocation
+        },
+        Sensors: {
+            screen: Sensors
         }
     },
     {
