@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
 import MapView from 'react-native-maps';
+import Marker from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,8 +15,8 @@ class UserLocation extends React.Component{
             region: {
                 latitude: 43.47784863069389,
                 longitude: -1.5082811718614655,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             },
             currentLocation: {},
             errorMessage: '',
@@ -39,7 +40,9 @@ class UserLocation extends React.Component{
                 latitude: userLocation.coords.latitude,
                 longitude: userLocation.coords.longitude,
                 latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                longitudeDelta: 0.0421,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             }
         })
     }
@@ -69,20 +72,46 @@ class UserLocation extends React.Component{
         }
     }
 
+    returnData(latitude, longitude) {
+        this.setState({
+            region:{
+                latitude: parseInt(latitude),
+                longitude: parseInt(longitude),
+            }
+        });
+    }
+
+    _createMarker(){
+        return(
+            <Text>test</Text>
+        )
+    }
+
     _displayHistory = () => {
-        this.props.navigation.navigate("LocationHistory");
+        this.props.navigation.navigate("LocationHistory",{returnData: this.returnData.bind(this)});
     }
     
     render(){
         return(
             <View style={styles.main_container}>
-                <MapView 
+                <Text>{this._createMarker()}</Text>
+                <MapView
                     style={styles.map} 
                     region={this.state.region}
                     showsUserLocation={true}
                     followsUserLocation={true}
                     showsCompass={true}
-                />
+                >
+                    <MapView.Marker
+                        coordinate={{
+                            latitude: 43.4925816087616, 
+                            longitude: -1.4744433004308706,
+                        }}
+                            image={require('../../Images/pin.png')}
+                            style={styles.icon}
+                    />
+                </MapView>
+                
                 <View style={styles.button_container}>
                     
                     <TouchableOpacity 
@@ -152,6 +181,10 @@ const styles = StyleSheet.create({
         height: 30,
         resizeMode: 'contain',
         alignItems: 'center',
+    },
+
+    pin:{
+
     }
 });
 
