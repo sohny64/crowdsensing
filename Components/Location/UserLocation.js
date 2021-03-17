@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image} from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from 'moment';
 
 class UserLocation extends React.Component{
 
@@ -18,17 +17,10 @@ class UserLocation extends React.Component{
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
-            currentLocation: {
-                date: '',
-                coords: {}
-            },
+            currentLocation: {},
             errorMessage: '',
             msg: ''
         }
-    }
-
-    componentDidMount(){
-        this._getLocation();
     }
 
     _getLocation = async () => {
@@ -40,13 +32,9 @@ class UserLocation extends React.Component{
             })
         }
         const userLocation = await Location.getCurrentPositionAsync();
-        let currentDate = moment().format();
 
         this.setState({
-            currentLocation: {
-                date: currentDate,
-                coords: userLocation
-            },
+            currentLocation: userLocation,
             region: {
                 latitude: userLocation.coords.latitude,
                 longitude: userLocation.coords.longitude,
@@ -58,9 +46,11 @@ class UserLocation extends React.Component{
 
     _storeData = async () => {
         try {
-
-            this._getLocation()
-            await AsyncStorage.setItem(this.state.currentLocation.date, JSON.stringify(this.state.currentLocation.coords))
+            await this._getLocation();
+            let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
+            let value = JSON.stringify(this.state.currentLocation);
+            await AsyncStorage.setItem(key, value);
+            ToastAndroid.show("Enregistré !",ToastAndroid.SHORT);
         } catch (e) {
           alert(e)
         }
@@ -79,14 +69,13 @@ class UserLocation extends React.Component{
         }
     }
 
-    _displayForm = () => {
+    _displayHistory = () => {
         this.props.navigation.navigate("LocationHistory");
     }
     
     render(){
         return(
             <View style={styles.main_container}>
-                <Text>{this.state.msg}</Text>
                 <MapView 
                     style={styles.map} 
                     region={this.state.region}
@@ -105,8 +94,7 @@ class UserLocation extends React.Component{
 
                     <TouchableOpacity 
                         style={styles.button_history}
-                        //onPress={() => this._getData()}
-                        onPress={() => this._displayForm()}
+                        onPress={() => this._displayHistory()}
                     >
                         <Image
                             source={require('../../Images/book.png')}
