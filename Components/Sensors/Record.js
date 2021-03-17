@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, TouchableHighlight} from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform} from 'react-native';
 import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
+import { Pedometer } from 'expo-sensors';
+import { relativeTimeRounding } from 'moment';
 
 
 
@@ -13,10 +15,15 @@ class Record extends React.Component{
             stopwatchStart: false,
             totalDuration: 10000,
             stopwatchReset: false,
+            isPedometerAvailable: 'checking',
+            pastStepCount: 0,
+            currentStepCount: 0,
         }
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     }
+
+    /* STOP WATCH */
     toggleStopwatch() {
         this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
     }
@@ -31,10 +38,11 @@ class Record extends React.Component{
             this.resetStopwatch()
         }
     }
+    /* ------------------ */
 
-
+    /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
     componentDidMount(){
-        /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
+    
         const smartphoneSensors = this.props.navigation.state.params.selectedSensors
         let Temps = smartphoneSensors
         let FormatData=[]
@@ -47,14 +55,50 @@ class Record extends React.Component{
             )
         }
         this.setState({selected:FormatData})
+
     }
 
+    componentWillUnmount() {
+        this._unsubscribe();
+      }
+
+    /* ------------------ */
+
+    /* SENSOR Barometer*/ 
+
+    _subscribe = () => {
+        this._subscription = Pedometer.watchStepCount(result => {
+          this.setState({
+            currentStepCount: result.steps,
+          });
+        });
+        Pedometer.isAvailableAsync().then(
+            result => {
+              this.setState({
+                isPedometerAvailable: String(result),
+              });
+            },
+            error => {
+              this.setState({
+                isPedometerAvailable: 'Could not get isPedometerAvailable: ' + error,
+              });
+            }
+          );
+        };
+
+        _unsubscribe = () => {
+            this._subscription && this._subscription.remove();
+            this._subscription = null;
+          };
 
 
     renderSmartphoneSensorList(){
         return this.state.selected.map((item, key) => {
             return (
-                <Text style={styles.text}>{item.key}</Text>
+                <View>
+                    <Text style={styles.text}>{item.key} : {this.state.isPedometerAvailable}</Text>
+                    <Text style={styles.text}> Steps : {this.state.currentStepCount}</Text>
+                </View>
             )
           })
     }
@@ -80,7 +124,7 @@ class Record extends React.Component{
                     {this.renderSmartphoneSensorList()}
                 </View>
                 {this.renderStopWatch()}
-                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete()}}>
+                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete(); this._subscribe();}}>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
@@ -88,7 +132,9 @@ class Record extends React.Component{
     };
 }
 
+    /* ------------------ */
 
+     /* CSS */
 
 const options = {
     text: {
@@ -168,6 +214,7 @@ const styles = StyleSheet.create({
     },
 });
 
+/* ------------------ */
 
 export default Record;
 

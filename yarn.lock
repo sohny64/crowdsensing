@@ -3193,12 +3193,11 @@ expo-secure-store@~9.3.0:
   resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-9.3.0.tgz#b716d5d115cc50a34037d1afef84fe4b8ea0745c"
   integrity sha512-dNhKcoUUn+1kmEfFVxSU7h+YsqODqlExZQJcQgxgeiuCeeDvJWkE10t3jjrO6aNfrdM5i/X2l3oh401EDslWsQ==
 
-expo-sensors@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/expo-sensors/-/expo-sensors-10.0.0.tgz#4a323bef50866eec916cb87529a77af8ab96980e"
-  integrity sha512-DvsgGh201RUgRJykUHRcMUWjea2s5jdW7ycB0nC1JdKFK74KQQ6YJngMwSqegVwwKs4pysjf/4QwUa/Zwga14g==
+expo-sensors@~9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/expo-sensors/-/expo-sensors-9.2.0.tgz#4b0c0f85236c874eb99646114e05bb1bd2172058"
+  integrity sha512-HKRFHev1ZclEbeZKdgbTCSpTu8N9WT8Asw3jckno6cCENjV1P7lSrbBx0HCW6q4cO/DcZ0QGvOjQ/LNNE4bCDQ==
   dependencies:
-    "@expo/config-plugins" "~1.0.13"
     invariant "^2.2.4"
 
 expo-sqlite@~8.5.0:
@@ -5523,6 +5522,13 @@ react-native-size-matters@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
+
+react-native-stopwatch-timer@0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/react-native-stopwatch-timer/-/react-native-stopwatch-timer-0.0.21.tgz#52c39f603e36c538bed3466212b1bfb350ed452f"
+  integrity sha512-qFFsD85NkBT1nxo32HMGq3XAtQyMC09p9ZDIEuOED2BOxgs0UpWg/FSTA0MmEoIKMyXUwSE5VxEzBaGP3z1HFw==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-tab-view@^2.15.2:
   version "2.16.0"

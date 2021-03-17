@@ -40,6 +40,13 @@ export default data = [
         name:"Brightness",
         permissions: "SYSTEM_BRIGHTNESS",
         checked: false
+    },
+    {
+        id:7,
+        device: "smartphone",
+        name:"Pedometer",
+        permissions: "MOTION",
+        checked: false
     }
  
     
