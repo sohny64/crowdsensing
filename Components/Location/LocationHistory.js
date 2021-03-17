@@ -62,6 +62,11 @@ class LocationHistory extends React.Component{
         return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
     }
 
+    _returnToMapWithLocation = (latitude, longitude) => {
+        this.props.navigation.state.params.returnData('43.4925816087616', '-1.4744433004308706');
+        this.props.navigation.goBack(null);
+    }
+
     render(){
         return(
             <View style={styles.main_container}>
@@ -69,13 +74,23 @@ class LocationHistory extends React.Component{
                     data={this.state.data}
                     keyExtractor={(item) => item.timestamp.toString()}
                     renderItem={(location =>
-                        <TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
+                                                                         location.item.coords.longitude)}>
+
                             <View style={styles.description_container}>
                                 <Text style={styles.subhead}>
                                     Date recorded
                                 </Text>
                                 <Text style={styles.text}>
                                     {this._getDate(location.item.timestamp)}
+                                </Text>
+                                <Text style={styles.subhead}>
+                                    GPS location
+                                </Text>
+                                <Text style={styles.text}>
+                                    Latitude: {location.item.coords.latitude}{"\n"}
+                                    Longitude: {location.item.coords.longitude}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -93,7 +108,8 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: '#ffffff'
+        color: '#ffffff',
+        marginBottom: 5
     },
 
     description_container: {
@@ -106,7 +122,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
-        marginBottom: 5
     },
 });
 
