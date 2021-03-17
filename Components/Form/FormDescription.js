@@ -7,6 +7,14 @@ class FormDescription extends React.Component{
         this.props.navigation.navigate("Form", { form: form});
     }
 
+    displaySensorsForm(form){
+        return(
+            form.sensors.map((sensor) => {
+                return(<Text style={styles.text} key={sensor.toString()}> -{sensor}</Text>);
+            })
+        );
+    }
+
     render(){
         const form = this.props.navigation.state.params.form;
         return(
@@ -25,10 +33,7 @@ class FormDescription extends React.Component{
                 <View style={styles.sensors_container}>
                     <Text style={styles.subhead}>Sensor used</Text>
                     <View>
-                        {//To display all sensors in the array
-                         form.sensors.map((sensor) => {
-                            return(<Text style={styles.text} key={sensor.toString()}> -{sensor}</Text>)
-                        })}
+                        {this.displaySensorsForm(form)}
                     </View>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={() => this.displayForm(form)}>
@@ -96,7 +101,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 'auto',
-        marginBottom: 10
+        marginBottom: 30
     }
 });
 
