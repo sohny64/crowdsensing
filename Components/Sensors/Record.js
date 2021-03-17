@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, TouchableHighlight  } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, TouchableHighlight} from 'react-native';
 import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 
 
@@ -10,26 +10,13 @@ class Record extends React.Component{
         super(props);
         this.state = {
             selected: [],
-            timerStart: false,
             stopwatchStart: false,
             totalDuration: 10000,
-            timerReset: false,
             stopwatchReset: false,
         }
-    this.toggleTimer = this.toggleTimer.bind(this);
-    this.resetTimer = this.resetTimer.bind(this);
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     }
-    
-    toggleTimer() {
-        this.setState({timerStart: !this.state.timerStart, timerReset: false});
-    }
-    
-    resetTimer() {
-        this.setState({timerStart: false, timerReset: true});
-    }
-    
     toggleStopwatch() {
         this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
     }
@@ -37,6 +24,14 @@ class Record extends React.Component{
     resetStopwatch() {
         this.setState({stopwatchStart: false, stopwatchReset: true});
     }
+
+    handleTimerComplete(){
+        if (this.state.stopwatchStart == true){
+            alert("Lancer la fonction pour enregistrer")
+            this.resetStopwatch()
+        }
+    }
+
 
     componentDidMount(){
         /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -64,40 +59,38 @@ class Record extends React.Component{
           })
     }
 
-    renderTimer() {
+
+
+    renderStopWatch() {
         return (
-          <View style={styles.timer}>
-            <Timer totalDuration={this.state.totalDuration} msecs
-                start={this.state.timerStart}
-                reset={this.state.timerReset}
+            <View style={styles.timer}>
+            <Stopwatch laps msecs start={this.state.stopwatchStart}
+                reset={this.state.stopwatchReset}
                 options={options}
-                handleFinish={handleTimerComplete}
                 getTime={this.getFormattedTime} />
-        </View>)
+            </View>
+            )
     }
 
     render(){
-        
         return(
             <View style={styles.main_container}>
                  <View style={styles.description_container}>
                     <Text style={styles.subhead}>Sensors selected :</Text>
                     {this.renderSmartphoneSensorList()}
                 </View>
-                {this.renderTimer()}
-                <TouchableOpacity style={styles.button} onPress={this.toggleTimer}>
-                        <Text style={styles.text_button}>{!this.state.timerStart ? "Start" : "Stop"}</Text>
+                {this.renderStopWatch()}
+                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete()}}>
+                        <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
         );
     };
 }
 
-const handleTimerComplete = () => alert("custom completion function");
-const options = {
-    container: {
 
-    },
+
+const options = {
     text: {
       fontSize: 30,
       color: '#FFF',

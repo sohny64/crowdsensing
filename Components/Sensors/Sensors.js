@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
@@ -36,7 +36,7 @@ class Sensors extends React.Component{
         }
         this.setState(data)
     }
-
+    /*
     onCheckedWatch(id){
         const data=this.state.watchData
         const index=data.findIndex(x => x.id === id)
@@ -54,7 +54,7 @@ class Sensors extends React.Component{
         this.setState(data)
 
     }
-
+    */
     getSelectedSensors(){
         console.log(this.state.selectedSensors)
     }
@@ -83,7 +83,7 @@ class Sensors extends React.Component{
                 />
             )
     }
-
+    /*
     renderWatchSensors(){
         return(
             <FlatList
@@ -96,21 +96,24 @@ class Sensors extends React.Component{
                 />}
             />
         )
-}
+    }
 
+                   <View style={styles.description_container}>
+                    <Text style={styles.subhead}>Watch Sensors :</Text>
+                    {this.renderWatchSensors()}
+                </View>
+*/
 
 
     render(){
         return(
             <View style={styles.main_container}>
+   
                 <View style={styles.description_container}>
                     <Text style={styles.subhead}>Phone Sensors :</Text>
                     {this.renderSmartphoneSensors()}
                 </View>
-                <View style={styles.description_container}>
-                    <Text style={styles.subhead}>Watch Sensors :</Text>
-                    {this.renderWatchSensors()}
-                </View>
+          
                 <View style={styles.button_container}>
                 <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
                         <Text style={styles.text_button}>Sart recording</Text>
@@ -124,6 +127,7 @@ class Sensors extends React.Component{
                         />
                     </TouchableOpacity>
                     </View>
+                
             </View>
             
         );
