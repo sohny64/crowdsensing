@@ -20,7 +20,9 @@ class UserLocation extends React.Component{
             },
             currentLocation: {},
             errorMessage: '',
-            msg: ''
+            msg: '',
+            myArr: [],
+            index: 0
         }
     }
 
@@ -87,14 +89,25 @@ class UserLocation extends React.Component{
         )
     }
 
+    _onPress(){
+        let temp = "<Text>aa-</Text>"
+        this.state.myArr.push(temp)
+        this.setState({
+            myArr: this.state.myArr
+        })
+    }
+
     _displayHistory = () => {
         this.props.navigation.navigate("LocationHistory",{returnData: this.returnData.bind(this)});
     }
     
     render(){
+        let Arr = this.state.myArr.map((a, i) => {
+            return <View key={i} style={{ height:40, borderBottomWidth:2, borderBottomColor: '#ededed' }}><Text>{ a }</Text></View>                            
+        })   
         return(
             <View style={styles.main_container}>
-                <Text>{this._createMarker()}</Text>
+                {Arr}
                 <MapView
                     style={styles.map} 
                     region={this.state.region}
@@ -108,7 +121,6 @@ class UserLocation extends React.Component{
                             longitude: -1.4744433004308706,
                         }}
                             image={require('../../Images/pin.png')}
-                            style={styles.icon}
                     />
                 </MapView>
                 
@@ -123,7 +135,7 @@ class UserLocation extends React.Component{
 
                     <TouchableOpacity 
                         style={styles.button_history}
-                        onPress={() => this._displayHistory()}
+                        onPress={() => this._onPress()}
                     >
                         <Image
                             source={require('../../Images/book.png')}
