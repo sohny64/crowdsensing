@@ -1117,7 +1117,7 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@expo/config-plugins@1.0.21", "@expo/config-plugins@~1.0.13":
+"@expo/config-plugins@1.0.21":
   version "1.0.21"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-1.0.21.tgz#5a6f5c818dd7bccc2f3e381cbf8b0657c38bb302"
   integrity sha512-sMTF0/lx52ovJPz9iH5l0aKRpPFFtYoAQ+38AYhXI890Sswr1UU4Pq3IA5RMdvtOTkTzNREr21WvEHd7X8D1dA==
@@ -3120,12 +3120,10 @@ expo-asset@~8.2.1:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
-expo-brightness@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/expo-brightness/-/expo-brightness-9.0.0.tgz#3ecb5b86e355c9f1eda25c441dd523a3165b8d0d"
-  integrity sha512-M3ei3uP1r7DII+Pn/SPeSpMyfdUv1fTHRAI+HpUlMv66kpOhwTfo4TfwHHJ5mrsEdXA3iGDUOJoqePmlyGU3mA==
-  dependencies:
-    "@expo/config-plugins" "~1.0.13"
+expo-brightness@~8.4.0:
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/expo-brightness/-/expo-brightness-8.4.0.tgz#6ace4d69abf71614a0a4037b8613c37c5402467e"
+  integrity sha512-RjV1E0mU8urX1v2Y/z2NFkTVOh3NyEy8LxTNJtRlwaX102DDcrpJBSZLlhSNxd1cZUsl07TpvLYiIEzjraSzjw==
 
 expo-constants@~9.3.3:
   version "9.3.5"
