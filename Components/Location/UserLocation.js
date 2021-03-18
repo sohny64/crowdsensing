@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
 import MapView from 'react-native-maps';
+import Marker from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,12 +15,14 @@ class UserLocation extends React.Component{
             region: {
                 latitude: 43.47784863069389,
                 longitude: -1.5082811718614655,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             },
             currentLocation: {},
             errorMessage: '',
-            msg: ''
+            msg: '',
+            myArr: [],
+            index: 0
         }
     }
 
@@ -39,7 +42,9 @@ class UserLocation extends React.Component{
                 latitude: userLocation.coords.latitude,
                 longitude: userLocation.coords.longitude,
                 latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                longitudeDelta: 0.0421,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             }
         })
     }
@@ -69,20 +74,56 @@ class UserLocation extends React.Component{
         }
     }
 
+    returnData(latitude, longitude) {
+        this.setState({
+            region:{
+                latitude: parseInt(latitude),
+                longitude: parseInt(longitude),
+            }
+        });
+    }
+
+    _createMarker(){
+        return(
+            <Text>test</Text>
+        )
+    }
+
+    _onPress(){
+        let temp = "<Text>aa-</Text>"
+        this.state.myArr.push(temp)
+        this.setState({
+            myArr: this.state.myArr
+        })
+    }
+
     _displayHistory = () => {
-        this.props.navigation.navigate("LocationHistory");
+        this.props.navigation.navigate("LocationHistory",{returnData: this.returnData.bind(this)});
     }
     
     render(){
+        let Arr = this.state.myArr.map((a, i) => {
+            return <View key={i} style={{ height:40, borderBottomWidth:2, borderBottomColor: '#ededed' }}><Text>{ a }</Text></View>                            
+        })   
         return(
             <View style={styles.main_container}>
-                <MapView 
+                {Arr}
+                <MapView
                     style={styles.map} 
                     region={this.state.region}
                     showsUserLocation={true}
                     followsUserLocation={true}
                     showsCompass={true}
-                />
+                >
+                    <MapView.Marker
+                        coordinate={{
+                            latitude: 43.4925816087616, 
+                            longitude: -1.4744433004308706,
+                        }}
+                            image={require('../../Images/pin.png')}
+                    />
+                </MapView>
+                
                 <View style={styles.button_container}>
                     
                     <TouchableOpacity 
@@ -94,7 +135,7 @@ class UserLocation extends React.Component{
 
                     <TouchableOpacity 
                         style={styles.button_history}
-                        onPress={() => this._displayHistory()}
+                        onPress={() => this._onPress()}
                     >
                         <Image
                             source={require('../../Images/book.png')}
@@ -152,6 +193,10 @@ const styles = StyleSheet.create({
         height: 30,
         resizeMode: 'contain',
         alignItems: 'center',
+    },
+
+    pin:{
+
     }
 });
 
