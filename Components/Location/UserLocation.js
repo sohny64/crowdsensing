@@ -103,10 +103,10 @@ class UserLocation extends React.Component{
                     region={this.state.region}
                     showsUserLocation={true}
                     followsUserLocation={true}
-                    showsCompass={true}
                 >
-                {this.state.mapMarkers.map(marker =>
+                {this.state.mapMarkers.map((marker,i) =>
                     <MapView.Marker
+                        key = {i}
                         coordinate={{
                             latitude: marker.latitude, 
                             longitude: marker.longitude,
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     map: {
         width: (Dimensions.get('window').width),
         height: (Dimensions.get('window').height),
+        marginBottom: 0
       },
     
     text_button:{
