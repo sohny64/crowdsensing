@@ -32,6 +32,9 @@ class LocationHistory extends React.Component{
                 return;
             }
             
+            //Trie du plus récent au moins récent
+            validKeys.sort();
+            validKeys.reverse();
         } catch(e) {
             alert(e)
         }
