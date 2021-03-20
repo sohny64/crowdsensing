@@ -10,10 +10,7 @@ class LocationHistory extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            data: {
-                "mocked": false,
-                "timestamp": 1615841063167
-            }
+            data: {}
         })
     }
 
@@ -26,10 +23,15 @@ class LocationHistory extends React.Component{
             keys = await AsyncStorage.getAllKeys()
             keys.forEach(element => {
                 //Check key start by location and is defined
-                if(!element.includes("undefined") || !regex_keyValidity.test(element)){
+                if(!element.includes("undefined") && regex_keyValidity.test(element)){
                     validKeys.push(element)
                 }
             });
+
+            if(validKeys.length <= 0){
+                return;
+            }
+            
         } catch(e) {
             alert(e)
         }
@@ -62,8 +64,10 @@ class LocationHistory extends React.Component{
         return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
     }
 
-    _returnToMapWithLocation = (latitude, longitude) => {
-        this.props.navigation.state.params.returnData('43.4925816087616', '-1.4744433004308706');
+    _returnToMapWithLocation = (latitude, longitude, timestamp) => {
+        this.props.navigation.state.params.returnData(latitude, 
+                                                      longitude,
+                                                      timestamp);
         this.props.navigation.goBack(null);
     }
 
@@ -76,7 +80,8 @@ class LocationHistory extends React.Component{
                     renderItem={(location =>
                         <TouchableOpacity 
                             onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
-                                                                         location.item.coords.longitude)}>
+                                                                         location.item.coords.longitude,
+                                                                         location.item.timestamp)}>
 
                             <View style={styles.description_container}>
                                 <Text style={styles.subhead}>
