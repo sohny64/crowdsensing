@@ -1,21 +1,44 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { ScrollView, State, TextInput } from 'react-native-gesture-handler';
 
 class Form extends React.Component{
+    constructor(state){
+        super(state)
+        this.state = {
+            answers: {}
+        }
+    }
+
+    getAnswer(answer, name){
+        const answers = this.state.answers;
+        answers[name] = answer;
+        this.setState({ answers });
+    }
+
+    submitForm(){
+        console.log(JSON.stringify(this.state.answers));
+    }
+
     displayQuestionsForm(form){
         var input;
         return(
             form.questions.map((question, index) => {
-                //Get data input type
+                //Get input type
                 if (question.type == "text") {
-                    input = <TextInput style={styles.text_input}/>
+                    input = <TextInput 
+                                style={styles.text_input} 
+                                multiline
+                                onChangeText={(answer) => this.getAnswer(answer, question.name)}
+                            />
                 }
                 //Display data title and his input
-                return(<View style={styles.container} key={index}>
-                    <Text style={styles.title_question}> {question.title} </Text>
-                    {input}
-                </View>);
+                return(
+                    <View style={styles.container} key={index}>
+                        <Text style={styles.title_question}> {question.title} </Text>
+                        {input}
+                    </View>
+                );
             })
         );
     }
@@ -33,7 +56,7 @@ class Form extends React.Component{
                         <Text style={styles.text}>{form.description}</Text>
                     </View>
                     {this.displayQuestionsForm(form)}
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.submitForm()}>
                         <Text style={styles.text_button}>Submit</Text>
                     </TouchableOpacity>
                 </ScrollView>
@@ -83,7 +106,7 @@ const styles = StyleSheet.create({
     text_input: {
         color: '#ffffff',
         backgroundColor: '#70388f',
-        borderRadius: 90,
+        borderRadius: 20,
         fontSize: 16,
         paddingLeft: 10,
         paddingRight: 10,

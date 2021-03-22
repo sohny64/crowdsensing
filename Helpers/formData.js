@@ -10,14 +10,17 @@ export default data = [
         sensors: ["GPS Location", "Photo sensor"],
         questions: [
             firstName= {
+                name: "firstName",
                 title: "First name",
                 type: "text"
             },
             lastName= {
+                name: "lastName",
                 title: "Last name",
                 type: "text"
             },
             pollutionInCity= {
+                name: "pollutionInCity",
                 title: "Have you ever witnessed pollution in your city?",
                 type: "text",
             }
@@ -34,14 +37,17 @@ export default data = [
         sensors: ["GPS Location", "Microphone sensor"],
         questions: [
             firstName= {
+                name: "firstName",
                 title: "First name",
                 type: "text"
             },
             lastName= {
+                name: "lastName",
                 title: "Last name",
                 type: "text"
             },
             soundPollutionInCity= {
+                name: "soundPollutionInCity",
                 title: "Do you have sound pollution in your city ?",
                 type: "text",
             }
@@ -58,14 +64,17 @@ export default data = [
         sensors: ["GPS Location", "Barometer"],
         questions: [
             firstName= {
+                name: "firstName",
                 title: "First name",
                 type: "text"
             },
             lastName= {
+                name: "lastName",
                 title: "Last name",
                 type: "text"
             },
             pressure= {
+                name: "pressure",
                 title: "What is your current atmospheric pressure ?",
                 type: "text",
             }
