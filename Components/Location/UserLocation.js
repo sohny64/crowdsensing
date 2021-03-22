@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Callout } from 'react-native-maps';
+import Marker from 'react-native-maps';
+import moment from 'moment';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,12 +16,13 @@ class UserLocation extends React.Component{
             region: {
                 latitude: 43.47784863069389,
                 longitude: -1.5082811718614655,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             },
             currentLocation: {},
             errorMessage: '',
-            msg: ''
+            msg: '',
+            mapMarkers: [],
         }
     }
 
@@ -38,8 +41,8 @@ class UserLocation extends React.Component{
             region: {
                 latitude: userLocation.coords.latitude,
                 longitude: userLocation.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             }
         })
     }
@@ -69,20 +72,61 @@ class UserLocation extends React.Component{
         }
     }
 
+    _getDate(timestamp){
+        return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
+    }
+
+    returnData(latitude, longitude, date) {
+        var coordinate = {
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            date: date,
+        }
+        this.state.mapMarkers.push(coordinate);
+        this.setState({
+            mapMarkers: this.state.mapMarkers
+        }); 
+    }
+
     _displayHistory = () => {
-        this.props.navigation.navigate("LocationHistory");
+        this.props.navigation.navigate("LocationHistory",{returnData: this.returnData.bind(this)});
     }
     
     render(){
+        /*let Arr = this.state.mapMarkers.map((a, i) => {
+            return <Text>{a.latitude}</Text>
+        }) */ 
         return(
             <View style={styles.main_container}>
-                <MapView 
+                <MapView
                     style={styles.map} 
                     region={this.state.region}
                     showsUserLocation={true}
                     followsUserLocation={true}
-                    showsCompass={true}
-                />
+                >
+                {this.state.mapMarkers.map((marker,i) =>
+                    <MapView.Marker
+                        key = {i}
+                        coordinate={{
+                            latitude: marker.latitude, 
+                            longitude: marker.longitude,
+                        }}
+                        image={require('../../Images/pin.png')}
+                    >
+                    <Callout>
+                        <View>
+                            <Text>
+                                Date: {this._getDate(marker.date)}{"\n"}
+                                Latitude: {marker.latitude}{"\n"}
+                                Longitude: {marker.longitude}
+                            </Text>
+                        </View>
+                    </Callout>
+                    </MapView.Marker>
+                )}
+                    
+                </MapView>
+                
                 <View style={styles.button_container}>
                     
                     <TouchableOpacity 
@@ -125,6 +169,7 @@ const styles = StyleSheet.create({
     map: {
         width: (Dimensions.get('window').width),
         height: (Dimensions.get('window').height),
+        marginBottom: 0
       },
     
     text_button:{
@@ -152,6 +197,10 @@ const styles = StyleSheet.create({
         height: 30,
         resizeMode: 'contain',
         alignItems: 'center',
+    },
+
+    pin:{
+
     }
 });
 

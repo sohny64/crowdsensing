@@ -27,9 +27,9 @@ const TabNavigator = createMaterialTopTabNavigator(
             headerShown: false,
         },
         tabBarOptions: {
-            style: {backgroundColor: '#ffffff', paddingTop: 50}, //borderBottomLeftRadius: 80
+            style: {backgroundColor: '#ffffff', paddingTop:'8%', height:'10%'}, //borderBottomLeftRadius: 80
             labelStyle: { color: '#000000'},
-            indicatorStyle: { backgroundColor: '#ababab'}
+            indicatorStyle: { backgroundColor: '#ababab'},
         }
         
     }

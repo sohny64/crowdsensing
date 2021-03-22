@@ -10,10 +10,7 @@ class LocationHistory extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            data: {
-                "mocked": false,
-                "timestamp": 1615841063167
-            }
+            data: {}
         })
     }
 
@@ -26,10 +23,18 @@ class LocationHistory extends React.Component{
             keys = await AsyncStorage.getAllKeys()
             keys.forEach(element => {
                 //Check key start by location and is defined
-                if(!element.includes("undefined") || !regex_keyValidity.test(element)){
+                if(!element.includes("undefined") && regex_keyValidity.test(element)){
                     validKeys.push(element)
                 }
             });
+
+            if(validKeys.length <= 0){
+                return;
+            }
+            
+            //Trie du plus récent au moins récent
+            validKeys.sort();
+            validKeys.reverse();
         } catch(e) {
             alert(e)
         }
@@ -62,6 +67,13 @@ class LocationHistory extends React.Component{
         return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
     }
 
+    _returnToMapWithLocation = (latitude, longitude, timestamp) => {
+        this.props.navigation.state.params.returnData(latitude, 
+                                                      longitude,
+                                                      timestamp);
+        this.props.navigation.goBack(null);
+    }
+
     render(){
         return(
             <View style={styles.main_container}>
@@ -69,13 +81,24 @@ class LocationHistory extends React.Component{
                     data={this.state.data}
                     keyExtractor={(item) => item.timestamp.toString()}
                     renderItem={(location =>
-                        <TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
+                                                                         location.item.coords.longitude,
+                                                                         location.item.timestamp)}>
+
                             <View style={styles.description_container}>
                                 <Text style={styles.subhead}>
                                     Date recorded
                                 </Text>
                                 <Text style={styles.text}>
                                     {this._getDate(location.item.timestamp)}
+                                </Text>
+                                <Text style={styles.subhead}>
+                                    GPS location
+                                </Text>
+                                <Text style={styles.text}>
+                                    Latitude: {location.item.coords.latitude}{"\n"}
+                                    Longitude: {location.item.coords.longitude}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -93,7 +116,8 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: '#ffffff'
+        color: '#ffffff',
+        marginBottom: 5
     },
 
     description_container: {
@@ -106,7 +130,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
-        marginBottom: 5
     },
 });
 
