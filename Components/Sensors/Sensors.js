@@ -64,10 +64,16 @@ class Sensors extends React.Component{
     }
 
     _displayRecord = () => {
-            this.props.navigation.navigate("Record", { 
-                                            selectedSensors: this.state.selectedSensors,
-                                            permissionsNeeded: this.state.permissionsNeeded 
-                                          });
+
+            if(this.state.selectedSensors.length > 0){
+                this.props.navigation.navigate("Record", { 
+                                                selectedSensors: this.state.selectedSensors,
+                                                permissionsNeeded: this.state.permissionsNeeded 
+                                            });
+            }
+            else{
+                alert("None sensors selected!")
+            }
     }
 
     renderSmartphoneSensors(){

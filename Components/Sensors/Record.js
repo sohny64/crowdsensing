@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform} from 'react-native';
 import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 import { Pedometer } from 'expo-sensors';
-import { relativeTimeRounding } from 'moment';
+
 
 
 
@@ -40,6 +40,10 @@ class Record extends React.Component{
     }
     /* ------------------ */
 
+
+
+
+
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
     componentDidMount(){
     
@@ -56,47 +60,24 @@ class Record extends React.Component{
         }
         this.setState({selected:FormatData})
 
+        if( FormatData.length > 0 ){
+            {this.toggleStopwatch(); this.handleTimerComplete();}
+        }
     }
-
-    componentWillUnmount() {
-        this._unsubscribe();
-      }
 
     /* ------------------ */
 
+
+
+
+
     /* SENSOR Barometer*/ 
 
-    _subscribe = () => {
-        this._subscription = Pedometer.watchStepCount(result => {
-          this.setState({
-            currentStepCount: result.steps,
-          });
-        });
-        Pedometer.isAvailableAsync().then(
-            result => {
-              this.setState({
-                isPedometerAvailable: String(result),
-              });
-            },
-            error => {
-              this.setState({
-                isPedometerAvailable: 'Could not get isPedometerAvailable: ' + error,
-              });
-            }
-          );
-        };
-
-        _unsubscribe = () => {
-            this._subscription && this._subscription.remove();
-            this._subscription = null;
-          };
-
-
     renderSmartphoneSensorList(){
-        return this.state.selected.map((item, key) => {
+        return this.state.selected.map((item) => {
             return (
                 <View>
-                    <Text style={styles.text}>{item.key} : {this.state.isPedometerAvailable}</Text>
+                    <Text style={styles.text}>{item.key} - Status : {this.state.isPedometerAvailable}</Text>
                     <Text style={styles.text}> Steps : {this.state.currentStepCount}</Text>
                 </View>
             )
@@ -124,7 +105,7 @@ class Record extends React.Component{
                     {this.renderSmartphoneSensorList()}
                 </View>
                 {this.renderStopWatch()}
-                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete(); this._subscribe();}}>
+                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete();}}>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
