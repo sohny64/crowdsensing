@@ -17,7 +17,6 @@ class FormDescription extends React.Component{
 
     render(){
         const form = this.props.navigation.state.params.form;
-        console.log(this.props)
         return(
             <View style={styles.main_container}>
                 <View style={styles.title_container}>
