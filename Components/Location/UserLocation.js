@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
 import MapView, { Callout } from 'react-native-maps';
-import Marker from 'react-native-maps';
 import moment from 'moment';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -116,9 +115,9 @@ class UserLocation extends React.Component{
                     <Callout>
                         <View>
                             <Text>
-                                Date: {this._getDate(marker.date)}{"\n"}
-                                Latitude: {marker.latitude}{"\n"}
-                                Longitude: {marker.longitude}
+                                <Text style={{fontWeight: "bold"}}>Date:</Text> {this._getDate(marker.date)}{"\n"}
+                                <Text style={{fontWeight: "bold"}}>Latitude:</Text> {marker.latitude}{"\n"}
+                                <Text style={{fontWeight: "bold"}}>Longitude:</Text> {marker.longitude}
                             </Text>
                         </View>
                     </Callout>
@@ -161,9 +160,10 @@ const styles = StyleSheet.create({
     button_container:{
         flexDirection: "row",
         bottom: 20,
-        right: 20,
+        left: '20%',
         position: 'absolute',
         marginTop: 'auto',
+        width: '100%',
     },
 
     map: {
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',
-        flexWrap: "wrap",
-        marginRight: 10
+        width: '60%',
+        marginRight: 10,
     },
 
     button_history: {
