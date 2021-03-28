@@ -34,14 +34,12 @@ class Record extends React.Component{
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
+            new Accelerometer()._unsubscribe();
             alert("Lancer la fonction pour enregistrer")
             this.resetStopwatch()
         }
     }
     /* ------------------ */
-
-    
-
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
     componentDidMount(){
@@ -70,7 +68,7 @@ class Record extends React.Component{
     checkSwitch=(param)=>{
         switch(param) {
           case 'Accelerometer':
-            return ( <Accelerometer/> )
+              return ( <Accelerometer /> )
 
           case 'Barometer':
               return ( <Barometer/>)
@@ -97,7 +95,6 @@ class Record extends React.Component{
                                                {"\n"}
                                                {this.checkSwitch(item.key)}
                     </Text>
-
                 </View>
             )
           })

@@ -3,53 +3,60 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 
 
-export default function accelerometer() {
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState(null);
+export default class accelerometer extends React.Component {
 
 
-  const _slow = () => {
-    Accelerometer.setUpdateInterval(1000);
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+  }
+
+  _slow(){
+    Accelerometer.setUpdateInterval(500);
   };
 
-  const _fast = () => {
-    Accelerometer.setUpdateInterval(16);
+  _fast (){
+    Accelerometer.setUpdateInterval(50);
   };
 
-  const _subscribe = () => {
-    setSubscription(
-      Accelerometer.addListener(accelerometerData => {
-        setData(accelerometerData);
-      })
-    );
+  _subscribe = () => {
+    this._subscription = Accelerometer.addListener(accelerometerData => {
+      this.setState({
+        x: Object.values(accelerometerData)[2],
+        y: Object.values(accelerometerData)[1],
+        z: Object.values(accelerometerData)[0],
+      });
+    });
+  }
+
+  componentDidMount() {
+    this._subscribe();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  _unsubscribe = () => {
+    this._subscription && this._subscription.remove();
+    this._subscription = null;
   };
 
-  const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
-  };
-
-  useEffect(() => {
-        _subscribe();
-    return () => 
-      _unsubscribe();
-  }, []);
-
-  const { x, y, z } = data;
-
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>
-          x: {round(x)}{"\n"}
-          y: {round(y)}{"\n"}
-          z: {round(z)}
-        </Text>
-      </View>
-    );
+   render(){
+      return (
+        <View style={styles.container}>
+          <Text style={styles.text}>
+            x: {round(this.state.x)}{"\n"}
+            y: {round(this.state.y)}{"\n"}
+            z: {round(this.state.z)}
+          </Text>
+        </View>
+      )
+    }
 }
 
 function round(n) {

@@ -2,50 +2,59 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Magnetometer } from 'expo-sensors';
 
-export default function Compass() {
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState(null);
+export default class magnetometer extends React.Component {
 
-  const _slow = () => {
-    Magnetometer.setUpdateInterval(1000);
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+  }
+
+  _slow(){
+    Accelerometer.setUpdateInterval(500);
   };
 
-  const _fast = () => {
-    Magnetometer.setUpdateInterval(16);
+  _fast (){
+    Accelerometer.setUpdateInterval(50);
   };
 
-  const _subscribe = () => {
-    setSubscription(
-      Magnetometer.addListener(result => {
-        setData(result);
-      })
-    );
+  _subscribe = () => {
+    this._subscription = Magnetometer.addListener(magnetometerData => {
+      this.setState({
+        x: Object.values(magnetometerData)[2],
+        y: Object.values(magnetometerData)[1],
+        z: Object.values(magnetometerData)[0],
+      });
+    });
+  }
+
+  componentDidMount() {
+    this._subscribe();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  _unsubscribe = () => {
+    this._subscription && this._subscription.remove();
+    this._subscription = null;
   };
 
-  const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
-  };
 
-  useEffect(() => {
-    _subscribe();
-    return () => _unsubscribe();
-  }, []);
-
-  const { x, y, z } = data;
+  render(){
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        x: {round(x)}{"\n"}
-        y: {round(y)}{"\n"}
-        z: {round(z)}
+        x: {round(this.state.x)}{"\n"}
+        y: {round(this.state.y)}{"\n"}
+        z: {round(this.state.z)}
       </Text>
     </View>
-  );
+  )};
 }
 
 function round(n) {

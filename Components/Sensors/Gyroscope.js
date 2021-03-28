@@ -2,50 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Gyroscope } from 'expo-sensors';
 
-export default function gyroscope() {
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState(null);
+export default class gyroscope extends React.Component {
 
-  const _slow = () => {
-    Gyroscope.setUpdateInterval(1000);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+  }
+
+  _slow(){
+    Accelerometer.setUpdateInterval(500);
   };
 
-  const _fast = () => {
-    Gyroscope.setUpdateInterval(16);
+  _fast (){
+    Accelerometer.setUpdateInterval(50);
   };
 
-  const _subscribe = () => {
-    setSubscription(
-      Gyroscope.addListener(gyroscopeData => {
-        setData(gyroscopeData);
-      })
-    );
+  componentDidMount() {
+    this._subscribe();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  _unsubscribe = () => {
+    this._subscription && this._subscription.remove();
+    this._subscription = null;
   };
 
-  const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
-  };
+  _subscribe = () => {
+    this._subscription = Gyroscope.addListener(gyroscopeData => {
+      this.setState({
+        x: Object.values(gyroscopeData)[2],
+        y: Object.values(gyroscopeData)[1],
+        z: Object.values(gyroscopeData)[0],
+      });
+    });
+  }
 
-  useEffect(() => {
-    _subscribe();
-    return () => _unsubscribe();
-  }, []);
 
-  const { x, y, z } = data;
-  return (
+  render() {
+    return(
     <View style={styles.container}>
       <Text style={styles.text}>
-        x: {round(x)}{"\n"}
-        y: {round(y)}{"\n"}
-        z: {round(z)}
+        x: {round(this.state.x)}{"\n"}
+        y: {round(this.state.y)}{"\n"}
+        z: {round(this.state.z)}
       </Text>
     </View>
-  );
+  )}
 }
 
 function round(n) {

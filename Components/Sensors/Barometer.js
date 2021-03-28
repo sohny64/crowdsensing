@@ -2,48 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Barometer } from 'expo-sensors';
 
-export default function barometer() {
-  const [data, setData] = useState({});
+export default class barometer extends React.Component {
 
-  useEffect(() => {
-    _toggle();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      _unsubscribe();
-    };
-  }, []);
-
-  const _toggle = () => {
-    if (this._subscription) {
-      _unsubscribe();
-    } else {
-      _subscribe();
+constructor(props) {
+    super(props);
+    this.state = {
+      pressure:0,
+      relativeAltitude:0
     }
-  };
+  }
 
-  const _subscribe = () => {
+  componentDidMount() {
+    this._subscribe();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+  
+
+  _subscribe = () => {
     this._subscription = Barometer.addListener(barometerData => {
-      setData(barometerData);
+      this.setState({
+        pressure: Object.values(barometerData)[0],
+        relativeAltitude: Object.values(barometerData)[1],
+      });
     });
   };
 
-  const _unsubscribe = () => {
+  _unsubscribe = () => {
     this._subscription && this._subscription.remove();
     this._subscription = null;
   };
 
-  const { pressure = 0, relativeAltitude = 0 } = data;
-
-  return (
+  render (){
+    return(
     <View style={styles.container}>
-      <Text style={styles.text}>Pressure: {pressure * 100} Pa {"\n"}
+      <Text style={styles.text}>Pressure: {this.state.pressure * 100} Pa {"\n"}
         Relative Altitude:{' '}
-        {Platform.OS === 'ios' ? `${relativeAltitude} m` : `Only available on iOS`}
+        {Platform.OS === 'ios' ? `${this.state.relativeAltitude} m` : `Only available on iOS`}
       </Text>
     </View>
-  );
+    )}
 }
 
 const styles = StyleSheet.create({
