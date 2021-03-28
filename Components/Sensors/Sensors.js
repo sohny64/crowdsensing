@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image} from 'react-
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
-import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 
 
 class Sensors extends React.Component{
@@ -64,10 +63,16 @@ class Sensors extends React.Component{
     }
 
     _displayRecord = () => {
-            this.props.navigation.navigate("Record", { 
-                                            selectedSensors: this.state.selectedSensors,
-                                            permissionsNeeded: this.state.permissionsNeeded 
-                                          });
+
+            if(this.state.selectedSensors.length > 0){
+                this.props.navigation.navigate("Record", { 
+                                                selectedSensors: this.state.selectedSensors,
+                                                permissionsNeeded: this.state.permissionsNeeded 
+                                            });
+            }
+            else{
+                alert("None sensors selected!")
+            }
     }
 
     renderSmartphoneSensors(){

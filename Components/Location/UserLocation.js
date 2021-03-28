@@ -52,7 +52,10 @@ class UserLocation extends React.Component{
             let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
             let value = JSON.stringify(this.state.currentLocation);
             await AsyncStorage.setItem(key, value);
-            ToastAndroid.show("Enregistré !",ToastAndroid.SHORT);
+            if (Platform.OS == 'android') {
+                ToastAndroid.show("Enregistré !",ToastAndroid.SHORT);
+            }
+            
         } catch (e) {
           alert(e)
         }

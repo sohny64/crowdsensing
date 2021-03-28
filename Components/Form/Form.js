@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { ScrollView, State, TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import Toast from 'react-native-easy-toast'
 
 class Form extends React.Component{
     constructor(state){
@@ -18,6 +19,7 @@ class Form extends React.Component{
 
     submitForm(){
         console.log(JSON.stringify(this.state.answers));
+        this.toast.show('Form submit !');
     }
 
     displayQuestionsForm(form){
@@ -60,7 +62,7 @@ class Form extends React.Component{
                         <Text style={styles.text_button}>Submit</Text>
                     </TouchableOpacity>
                 </ScrollView>
-                
+                <Toast ref={(toast) => this.toast = toast}/> 
             </View>
             
         );
