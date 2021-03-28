@@ -30,20 +30,6 @@ export default data = [
     {
         id:5,
         device: "smartphone",
-        name:"Microphone",
-        permissions: "AUDIO_RECORDING",
-        checked: false
-    },
-    {
-        id:6,
-        device: "smartphone",
-        name:"Brightness",
-        permissions: "SYSTEM_BRIGHTNESS",
-        checked: false
-    },
-    {
-        id:7,
-        device: "smartphone",
         name:"Pedometer",
         permissions: "MOTION",
         checked: false

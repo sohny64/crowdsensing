@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image} from 'react-
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
-import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 
 
 class Sensors extends React.Component{

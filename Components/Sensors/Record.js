@@ -1,8 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform} from 'react-native';
-import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
-import { Pedometer } from 'expo-sensors';
-
+import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { Stopwatch } from 'react-native-stopwatch-timer'
+import Accelerometer from './Accelerometer'
+import Barometer from './Barometer'
+import Gyroscope from './Gyroscope'
+import Magnetometer from './Magnetometer'
+import Pedometer from './Pedometer'
 
 
 
@@ -15,9 +18,6 @@ class Record extends React.Component{
             stopwatchStart: false,
             totalDuration: 10000,
             stopwatchReset: false,
-            isPedometerAvailable: 'checking',
-            pastStepCount: 0,
-            currentStepCount: 0,
         }
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
@@ -40,8 +40,7 @@ class Record extends React.Component{
     }
     /* ------------------ */
 
-
-
+    
 
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -68,17 +67,37 @@ class Record extends React.Component{
     /* ------------------ */
 
 
+    checkSwitch=(param)=>{
+        switch(param) {
+          case 'Accelerometer':
+            return ( <Accelerometer/> )
 
+          case 'Barometer':
+              return ( <Barometer/>)
 
+          case 'Gyroscope':
+              return ( <Gyroscope/>)
 
-    /* SENSOR Barometer*/ 
+          case 'Magnetometer':
+              return ( <Magnetometer/>)
+              
+          case 'Pedometer':
+              return ( <Pedometer/>)
+        }
+      }
+
 
     renderSmartphoneSensorList(){
-        return this.state.selected.map((item) => {
+        return this.state.selected.map((item,key) => {
             return (
-                <View>
-                    <Text style={styles.text}>{item.key} - Status : {this.state.isPedometerAvailable}</Text>
-                    <Text style={styles.text}> Steps : {this.state.currentStepCount}</Text>
+                <View key={key}>
+                    
+                    <Text  style={styles.text}>{"\n"}
+                                               {item.key}
+                                               {"\n"}
+                                               {this.checkSwitch(item.key)}
+                    </Text>
+
                 </View>
             )
           })
@@ -103,6 +122,8 @@ class Record extends React.Component{
                  <View style={styles.description_container}>
                     <Text style={styles.subhead}>Sensors selected :</Text>
                     {this.renderSmartphoneSensorList()}
+                    
+                    
                 </View>
                 {this.renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete();}}>
