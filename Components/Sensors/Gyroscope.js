@@ -15,11 +15,15 @@ export default class gyroscope extends React.Component {
   }
 
   _slow(){
-    Accelerometer.setUpdateInterval(500);
+    Gyroscope.setUpdateInterval(350);
   };
 
   _fast (){
-    Accelerometer.setUpdateInterval(50);
+    Gyroscope.setUpdateInterval(50);
+  };
+
+  _stop(){
+    Gyroscope.setUpdateInterval(100000);
   };
 
   componentDidMount() {

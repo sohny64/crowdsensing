@@ -38,12 +38,19 @@ constructor(props) {
   render (){
     return(
     <View style={styles.container}>
-      <Text style={styles.text}>Pressure: {this.state.pressure * 100} Pa {"\n"}
+      <Text style={styles.text}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
         Relative Altitude:{' '}
         {Platform.OS === 'ios' ? `${this.state.relativeAltitude} m` : `Only available on iOS`}
       </Text>
     </View>
     )}
+}
+
+function round(n) {
+  if (!n) {
+    return 0;
+  }
+  return Math.floor(n * 100) / 100;
 }
 
 const styles = StyleSheet.create({

@@ -16,7 +16,11 @@ export default class accelerometer extends React.Component {
   }
 
   _slow(){
-    Accelerometer.setUpdateInterval(500);
+    Accelerometer.setUpdateInterval(350);
+  };
+
+  _stop(){
+    Accelerometer.setUpdateInterval(100000);
   };
 
   _fast (){

@@ -14,11 +14,15 @@ export default class magnetometer extends React.Component {
   }
 
   _slow(){
-    Accelerometer.setUpdateInterval(500);
+    Magnetometer.setUpdateInterval(350);
+  };
+  
+  _stop(){
+    Magnetometer.setUpdateInterval(100000);
   };
 
   _fast (){
-    Accelerometer.setUpdateInterval(50);
+    Magnetometer.setUpdateInterval(50);
   };
 
   _subscribe = () => {

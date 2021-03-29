@@ -25,16 +25,19 @@ class Record extends React.Component{
 
     /* STOP WATCH */
     toggleStopwatch() {
-        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
+        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false})
     }
     
     resetStopwatch() {
-        this.setState({stopwatchStart: false, stopwatchReset: true});
+        this.setState({stopwatchStart: false, stopwatchReset: true})
     }
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
-            new Accelerometer()._unsubscribe();
+            new Accelerometer()._stop()
+            new Gyroscope()._stop()
+            new Magnetometer()._stop()
+            new Barometer()._unsubscribe()
             alert("Lancer la fonction pour enregistrer")
             this.resetStopwatch()
         }
@@ -123,7 +126,7 @@ class Record extends React.Component{
                     
                 </View>
                 {this.renderStopWatch()}
-                <TouchableOpacity style={styles.button} onPress={ () => {this.toggleStopwatch(); this.handleTimerComplete();}}>
+                <TouchableOpacity style={styles.button} onPress={ () => { new Accelerometer()._fast();new Gyroscope()._fast();new Magnetometer()._fast();this.toggleStopwatch(); this.handleTimerComplete();}}>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
