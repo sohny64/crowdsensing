@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image} from 'react-
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
+import * as Permissions from 'expo-permissions';
 
 
 class Sensors extends React.Component{
@@ -62,13 +63,23 @@ class Sensors extends React.Component{
         console.log(this.state.permissionsNeeded)
     }
 
+    _getLocation = async () => {
+        const {status} = await Permissions.askAsync(Permissions.MOTION);
+        if(status != 'granted'){
+            alert("PERMISSION NOT GRANTED");
+        }
+        else{
+            this.props.navigation.navigate("Record", { 
+                selectedSensors: this.state.selectedSensors,
+                permissionsNeeded: this.state.permissionsNeeded 
+            });
+        }
+    }
+
     _displayRecord = () => {
 
             if(this.state.selectedSensors.length > 0){
-                this.props.navigation.navigate("Record", { 
-                                                selectedSensors: this.state.selectedSensors,
-                                                permissionsNeeded: this.state.permissionsNeeded 
-                                            });
+                this._getLocation();
             }
             else{
                 alert("None sensors selected!")
@@ -121,7 +132,7 @@ class Sensors extends React.Component{
           
                 <View style={styles.button_container}>
                 <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
-                        <Text style={styles.text_button}>Sart recording</Text>
+                        <Text style={styles.text_button}>Start recording</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                         style={styles.button_history}
