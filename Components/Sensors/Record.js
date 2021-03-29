@@ -67,7 +67,7 @@ class Record extends React.Component{
 
     /* ------------------ */
 
-
+    /* RENDER EACH SENSORS CHECKED */ 
     checkSwitch=(param)=>{
         switch(param) {
           case 'Accelerometer':
@@ -103,7 +103,7 @@ class Record extends React.Component{
           })
     }
 
-
+    /* ------------------ */
 
     renderStopWatch() {
         return (
@@ -134,7 +134,6 @@ class Record extends React.Component{
     };
 }
 
-    /* ------------------ */
 
      /* CSS */
 
