@@ -25,14 +25,9 @@ class Sensors extends React.Component{
         data[index].checked = !data[index].checked
         if (data[index].checked==true){
             this.state.selectedSensors.push(data[index].name)
-            if(!this.state.permissionsNeeded.includes(data[index].permissions)){
-                this.state.permissionsNeeded.push(data[index].permissions)
-            }
         }
         else{
-            this.state.selectedSensors.splice(data[index].name, 1)
-            this.state.permissionsNeeded.splice(data[index].permissions, 1)
-            
+            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);  
         }
         this.setState(data)
     }
