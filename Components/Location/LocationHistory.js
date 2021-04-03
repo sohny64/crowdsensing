@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Share, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -12,6 +12,26 @@ class LocationHistory extends React.Component{
         this.state = ({
             data: {}
         })
+    }
+
+    _onShare = async (latitude) => {
+        try {
+          const result = await Share.share({
+            message:
+                JSON.stringify(latitude),
+          });
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
     }
 
     _getPosHistory= async () => {
@@ -81,27 +101,39 @@ class LocationHistory extends React.Component{
                     data={this.state.data}
                     keyExtractor={(item) => item.timestamp.toString()}
                     renderItem={(location =>
-                        <TouchableOpacity 
-                            onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
-                                                                         location.item.coords.longitude,
-                                                                         location.item.timestamp)}>
+                        <View style={styles.buttons_container}>
+                            <TouchableOpacity 
+                                style={styles.history_container}
+                                onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
+                                                                            location.item.coords.longitude,
+                                                                            location.item.timestamp)}>
 
-                            <View style={styles.description_container}>
-                                <Text style={styles.subhead}>
-                                    Date recorded
-                                </Text>
-                                <Text style={styles.text}>
-                                    {this._getDate(location.item.timestamp)}
-                                </Text>
-                                <Text style={styles.subhead}>
-                                    GPS location
-                                </Text>
-                                <Text style={styles.text}>
-                                    Latitude: {location.item.coords.latitude}{"\n"}
-                                    Longitude: {location.item.coords.longitude}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
+                                <View style={styles.description_container}>
+                                    <Text style={styles.subhead}>
+                                        Date recorded
+                                    </Text>
+                                    <Text style={styles.text}>
+                                        {this._getDate(location.item.timestamp)}
+                                    </Text>
+                                    <Text style={styles.subhead}>
+                                        GPS location
+                                    </Text>
+                                    <Text style={styles.text}>
+                                        Latitude: {location.item.coords.latitude}{"\n"}
+                                        Longitude: {location.item.coords.longitude}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.button_history}
+                                onPress={() => this._onShare(location.item)}
+                            >
+                                <Image
+                                    source={require('../../Images/share.png')}
+                                    style={styles.icon}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     )}
                 />
             </View> 
@@ -115,6 +147,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
+    buttons_container: {
+        flexDirection: "row",
+        width: '100%',
+        flex:1,
+    },
+
     text: {
         color: '#ffffff',
         marginBottom: 5
@@ -122,14 +160,35 @@ const styles = StyleSheet.create({
 
     description_container: {
         backgroundColor: '#441d59',
-        borderRadius: 20,
-        margin: 10,
-        padding: 10
+        marginLeft: 10,
+        marginTop: 10,
+        padding: 10,
     },
+
+    button_history: {
+        backgroundColor: '#441d59',
+        marginRight: 10,
+        marginTop: 10,
+        padding: 10,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    history_container: {
+        flex: 3,
+    },
+
     subhead: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
+    },
+
+    icon: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
     },
 });
 
