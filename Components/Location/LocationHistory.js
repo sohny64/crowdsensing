@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Share, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Share, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -97,27 +97,45 @@ class LocationHistory extends React.Component{
     }
 
     async _deleteLocation(item){
-        var regex = new RegExp(item.timestamp);
-        var key = this.state.keys.find(value => regex.test(value));
+        Alert.alert(
+            "Warning!",
+            "Are you sure you want to delete the location?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => {
+                        return false;
+                    },
 
-        //Remove from storage
-        try {
-            await AsyncStorage.removeItem(key)
-        } catch(e) {
-            return false;
-        }
+                },
+                { 
+                    text: "OK",
+                    onPress: async () => {
+                        var regex = new RegExp(item.timestamp);
+                        var key = this.state.keys.find(value => regex.test(value));
 
-        data = this.state.data;
-        var index;
-        for(var i=0 ; i<data.length ; i++){
-            if(data[i].timestamp == item.timestamp){
-                index = i;
-            }
-        }
-        data.splice(index,1);
-        this.setState({
-            data: data,
-        })
+                        //Remove from storage
+                        try {
+                            await AsyncStorage.removeItem(key)
+                        } catch(e) {
+                            return false;
+                        }
+
+                        data = this.state.data;
+                        var index;
+                        for(var i=0 ; i<data.length ; i++){
+                            if(data[i].timestamp == item.timestamp){
+                                index = i;
+                            }
+                        }
+                        data.splice(index,1);
+                        this.setState({
+                            data: data,
+                        })
+                    }
+                }
+            ]
+        );            
     }
 
     render(){
@@ -165,7 +183,7 @@ class LocationHistory extends React.Component{
                                     onPress={() => this._deleteLocation(location.item)}
                                 >
                                     <Image
-                                        source={require('../../Images/delete.png')}
+                                        source={require('../../Images/delete_red.png')}
                                         style={styles.icon_delete}
                                     />
                                 </TouchableOpacity>
