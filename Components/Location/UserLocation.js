@@ -91,6 +91,12 @@ class UserLocation extends React.Component{
     _displayHistory = () => {
         this.props.navigation.navigate("LocationHistory",{returnData: this.returnData.bind(this)});
     }
+
+    _resetMarkers(){
+        this.setState({
+            mapMarkers: []
+        })
+    }
     
     render(){
         /*let Arr = this.state.mapMarkers.map((a, i) => {
@@ -146,6 +152,16 @@ class UserLocation extends React.Component{
                             style={styles.icon}
                         />
                     </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.button_trash}
+                        onPress={() => this._resetMarkers()}
+                    >
+                        <Image
+                            source={require('../../Images/delete.png')}
+                            style={styles.icon}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <Toast ref={(toast) => this.toast = toast} position='center'/>
                 
@@ -164,7 +180,7 @@ const styles = StyleSheet.create({
     button_container:{
         flexDirection: "row",
         bottom: 20,
-        left: '20%',
+        left: '18%',
         position: 'absolute',
         marginTop: 'auto',
         width: '100%',
@@ -186,7 +202,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',
-        width: '60%',
+        width: '50%',
         marginRight: 10,
     },
 
@@ -194,6 +210,13 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 100,
+    },
+
+    button_trash: {
+        padding: 10,
+        backgroundColor: '#cc0000',
+        borderRadius: 100,
+        left: 10,
     },
 
     icon: {
