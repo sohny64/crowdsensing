@@ -42,9 +42,9 @@ const TabNavigator = createMaterialTopTabNavigator(
                 const { routeName } = navigation.state;
                 let iconName;
                 if (routeName === "Forms") {
-                    iconName = "map-pin";
-                } else if (routeName === "Location") {
                     iconName = "message-circle";
+                } else if (routeName === "Location") {
+                    iconName = "map-pin";
                 } else if (routeName === "Sensors") {
                     iconName = "radio";
                 }
