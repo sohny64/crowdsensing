@@ -9,6 +9,16 @@ class FormList extends React.Component{
         this.props.navigation.navigate("Description", { form: form });
     }
 
+    getColors(){
+        let colors = [];
+        let i = 0;
+        forms.forEach(form => {
+            colors[i] = form.color;
+            i++;
+        });
+        return colors  
+    }
+
     render(){
         return(
             <View style={styles.main_container}>
@@ -16,7 +26,7 @@ class FormList extends React.Component{
                 style={styles.forms_list}
                 data={forms}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <FormListItem form={item} t={item+1} displayFormDescription={this.displayFormDescription}/>}
+                renderItem={({item}) => <FormListItem form={item} getColors={this.getColors} displayFormDescription={this.displayFormDescription}/>}
                 />
             </View>
         );

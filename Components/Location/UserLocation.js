@@ -5,6 +5,7 @@ import moment from 'moment';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-easy-toast'
 
 class UserLocation extends React.Component{
 
@@ -52,13 +53,10 @@ class UserLocation extends React.Component{
             let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
             let value = JSON.stringify(this.state.currentLocation);
             await AsyncStorage.setItem(key, value);
-            if (Platform.OS == 'android') {
-                ToastAndroid.show("Enregistré !",ToastAndroid.SHORT);
-            }
-            
+            this.toast.show('Location saved !');
         } catch (e) {
           alert(e)
-        }
+        }  
     }
 
     _getData = async () => {
@@ -126,14 +124,15 @@ class UserLocation extends React.Component{
                     </Callout>
                     </MapView.Marker>
                 )}
-                    
+                 
                 </MapView>
+                
                 
                 <View style={styles.button_container}>
                     
                     <TouchableOpacity 
                         style={styles.button_save}
-                        onPress={() => this._storeData()}
+                        onPress={ () => this._storeData()}
                     >
                         <Text style={styles.text_button}>Save position</Text>
                     </TouchableOpacity>
@@ -148,6 +147,8 @@ class UserLocation extends React.Component{
                         />
                     </TouchableOpacity>
                 </View>
+                <Toast ref={(toast) => this.toast = toast} position='center'/>
+                
             </View>
             
         );
