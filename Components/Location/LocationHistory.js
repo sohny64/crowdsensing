@@ -10,7 +10,8 @@ class LocationHistory extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            data: {}
+            data: {},
+            keys: [],
         })
     }
 
@@ -75,7 +76,8 @@ class LocationHistory extends React.Component{
             alert(e)
         }
         this.setState({
-            data: valuesJSON
+            data: valuesJSON,
+            keys: validKeys
         })
     }
 
@@ -92,6 +94,30 @@ class LocationHistory extends React.Component{
                                                       longitude,
                                                       timestamp);
         this.props.navigation.goBack(null);
+    }
+
+    async _deleteLocation(item){
+        var regex = new RegExp(item.timestamp);
+        var key = this.state.keys.find(value => regex.test(value));
+
+        //Remove from storage
+        try {
+            await AsyncStorage.removeItem(key)
+        } catch(e) {
+            return false;
+        }
+
+        data = this.state.data;
+        var index;
+        for(var i=0 ; i<data.length ; i++){
+            if(data[i].timestamp == item.timestamp){
+                index = i;
+            }
+        }
+        data.splice(index,1);
+        this.setState({
+            data: data,
+        })
     }
 
     render(){
@@ -124,15 +150,26 @@ class LocationHistory extends React.Component{
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity 
-                                style={styles.button_history}
-                                onPress={() => this._onShare(location.item)}
-                            >
-                                <Image
-                                    source={require('../../Images/share.png')}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
+                            <View style={styles.button_container}>
+                                <TouchableOpacity 
+                                    style={styles.button_share}
+                                    onPress={() => this._onShare(location.item)}
+                                >
+                                    <Image
+                                        source={require('../../Images/share.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={styles.button_delete}
+                                    onPress={() => this._deleteLocation(location.item)}
+                                >
+                                    <Image
+                                        source={require('../../Images/delete.png')}
+                                        style={styles.icon_delete}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     )}
                 />
@@ -165,11 +202,25 @@ const styles = StyleSheet.create({
         padding: 10,
     },
 
-    button_history: {
+    button_container: {
         backgroundColor: '#441d59',
         marginRight: 10,
         marginTop: 10,
         padding: 10,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    button_share: {
+        backgroundColor: '#441d59',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    button_delete: {
+        backgroundColor: '#441d59',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -186,8 +237,14 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
+    },
+
+    icon_delete: {
+        width: 35,
+        height: 35,
         resizeMode: 'contain',
     },
 });

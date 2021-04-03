@@ -225,10 +225,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         alignItems: 'center',
     },
-
-    pin:{
-
-    }
 });
 
 export default UserLocation;
