@@ -8,7 +8,7 @@ export default class AudioRecorder extends React.Component{
         super(props)
         this.state = {
             isRecording: false,
-            uri: undefined,
+            uri: "",
             recording: undefined,
             stopwatchStart: false,
             totalDuration: 10000,
@@ -21,7 +21,7 @@ export default class AudioRecorder extends React.Component{
     
 
     toggleStopwatch() {
-        this.setState({stopwatchStart: !this.state.stopwatchStart})
+        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
     }
 
     resetStopwatch() {
@@ -30,23 +30,26 @@ export default class AudioRecorder extends React.Component{
 
     startRecording = async () =>  {
         try {
-          console.log('Requesting permissions..');
-          await Audio.requestPermissionsAsync();
-          await Audio.getPermissionsAsync();
-          await Audio.setAudioModeAsync({
-            allowsRecordingIOS: true,
-            playsInSilentModeIOS: true,
-          }); 
-          console.log('Starting recording..');
-          const recording = new Audio.Recording();
-          await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
-          await recording.startAsync();
-          this.setState({ recording: recording, isRecording:true });
-          this.toggleStopwatch();
-          //setRecording(recording);
-          console.log('Recording started');
+            console.log('Requesting permissions..');
+            await Audio.requestPermissionsAsync();
+            await Audio.getPermissionsAsync();
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: true,
+                playsInSilentModeIOS: true,
+            }); 
+            console.log('Starting recording..');
+            const recording = new Audio.Recording();
+            await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+            await recording.startAsync();
+            this.setState({ recording: recording, isRecording:true });
+          
+            //Start and reset timer
+            this.resetStopwatch()
+            this.toggleStopwatch();
+          
+            console.log('Recording started');
         } catch (err) {
-          console.error('Failed to start recording', err);
+            console.error('Failed to start recording', err);
         }
     }
 
@@ -60,16 +63,20 @@ export default class AudioRecorder extends React.Component{
         this.setState({ uri: uri });
         getAnswer(uri, this.props.question);
         console.log('Recording stopped and stored at', uri);
+
+        //Stop timer
         this.toggleStopwatch();
     }
 
     render(){
         return(
             <View>
-                 <Stopwatch laps msecs start={this.state.stopwatchStart}
+                 <Stopwatch
+                    msecs={true}
+                    start={this.state.stopwatchStart}
                     reset={this.state.stopwatchReset}
                     options={options}
-                    getTime={this.getFormattedTime} />
+                />
                 <TouchableOpacity style={styles.button} onPress={this.state.isRecording ? () => this.stopRecording() : () => this.startRecording() }>
                     <Text style={styles.text}>{this.state.isRecording ? 'Stop' : 'Start'}</Text>
                 </TouchableOpacity>
