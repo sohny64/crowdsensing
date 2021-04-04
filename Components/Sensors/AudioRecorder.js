@@ -4,8 +4,8 @@ import { Audio } from 'expo-av';
 import { Stopwatch } from 'react-native-stopwatch-timer'
 
 export default class AudioRecorder extends React.Component{
-    constructor(state){
-        super(state)
+    constructor(props){
+        super(props)
         this.state = {
             isRecording: false,
             uri: undefined,
@@ -17,6 +17,8 @@ export default class AudioRecorder extends React.Component{
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
     }
+
+    
 
     toggleStopwatch() {
         this.setState({stopwatchStart: !this.state.stopwatchStart})
@@ -49,13 +51,14 @@ export default class AudioRecorder extends React.Component{
     }
 
     stopRecording = async () => {
-        const setUriRecorder = this.props.setUriRecorder;
+        const getAnswer = this.props.getAnswer;
         const recording = this.state.recording;
         console.log('Stopping recording..');
         this.setState({ recording: undefined, isRecording:false });
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
         this.setState({ uri: uri });
+        getAnswer(uri, this.props.question);
         console.log('Recording stopped and stored at', uri);
         this.toggleStopwatch();
     }

@@ -5,27 +5,22 @@ import Toast from 'react-native-easy-toast';
 import AudioRecorder from '../Sensors/AudioRecorder';
 
 class Form extends React.Component{
-    constructor(state){
-        super(state)
+    constructor(props){
+        super(props)
         this.state = {
             answers: {},
-            uriRecorder: undefined
         }
+        this.getAnswer = this.getAnswer.bind(this);
     }
 
-    getAnswer(answer, question){
+    audioRecorderHandler = (uri) => {
+        this.setState({ uriRecorder: uri })
+    }
+
+    getAnswer = (answer, question) => {
         const answers = this.state.answers;
-        const uriRecorder = this.state.uriRecorder;
-        switch (question.type) {
-            case "text":
-                answers[question.name] = answer;
-                this.setState({ answers });
-                break;
-        
-            default:
-                break;
-        }
-        
+        answers[question.name] = answer;
+        this.setState({ answers: answers });
     }
 
     submitForm(){
@@ -48,7 +43,7 @@ class Form extends React.Component{
                         break;
                     
                     case "audioRecord":
-                        input = <AudioRecorder setUriRecorder={this.setUriRecorder}/>
+                        input = <AudioRecorder question={question} getAnswer={this.getAnswer}/>
                        break;
                 
                     default:
