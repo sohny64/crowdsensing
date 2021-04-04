@@ -16,9 +16,7 @@ export default class AudioRecorder extends React.Component{
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
-    }
-
-    
+    }  
 
     toggleStopwatch() {
         this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
