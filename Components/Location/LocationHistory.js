@@ -101,6 +101,8 @@ class LocationHistory extends React.Component{
                 valuesJSON = valuesJSON + element[1] + ",";
             });
             valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+            console.log(valuesJSON);
+            console.log(keysRecorded);
             valuesJSON = JSON.parse(valuesJSON);
             
         } catch(e) {
@@ -127,7 +129,7 @@ class LocationHistory extends React.Component{
         this.props.navigation.goBack(null);
     }
 
-    _askToDelete(item){
+    _askToDelete(item,isARecord){
         Alert.alert(
             "Warning!",
             "Are you sure you want to delete the location?",
@@ -140,15 +142,46 @@ class LocationHistory extends React.Component{
                 },
                 { 
                     text: "OK",
-                    onPress: () => this._deleteLocation(item)
+                    onPress: () => this._deleteLocation(item,isARecord)
                 }
             ]
         );
     }
 
-    async _deleteLocation(item){
-        var regex = new RegExp(item.timestamp);
-        var key = this.state.keys.find(value => regex.test(value));
+    _deleteLocation = async (item, isARecord) => {
+        var regex;
+        var key;
+        if(isARecord){
+            regex = new RegExp(item[0][1].timestamp);
+            key = this.state.recordedKeys.find(value => regex.test(value));
+
+            var recordedLocations = this.state.recordedLocations;
+            var index;
+            for(var i=0 ; i<recordedLocations.length ; i++){
+                if(recordedLocations[i][0][1].timestamp == item[0][1].timestamp){
+                    index = i;
+                }
+            }
+            recordedLocations.splice(index,1);
+            this.setState({
+                recordedLocations: recordedLocations,
+            })
+        }
+        else{
+            regex = new RegExp(item.timestamp);
+            key = this.state.keys.find(value => regex.test(value));
+            data = this.state.data;
+            var index;
+            for(var i=0 ; i<data.length ; i++){
+                if(data[i].timestamp == item.timestamp){
+                    index = i;
+                }
+            }
+            data.splice(index,1);
+            this.setState({
+                data: data,
+            })    
+        }
 
         //Remove from storage
         try {
@@ -156,18 +189,6 @@ class LocationHistory extends React.Component{
         } catch(e) {
             return false;
         }
-
-        data = this.state.data;
-        var index;
-        for(var i=0 ; i<data.length ; i++){
-            if(data[i].timestamp == item.timestamp){
-                index = i;
-            }
-        }
-        data.splice(index,1);
-        this.setState({
-            data: data,
-        })      
     }
 
     render(){
@@ -216,7 +237,7 @@ class LocationHistory extends React.Component{
                                 </TouchableOpacity>
                                 <TouchableOpacity 
                                     style={styles.button_delete}
-                                    onPress={() => this._askToDelete(location.item)}
+                                    onPress={() => this._askToDelete(location.item,false)}
                                 >
                                     <Image
                                         source={require('../../Images/delete_red.png')}
@@ -270,7 +291,7 @@ class LocationHistory extends React.Component{
                                 </TouchableOpacity>
                                 <TouchableOpacity 
                                     style={styles.button_delete}
-                                    onPress={() => this._askToDelete(locationRecord.item)}
+                                    onPress={() => this._askToDelete(locationRecord.item,true)}
                                 >
                                     <Image
                                         source={require('../../Images/delete_red.png')}

@@ -55,22 +55,24 @@ class UserLocation extends React.Component{
         if(this.state.isRecording){
             //Stop recording location
             clearInterval(this.state.interval);
+            await this._storeRecord();
             this.setState({
-                recordedLocationsTimestamp: currentLocation.timestamp,
+                recordedLocationsTimestamp: 0,
                 isRecording: false,
             })
-            this._storeRecord();
         } else {
-            //Start recording location
-            currentLocation = await Location.getCurrentPositionAsync();
             this.setState({
-                recordedLocationsTimestamp: currentLocation.timestamp,
                 isRecording: true,
                 recordedLocations: [],
-            })
+            })            
 
             this.state.interval = setInterval(async () => {
                 currentLocation = await Location.getCurrentPositionAsync();
+
+                if(this.state.recordedLocationsTimestamp == 0){
+                    this.state.recordedLocationsTimestamp = currentLocation.timestamp
+                }
+
                 locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
                 
                 this.state.recordedLocations.push(locationJSON);
