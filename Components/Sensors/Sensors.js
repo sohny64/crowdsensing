@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, Pressable} from 'react-native';
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
-import * as Permissions from 'expo-permissions';
 
 
 class Sensors extends React.Component{
@@ -15,6 +14,7 @@ class Sensors extends React.Component{
             watchData: watchSensorData,
             selectedSensors:[],
             permissionsNeeded:[],
+            modalVisible: false
         }
     }
 
@@ -31,6 +31,7 @@ class Sensors extends React.Component{
         }
         this.setState(data)
     }
+    
     /*
     onCheckedWatch(id){
         const data=this.state.watchData
@@ -38,18 +39,14 @@ class Sensors extends React.Component{
         data[index].checked = !data[index].checked
         if (data[index].checked==true){
             this.state.selectedSensors.push(data[index].name)
-            if(!this.state.permissionsNeeded.includes(data[index].permissions)){
-                this.state.permissionsNeeded.push(data[index].permissions)
-            }
         }
         else{
-            this.state.selectedSensors.splice(data[index].name, 1)
-            this.state.permissionsNeeded.splice(data[index].permissions, 1)
+            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);  
         }
         this.setState(data)
 
-    }
-    */
+    }*/
+
     getSelectedSensors(){
         console.log(this.state.selectedSensors)
     }
@@ -58,23 +55,50 @@ class Sensors extends React.Component{
         console.log(this.state.permissionsNeeded)
     }
 
-    _getLocation = async () => {
-        const {status} = await Permissions.askAsync(Permissions.MOTION);
-        if(status != 'granted'){
-            alert("PERMISSION NOT GRANTED");
-        }
-        else{
+    _NextPage(){
             this.props.navigation.navigate("Record", { 
                 selectedSensors: this.state.selectedSensors,
                 permissionsNeeded: this.state.permissionsNeeded 
             });
-        }
     }
+
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+    }
+
+    renderPopUp() {
+        const { modalVisible } = this.state;
+        return (
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalTitle}>Sensors permissions</Text>
+                  <Text style={styles.modalText}>Allow this app to access this motion sensors? </Text>
+                  <Text style={styles.modalText}>Number of sensors concerned : {this.state.selectedSensors.length} </Text>
+
+                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._NextPage();}}>
+                    <Text style={styles.buttonText}>             Allow             </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.buttonDeny} onPress={() => this.setModalVisible(false)}>
+                    <Text style={styles.buttonText}>             Deny             </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        );
+      }
 
     _displayRecord = () => {
 
             if(this.state.selectedSensors.length > 0){
-                this._getLocation();
+                this.setModalVisible();
             }
             else{
                 alert("None sensors selected!")
@@ -94,26 +118,22 @@ class Sensors extends React.Component{
                 />
             )
     }
-    /*
+    
     renderWatchSensors(){
         return(
             <FlatList
                 data={watchSensorData}
                 keyExtractor= {(item) => item.id.toString()}
-                renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.textCheckBox}
+                renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.textCheckBoxBlock}
                 title={item.name}
                 checked={item.checked}
-                onPress={()=>this.onCheckedWatch(item.id)}  
                 />}
             />
         )
     }
 
-                   <View style={styles.description_container}>
-                    <Text style={styles.subhead}>Watch Sensors :</Text>
-                    {this.renderWatchSensors()}
-                </View>
-*/
+                   
+
 
 
     render(){
@@ -124,11 +144,16 @@ class Sensors extends React.Component{
                     <Text style={styles.subhead}>Phone Sensors :</Text>
                     {this.renderSmartphoneSensors()}
                 </View>
+                <View style={styles.description_container}>
+                    <Text style={styles.subheadBlock}>Watch Sensors (not yet avaible):</Text>
+                    {this.renderWatchSensors()}
+                </View>
           
                 <View style={styles.button_container}>
                 <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
                         <Text style={styles.text_button}>Start recording</Text>
                 </TouchableOpacity>
+                
                 <TouchableOpacity 
                         style={styles.button_history}
                     >
@@ -138,8 +163,12 @@ class Sensors extends React.Component{
                         />
                     </TouchableOpacity>
                     </View>
-                
+                    <View>
+                {this.renderPopUp()}  
             </View>
+                  
+            </View>
+
             
         );
     };
@@ -154,6 +183,12 @@ const styles = StyleSheet.create({
             fontSize: 20,
             fontWeight: 'bold',
             color: '#ffffff',
+            marginBottom: 5
+        },
+        subheadBlock: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#939393',
             marginBottom: 5
         },
         description_container: {
@@ -182,6 +217,9 @@ const styles = StyleSheet.create({
         textCheckBox: {
             color: '#ffffff'
         },
+        textCheckBoxBlock: {
+            color: '#939393'
+        },
         button: {
             padding: 10,
             backgroundColor: '#862db3',
@@ -207,7 +245,64 @@ const styles = StyleSheet.create({
         height: 30,
         resizeMode: 'contain',
         alignItems: 'center',
-    }
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        backgroundColor:"#ffffffaa"
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "#241332",
+        borderTopRightRadius:60,
+        borderBottomLeftRadius:60,
+        padding: 25,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+        
+      },
+      modalText: {
+        marginTop: 10,
+        color: '#ffffff',
+        textAlign: "center"
+      },
+      modalTitle: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: "center"
+      },
+      buttonAllowed: {
+        width:'80%',
+        marginTop:35,
+        backgroundColor: "#D47FA6",
+        borderRadius: 20,
+        padding: 10,
+
+      },
+      buttonDeny: {
+        width:'80%',
+        marginTop:10,
+        backgroundColor: "#61536C",
+        borderRadius: 20,
+        padding: 10,
+
+
+      },
+      buttonText:{
+        color: '#ffffff',
+        fontSize: 18
+      },
 });
 
 
