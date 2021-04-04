@@ -1,20 +1,26 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import Toast from 'react-native-easy-toast'
+import Toast from 'react-native-easy-toast';
+import AudioRecorder from '../Sensors/AudioRecorder';
 
 class Form extends React.Component{
-    constructor(state){
-        super(state)
+    constructor(props){
+        super(props)
         this.state = {
-            answers: {}
+            answers: {},
         }
+        this.getAnswer = this.getAnswer.bind(this);
     }
 
-    getAnswer(answer, name){
+    audioRecorderHandler = (uri) => {
+        this.setState({ uriRecorder: uri })
+    }
+
+    getAnswer = (answer, question) => {
         const answers = this.state.answers;
-        answers[name] = answer;
-        this.setState({ answers });
+        answers[question.name] = answer;
+        this.setState({ answers: answers });
     }
 
     submitForm(){
@@ -27,12 +33,21 @@ class Form extends React.Component{
         return(
             form.questions.map((question, index) => {
                 //Get input type
-                if (question.type == "text") {
-                    input = <TextInput 
-                                style={styles.text_input} 
-                                multiline
-                                onChangeText={(answer) => this.getAnswer(answer, question.name)}
-                            />
+                switch (question.type) {
+                    case "text":
+                        input = <TextInput 
+                            style={styles.text_input} 
+                            multiline
+                            onChangeText={(answer) => this.getAnswer(answer, question)}
+                        />
+                        break;
+                    
+                    case "audioRecord":
+                        input = <AudioRecorder question={question} getAnswer={this.getAnswer}/>
+                       break;
+                
+                    default:
+                        break;
                 }
                 //Display data title and his input
                 return(

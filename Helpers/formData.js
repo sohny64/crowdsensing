@@ -48,8 +48,8 @@ export default data = [
             },
             soundPollutionInCity= {
                 name: "soundPollutionInCity",
-                title: "Do you have sound pollution in your city ?",
-                type: "text",
+                title: "Record sound in your city",
+                type: "audioRecord",
             }
         ]
     },
