@@ -1,11 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform} from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer'
-import Accelerometer from './Accelerometer'
-import Barometer from './Barometer'
-import Gyroscope from './Gyroscope'
-import Magnetometer from './Magnetometer'
-import Pedometer from './Pedometer'
+import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
 
 
 
@@ -14,36 +10,90 @@ class Record extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+
+            //selected
             selected: [],
+
+            //Stopwatch
             stopwatchStart: false,
             totalDuration: 10000,
             stopwatchReset: false,
-            resultSensor: []
+
+            //Accelerometer
+            accelerometerX: 0,
+            accelerometerY: 0,
+            accelerometerZ: 0,
+            
+            //Barometer
+            pressure:0,
+            relativeAltitude:0,           
+            
+            //Gyroscope
+            gyroscopeX: 0,
+            gyroscopeY: 0,
+            gyroscopeZ: 0,
+
+            //Magnetometer
+            magnetometerX: 0,
+            magnetometerY: 0,
+            magnetometerZ: 0,
+
+            //Pedometer
+            pastStepCount: 0,
+            currentStepCount: 0,
+
         }
-    this.toggleStopwatch = this.toggleStopwatch.bind(this);
-    this.resetStopwatch = this.resetStopwatch.bind(this);
+        this.toggleStopwatch = this.toggleStopwatch.bind(this);
+        this.resetStopwatch = this.resetStopwatch.bind(this);
     }
 
-    /* STOP WATCH */
-    toggleStopwatch() {
-        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false})
-    }
-    
-    resetStopwatch() {
-        this.setState({stopwatchStart: false, stopwatchReset: true})
-    }
 
-    handleTimerComplete(){
-        if (this.state.stopwatchStart == true){
-            alert("Lancer la fonction pour enregistrer")
-            this.resetStopwatch()
-        }
+//---------------------------------------------------------------------------------------------------------------------
+        
+    _unsubscribe = () => {
+        this._subscription && this._subscription.remove();
+        this._subscription = null;
+    };
+
+    _subscribe = () => {
+        
+        this._subscription =
+            Accelerometer.addListener(accelerometerData => {
+                this.setState({
+                accelerometerX: Object.values(accelerometerData)[2],
+                accelerometerY: Object.values(accelerometerData)[1],
+                accelerometerZ: Object.values(accelerometerData)[0],
+                })
+            })
+            Gyroscope.addListener(gyroscopeData => {
+                this.setState({
+                gyroscopeX: Object.values(gyroscopeData)[2],
+                gyroscopeY: Object.values(gyroscopeData)[1],
+                gyroscopeZ: Object.values(gyroscopeData)[0],
+                })
+            })
+            Magnetometer.addListener(magnetometerData => {
+                this.setState({
+                magnetometerX: Object.values(magnetometerData)[2],
+                magnetometerY: Object.values(magnetometerData)[1],
+                magnetometerZ: Object.values(magnetometerData)[0],
+                })
+            })
+            Barometer.addListener(barometerData => {
+                this.setState({
+                  pressure: Object.values(barometerData)[0],
+                  relativeAltitude: Object.values(barometerData)[1],
+                });
+              });
+            Pedometer.watchStepCount(result => {
+                this.setState({
+                  currentStepCount: result.steps,
+                });
+              });
     }
-    /* ------------------ */
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
     componentDidMount(){
-    
         const smartphoneSensors = this.props.navigation.state.params.selectedSensors
         let Temps = smartphoneSensors
         let FormatData=[]
@@ -56,37 +106,158 @@ class Record extends React.Component{
             )
         }
         this.setState({selected:FormatData})
-
-
-        {this.toggleStopwatch(); this.handleTimerComplete();}
-
-
+        this._subscribe()
+        this.toggleStopwatch()
     }
-
     /* ------------------ */
 
+    componentWillUnmount() {
+        this._unsubscribe();
+      }
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    //Accelerometer
+    _slowAccelerometer(){
+        Accelerometer.setUpdateInterval(350);
+    };
     
+    _stopAccelerometer(){
+        Accelerometer.setUpdateInterval(100000);
+    };
+    
+    _fastAccelerometer(){
+        Accelerometer.setUpdateInterval(50);
+    };
+    
+    renderAccelerometer(){
+        return (
+            <View style={styles.containerSensor}>
+              <Text style={styles.textSensor}>
+                x: {round(this.state.accelerometerX)}{"\n"}
+                y: {round(this.state.accelerometerY)}{"\n"}
+                z: {round(this.state.accelerometerZ)}
+              </Text>
+            </View>
+        )
+    }
+
+    //Barometer
+    renderBarometer (){
+        return(
+        <View style={styles.containerSensor}>
+          <Text style={styles.textSensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
+            Relative Altitude:{' '}
+            {Platform.OS === 'ios' ? `${this.state.relativeAltitude} m` : `Only available on iOS`}
+          </Text>
+        </View>
+        )
+    }
+    
+
+    //Gyroscope
+    _slowGyroscope(){
+        Gyroscope.setUpdateInterval(350);
+    };
+    
+    _fastGyroscope(){
+        Gyroscope.setUpdateInterval(50);
+    };
+    
+    _stopGyroscope(){
+        Gyroscope.setUpdateInterval(100000);
+    };
+    
+    renderGyroscope() {
+        return(
+        <View style={styles.containerSensor}>
+          <Text style={styles.textSensor}>
+            x: {round(this.state.gyroscopeX)}{"\n"}
+            y: {round(this.state.gyroscopeY)}{"\n"}
+            z: {round(this.state.gyroscopeZ)}
+          </Text>
+        </View>
+    )}
+
+    //Magnetometer
+    _slowMagnetometer(){
+        Magnetometer.setUpdateInterval(350);
+    };
+      
+    _stopMagnetometer(){
+        Magnetometer.setUpdateInterval(100000);
+    };
+    
+    _fastMagnetometer(){
+        Magnetometer.setUpdateInterval(50);
+    };
+
+    renderMagnetometer(){
+      return (
+        <View style={styles.containerSensor}>
+          <Text style={styles.textSensor}>
+            x: {round(this.state.magnetometerX)}{"\n"}
+            y: {round(this.state.magnetometerY)}{"\n"}
+            z: {round(this.state.magnetometerZ)}
+          </Text>
+        </View>
+    )};
+
+    //Pedometer
+    renderPedometer() {
+        return (
+          <View style={styles.containerSensor}>
+              
+            <Text style={styles.textSensor} >{Platform.OS === 'ios' ? `${this.state.currentStepCount} m` : `Only available on iOS`}</Text>
+          </View>
+        );
+    }
+
+    //StopWatch
+    toggleStopwatch() {
+        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false})
+    }
+    
+    resetStopwatch() {
+        this.setState({stopwatchStart: false, stopwatchReset: true})
+    }
+
+    handleTimerComplete(){
+        if (this.state.stopwatchStart == true){
+            this._slowGyroscope()
+            this.resetStopwatch()
+        }
+    }
+
+
+//---------------------------------------------------------------------------------------------------------------------
 
     /* RENDER EACH SENSORS CHECKED */ 
     checkSwitch=(param)=>{
         switch(param) {
           case 'Accelerometer':
-              return ( <Accelerometer /> )
+              return ( this.renderAccelerometer() )
 
           case 'Barometer':
-              return ( <Barometer/>)
+            return ( this.renderBarometer() )
 
           case 'Gyroscope':
-              return ( <Gyroscope/>)
+            return ( this.renderGyroscope() )
 
           case 'Magnetometer':
-              return ( <Magnetometer/>)
+            return ( this.renderMagnetometer() )
               
           case 'Pedometer':
-              return ( <Pedometer/>)
+            return ( this.renderPedometer() )
         }
       }
-
 
     renderSmartphoneSensorList(){
         return this.state.selected.map((item,key) => {
@@ -102,7 +273,6 @@ class Record extends React.Component{
             )
           })
     }
-
     /* ------------------ */
 
     renderStopWatch() {
@@ -116,7 +286,6 @@ class Record extends React.Component{
             )
     }
 
-
     render(){
         return(
             <View style={styles.main_container}>
@@ -127,7 +296,7 @@ class Record extends React.Component{
                     
                 </View>
                 {this.renderStopWatch()}
-                <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();}}>
+                <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
@@ -135,6 +304,13 @@ class Record extends React.Component{
     };
 }
 
+
+function round(n) {
+    if (!n) {
+      return 0;
+    }
+    return Math.floor(n * 100) / 100;
+  }
 
      /* CSS */
 
@@ -147,73 +323,90 @@ const options = {
   };
 
 const styles = StyleSheet.create({
+
     main_container: {
             backgroundColor: '#331245',
             flex: 1
-        },
-        subhead: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: '#ffffff',
-            marginBottom: 5
-        },
-        description_container: {
-            backgroundColor: '#441d59',
-            borderRadius: 20,
-            margin: 20,
-            padding: 10
-        },
-        button_container:{
-            flexDirection: "row",
-            bottom: 20,
-            right: 20,
-            position: 'absolute',
-            marginTop: 'auto',
-        },
-        checkbox: {
-            marginLeft: 5,
-            marginRight: 5,
-            height: 50,
-            backgroundColor: '#441d59',
-            borderColor: '#441d59',
-            borderWidth: 1,
-            paddingLeft: 5,
-            
-        },
-        textCheckBox: {
-            color: '#ffffff'
-        },
-        button: {
-            padding: 10,
-            backgroundColor: '#862db3',
-            borderRadius: 20,
-            width: '70%',
-            alignItems: 'center',
-            alignSelf: 'center',
-            marginTop: 'auto',
-            marginBottom: 40
-        },
-        text: {
-            color: '#ffffff',
-            fontSize: 17,
-        },
-        timer: {
-            backgroundColor: '#331245',
-            width: '70%',
-            alignItems: 'center',
-            alignSelf: 'center',
-            marginBottom: 80,
-            flexDirection: "row",
-            bottom: 20,
-            right: 20,
-            position: 'absolute',
-            marginTop: 'auto',
-            
-        },
-        text_button:{
-        color: '#ffffff',
-        fontSize: 20
     },
+
+    subhead: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginBottom: 5
+    },
+
+    description_container: {
+        backgroundColor: '#441d59',
+        borderRadius: 20,
+        margin: 20,
+        padding: 10
+    },
+
+    button_container:{
+        flexDirection: "row",
+        bottom: 20,
+        right: 20,
+        position: 'absolute',
+        marginTop: 'auto',
+    },
+
+    checkbox: {
+        marginLeft: 5,
+        marginRight: 5,
+        height: 50,
+        backgroundColor: '#441d59',
+        borderColor: '#441d59',
+        borderWidth: 1,
+        paddingLeft: 5,        
+    },
+
+    textCheckBox: {
+        color: '#ffffff'
+    },
+        
+    button: {
+        padding: 10,
+        backgroundColor: '#862db3',
+        borderRadius: 20,
+        width: '70%',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 'auto',
+        marginBottom: 40
+    },
+    text: {
+        color: '#ffffff',
+        fontSize: 17,
+    },
+    timer: {
+        backgroundColor: '#331245',
+        width: '70%',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: 80,
+        flexDirection: "row",
+        bottom: 20,
+        right: 20,
+        position: 'absolute',
+        marginTop: 'auto',     
+    },
+
+    text_button:{
+    color: '#ffffff',
+    fontSize: 20
+    },
+
+    containerSensor: {
+        flex: 1,
+        paddingHorizontal: 15,
+      },
+  
+      textSensor: {
+        color: '#ffffff',
+        fontSize: 14,
+    },
+
 });
 
 /* ------------------ */
