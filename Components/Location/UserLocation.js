@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ToastAndroid} from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image} from 'react-native';
 import MapView, { Callout } from 'react-native-maps';
 import moment from 'moment';
 import * as Location from 'expo-location';
@@ -23,6 +23,10 @@ class UserLocation extends React.Component{
             errorMessage: '',
             msg: '',
             mapMarkers: [],
+            recordedLocations: [],
+            recordedLocationsTimestamp: 0,
+            isRecording: false,
+            interval: 0,
         }
     }
 
@@ -47,11 +51,41 @@ class UserLocation extends React.Component{
         })
     }
 
-    _storeData = async () => {
+    async _recordLocation() {
+        if(this.state.isRecording){
+            //Stop recording location
+            clearInterval(this.state.interval);
+            this.setState({
+                recordedLocationsTimestamp: currentLocation.timestamp,
+                isRecording: false,
+            })
+            this._storeRecord();
+        } else {
+            //Start recording location
+            currentLocation = await Location.getCurrentPositionAsync();
+            this.setState({
+                recordedLocationsTimestamp: currentLocation.timestamp,
+                isRecording: true,
+                recordedLocations: [],
+            })
+
+            this.state.interval = setInterval(async () => {
+                currentLocation = await Location.getCurrentPositionAsync();
+                locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
+                
+                this.state.recordedLocations.push(locationJSON);
+                this.setState({
+                    recordedLocations: this.state.recordedLocations,
+                });
+                console.log("recording");
+            }, 5000);
+        }
+    }
+
+    async _storeRecord(){
         try {
-            await this._getLocation();
-            let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
-            let value = JSON.stringify(this.state.currentLocation);
+            let key = "locationRecord_" + JSON.stringify(this.state.recordedLocationsTimestamp);
+            let value = JSON.stringify(this.state.recordedLocations);
             await AsyncStorage.setItem(key, value);
             this.toast.show('Location saved !');
         } catch (e) {
@@ -59,17 +93,16 @@ class UserLocation extends React.Component{
         }  
     }
 
-    _getData = async () => {
+    _storeData = async () => {
         try {
-          const value = await AsyncStorage.getItem('pos')
-          if(value !== null) {
-            this.setState({
-                msg: value
-            })
-          }
-        } catch(e) {
+            await this._getLocation();
+            let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
+            let value = JSON.stringify(this.state.currentLocation);
+            await AsyncStorage.setItem(key, value);
+            this.toast.show('Record saved !');
+        } catch (e) {
           alert(e)
-        }
+        }  
     }
 
     _getDate(timestamp){
@@ -135,12 +168,14 @@ class UserLocation extends React.Component{
                 
                 
                 <View style={styles.button_container}>
-                    
                     <TouchableOpacity 
-                        style={styles.button_save}
-                        onPress={ () => this._storeData()}
+                        style={styles.button_record}
+                        onPress={() => this._recordLocation()}
                     >
-                        <Text style={styles.text_button}>Save position</Text>
+                        <Image
+                            source={require('../../Images/book.png')}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
 
                     <TouchableOpacity 
@@ -151,6 +186,13 @@ class UserLocation extends React.Component{
                             source={require('../../Images/book.png')}
                             style={styles.icon}
                         />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                        style={styles.button_save}
+                        onPress={ () => this._storeData()}
+                    >
+                        <Text style={styles.text_button}>Save position</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity 
@@ -163,10 +205,8 @@ class UserLocation extends React.Component{
                         />
                     </TouchableOpacity>
                 </View>
-                <Toast ref={(toast) => this.toast = toast} position='center'/>
-                
-            </View>
-            
+                <Toast ref={(toast) => this.toast = toast} position='center'/>                
+            </View>            
         );
     };
 }
@@ -180,8 +220,8 @@ const styles = StyleSheet.create({
     button_container:{
         flexDirection: "row",
         bottom: 20,
-        left: '18%',
         position: 'absolute',
+        alignItems: 'center',
         marginTop: 'auto',
         width: '100%',
     },
@@ -202,8 +242,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',
-        width: '50%',
+        width: '40%',
         marginRight: 10,
+        marginLeft: 10,
     },
 
     button_history: {
@@ -216,7 +257,12 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#cc0000',
         borderRadius: 100,
-        left: 10,
+    },
+
+    button_record: {
+        padding: 10,
+        backgroundColor: '#cc0000',
+        borderRadius: 100,
     },
 
     icon: {

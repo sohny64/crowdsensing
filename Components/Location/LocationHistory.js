@@ -12,6 +12,8 @@ class LocationHistory extends React.Component{
         this.state = ({
             data: {},
             keys: [],
+            recordedLocations: {},
+            recordedKeys: {},
         })
     }
 
@@ -39,13 +41,19 @@ class LocationHistory extends React.Component{
         //Fetch all keys
         let keys = []
         let validKeys = []
+        let keysRecorded = []
         let regex_keyValidity = /^(location_)/
+        let regex_recordKey = /^(locationRecord_)/
         try {
             keys = await AsyncStorage.getAllKeys()
             keys.forEach(element => {
                 //Check key start by location and is defined
                 if(!element.includes("undefined") && regex_keyValidity.test(element)){
                     validKeys.push(element)
+                } else {
+                    if(!element.includes("undefined") && regex_recordKey.test(element)){
+                        keysRecorded.push(element)
+                    }
                 }
             });
 
@@ -56,6 +64,9 @@ class LocationHistory extends React.Component{
             //Trie du plus récent au moins récent
             validKeys.sort();
             validKeys.reverse();
+
+            keysRecorded.sort();
+            keysRecorded.reverse();
         } catch(e) {
             alert(e)
         }
@@ -78,6 +89,26 @@ class LocationHistory extends React.Component{
         this.setState({
             data: valuesJSON,
             keys: validKeys
+        })
+
+        //Retrieve values
+        valuesJSON = "[";
+        try {
+            values = await AsyncStorage.multiGet(keysRecorded)
+
+            //Format values to respect JSON Format
+            values.forEach(element => {
+                valuesJSON = valuesJSON + element[1] + ",";
+            });
+            valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+            valuesJSON = JSON.parse(valuesJSON);
+            
+        } catch(e) {
+            alert(e)
+        }
+        this.setState({
+            recordedLocations: valuesJSON,
+            recordedKeys: keysRecorded
         })
     }
 
@@ -142,6 +173,10 @@ class LocationHistory extends React.Component{
     render(){
         return(
             <View style={styles.main_container}>
+                <View style={{flex:2}}>
+                <Text style={styles.title}>
+                    Unique locations
+                </Text>
                 <FlatList
                     data={this.state.data}
                     keyExtractor={(item) => item.timestamp.toString()}
@@ -192,6 +227,61 @@ class LocationHistory extends React.Component{
                         </View>
                     )}
                 />
+                </View>
+                <View
+                    style={{
+                        borderBottomColor: '#fff',
+                        borderBottomWidth: 3,
+                        marginTop: 20,
+                        marginBottom: 10
+                    }}
+                />
+                <View style={{flex:1}}>
+                <Text style={styles.title}>
+                    Sets of locations
+                </Text>
+                <FlatList
+                    data={this.state.recordedLocations}
+                    keyExtractor={(item) => item[0][1].timestamp.toString()}
+                    renderItem={(locationRecord =>
+                        <View style={styles.buttons_container}>
+                            <TouchableOpacity 
+                                style={styles.history_container}
+                            >
+                                <View style={styles.description_container}>
+                                    <Text style={styles.subhead}>
+                                        Date recorded
+                                    </Text>
+                                    <Text style={styles.text}>
+                                        {this._getDate(locationRecord.item[0][1].timestamp)}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+
+                            <View style={styles.button_container}>
+                                <TouchableOpacity 
+                                    style={styles.button_share}
+                                    onPress={() => this._onShare(locationRecord.item)}
+                                >
+                                    <Image
+                                        source={require('../../Images/share.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={styles.button_delete}
+                                    onPress={() => this._askToDelete(locationRecord.item)}
+                                >
+                                    <Image
+                                        source={require('../../Images/delete_red.png')}
+                                        style={styles.icon_delete}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
+                />
+                </View>
             </View> 
         );
     };
@@ -222,6 +312,7 @@ const styles = StyleSheet.create({
     },
 
     button_container: {
+        flexDirection: "row",
         backgroundColor: '#441d59',
         marginRight: 10,
         marginTop: 10,
@@ -246,13 +337,20 @@ const styles = StyleSheet.create({
     },
 
     history_container: {
-        flex: 3,
+        flex: 2,
     },
 
     subhead: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
+    },
+
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginLeft: 10
     },
 
     icon: {
