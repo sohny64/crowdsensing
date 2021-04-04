@@ -1,20 +1,31 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import Toast from 'react-native-easy-toast'
+import Toast from 'react-native-easy-toast';
+import AudioRecorder from '../Sensors/AudioRecorder';
 
 class Form extends React.Component{
     constructor(state){
         super(state)
         this.state = {
-            answers: {}
+            answers: {},
+            uriRecorder: undefined
         }
     }
 
-    getAnswer(answer, name){
+    getAnswer(answer, question){
         const answers = this.state.answers;
-        answers[name] = answer;
-        this.setState({ answers });
+        const uriRecorder = this.state.uriRecorder;
+        switch (question.type) {
+            case "text":
+                answers[question.name] = answer;
+                this.setState({ answers });
+                break;
+        
+            default:
+                break;
+        }
+        
     }
 
     submitForm(){
@@ -27,12 +38,21 @@ class Form extends React.Component{
         return(
             form.questions.map((question, index) => {
                 //Get input type
-                if (question.type == "text") {
-                    input = <TextInput 
-                                style={styles.text_input} 
-                                multiline
-                                onChangeText={(answer) => this.getAnswer(answer, question.name)}
-                            />
+                switch (question.type) {
+                    case "text":
+                        input = <TextInput 
+                            style={styles.text_input} 
+                            multiline
+                            onChangeText={(answer) => this.getAnswer(answer, question)}
+                        />
+                        break;
+                    
+                    case "audioRecord":
+                        input = <AudioRecorder setUriRecorder={this.setUriRecorder}/>
+                       break;
+                
+                    default:
+                        break;
                 }
                 //Display data title and his input
                 return(
