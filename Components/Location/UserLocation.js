@@ -170,25 +170,27 @@ class UserLocation extends React.Component{
                 
                 
                 <View style={styles.button_container}>
-                    <TouchableOpacity 
-                        style={styles.button_record}
-                        onPress={() => this._recordLocation()}
-                    >
-                        <Image
-                            source={require('../../Images/book.png')}
-                            style={styles.icon}
-                        />
-                    </TouchableOpacity>
+                    <View style={styles.button_history_container}>
+                        <TouchableOpacity 
+                            style={styles.button_record}
+                            onPress={() => this._recordLocation()}
+                        >
+                            <Image
+                                source={require('../../Images/book.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
 
-                    <TouchableOpacity 
-                        style={styles.button_history}
-                        onPress={() => this._displayHistory()}
-                    >
-                        <Image
-                            source={require('../../Images/book.png')}
-                            style={styles.icon}
-                        />
-                    </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={styles.button_history}
+                            onPress={() => this._displayHistory()}
+                        >
+                            <Image
+                                source={require('../../Images/book.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </View>
                     
                     <TouchableOpacity 
                         style={styles.button_save}
@@ -223,9 +225,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         bottom: 20,
         position: 'absolute',
-        alignItems: 'center',
+        justifyContent: 'space-between',
         marginTop: 'auto',
         width: '100%',
+    },
+
+    button_history_container:{
+        flexDirection: "row",
+        marginStart: 10
     },
 
     map: {
@@ -259,12 +266,14 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#cc0000',
         borderRadius: 100,
+        marginRight: 10
     },
 
     button_record: {
         padding: 10,
         backgroundColor: '#cc0000',
         borderRadius: 100,
+        marginRight: 3
     },
 
     icon: {
