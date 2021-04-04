@@ -18,6 +18,7 @@ class Record extends React.Component{
             stopwatchStart: false,
             totalDuration: 10000,
             stopwatchReset: false,
+            resultSensor: []
         }
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
@@ -34,10 +35,6 @@ class Record extends React.Component{
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
-            new Accelerometer()._stop()
-            new Gyroscope()._stop()
-            new Magnetometer()._stop()
-            new Barometer()._unsubscribe()
             alert("Lancer la fonction pour enregistrer")
             this.resetStopwatch()
         }
@@ -60,12 +57,15 @@ class Record extends React.Component{
         }
         this.setState({selected:FormatData})
 
-        if( FormatData.length > 0 ){
-            {this.toggleStopwatch(); this.handleTimerComplete();}
-        }
+
+        {this.toggleStopwatch(); this.handleTimerComplete();}
+
+
     }
 
     /* ------------------ */
+
+    
 
     /* RENDER EACH SENSORS CHECKED */ 
     checkSwitch=(param)=>{
@@ -116,6 +116,7 @@ class Record extends React.Component{
             )
     }
 
+
     render(){
         return(
             <View style={styles.main_container}>
@@ -126,7 +127,7 @@ class Record extends React.Component{
                     
                 </View>
                 {this.renderStopWatch()}
-                <TouchableOpacity style={styles.button} onPress={ () => { new Accelerometer()._fast();new Gyroscope()._fast();new Magnetometer()._fast();this.toggleStopwatch(); this.handleTimerComplete();}}>
+                <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();}}>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
             </View> 
