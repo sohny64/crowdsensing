@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
-import AudioRecorder from './RecorderSensor/Audio';
+import AudioRecorder from './RecorderSensor/AudioRecorder';
 
 class Form extends React.Component{
     constructor(props){
@@ -13,24 +13,25 @@ class Form extends React.Component{
         this.getAnswer = this.getAnswer.bind(this);
     }
 
-    audioRecorderHandler = (uri) => {
-        this.setState({ uriRecorder: uri })
-    }
-
     getAnswer = (answer, question) => {
+        //Add the aswer param to the answers
         const answers = this.state.answers;
         answers[question.name] = answer;
         this.setState({ answers: answers });
     }
 
     submitForm(){
+        //Currently this just displays form answer to the console in JSON format
+        //But this will send it to a database in a future version
         console.log(JSON.stringify(this.state.answers));
+        //Show a toast to inform the user that the form are submit
         this.toast.show('Form submit !');
     }
 
     displayQuestionsForm(form){
-        var input;
+        var input; //Input use to get data from the user
         return(
+            //Get all questions from the form
             form.questions.map((question, index) => {
                 //Get input type
                 switch (question.type) {
@@ -61,7 +62,7 @@ class Form extends React.Component{
     }
 
     render(){
-        const form = this.props.navigation.state.params.form;
+        const form = this.props.navigation.state.params.form; //Form
         return(
             <View style={styles.main_container}>
                 <View style={styles.title_container}>

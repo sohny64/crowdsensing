@@ -11,7 +11,6 @@ export default class AudioRecorder extends React.Component{
             uri: "",
             recording: undefined,
             stopwatchStart: false,
-            totalDuration: 10000,
             stopwatchReset: false
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -19,15 +18,18 @@ export default class AudioRecorder extends React.Component{
     }  
 
     toggleStopwatch() {
+        //Stop the reset and start the stop watch
         this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
     }
 
     resetStopwatch() {
+        //Stop the stopwatch and start the reset
         this.setState({stopwatchStart: false, stopwatchReset: true});
     }
 
     startRecording = async () =>  {
         try {
+            //Ask permission to use Audio sensor
             console.log('Requesting permissions..');
             await Audio.requestPermissionsAsync();
             await Audio.getPermissionsAsync();
@@ -35,7 +37,7 @@ export default class AudioRecorder extends React.Component{
                 allowsRecordingIOS: true,
                 playsInSilentModeIOS: true,
             }); 
-            console.log('Starting recording..');
+            //Start audio recording
             const recording = new Audio.Recording();
             await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
             await recording.startAsync();
@@ -44,25 +46,26 @@ export default class AudioRecorder extends React.Component{
             //Start and reset timer
             this.resetStopwatch()
             this.toggleStopwatch();
-          
-            console.log('Recording started');
+
         } catch (err) {
+            //Send the error to the log
             console.error('Failed to start recording', err);
         }
     }
 
     stopRecording = async () => {
-        const getAnswer = this.props.getAnswer;
-        const recording = this.state.recording;
-        console.log('Stopping recording..');
+        const getAnswer = this.props.getAnswer; //Function to send record to the form
+        const recording = this.state.recording; //Current recording
+
+        //Stop audio record
         this.setState({ recording: undefined, isRecording:false });
         await recording.stopAndUnloadAsync();
+        //Get uri record
         const uri = recording.getURI();
         this.setState({ uri: uri });
+        //Send record to the form
         getAnswer(uri, this.props.question);
-        console.log('Recording stopped and stored at', uri);
-
-        //Stop timer
+        //Stop stopwatch
         this.toggleStopwatch();
     }
 

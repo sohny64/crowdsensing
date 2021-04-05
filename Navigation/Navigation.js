@@ -12,14 +12,14 @@ import Record from '../Components/Sensors/Record';
 import { Icon, Text } from "react-native-elements";
 import { StyleSheet } from 'react-native';
 
-
+//Top bar navigator
 const TabNavigator = createMaterialTopTabNavigator(
     {
-        Forms: {
-            screen: FormList
-        },
         Location: {
             screen: UserLocation
+        },
+        Forms: {
+            screen: FormList
         },
         Sensors: {
             screen: Sensors
@@ -39,8 +39,9 @@ const TabNavigator = createMaterialTopTabNavigator(
         },
         defaultNavigationOptions: ({ navigation }) => ({
             tabBarIcon: () => {
-                const { routeName } = navigation.state;
-                let iconName;
+                const { routeName } = navigation.state; //Name of the route
+                let iconName; //icon display on the top of the title tab
+                //Select the good icon for the tab
                 if (routeName === "Forms") {
                     iconName = "message-circle";
                 } else if (routeName === "Location") {
@@ -48,10 +49,12 @@ const TabNavigator = createMaterialTopTabNavigator(
                 } else if (routeName === "Sensors") {
                     iconName = "radio";
                 }
+                //Display icon tab
                 return <Icon name={iconName} type="feather"/>;
             },
             tabBarLabel: () => {
-                const { routeName } = navigation.state;
+                const { routeName } = navigation.state; //Name of the route
+                //Display the title of each route
                 return <Text style={styles.text} >{routeName}</Text>;
             }
           })
@@ -59,7 +62,8 @@ const TabNavigator = createMaterialTopTabNavigator(
     
 );
 
-const FormStackNavigator = createStackNavigator(
+//Stack navigator
+const StackNavigator = createStackNavigator(
     {
         Forms: {
             screen: TabNavigator,
@@ -86,4 +90,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default createAppContainer(FormStackNavigator);
+export default createAppContainer(StackNavigator);

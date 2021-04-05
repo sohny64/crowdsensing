@@ -12,21 +12,25 @@ class FormList extends React.Component{
     }
 
     setInfoPopUpVisibility(){
+        //Change the pop-up visibility
         this.setState({ modalVisible: !this.state.modalVisible });
     }
 
     displayFormDescription = (form) => {
+        //Open a new screen with the selected form
         this.props.navigation.navigate("Description", { form: form });
     }
 
     getColors(){
-        let colors = [];
+        
+        let colors = []; //colors array
         let i = 0;
+        //Get colors from all forms. It's use in the FormListItem for the design
         forms.forEach(form => {
             colors[i] = form.color;
             i++;
         });
-        return colors  
+        return colors; 
     }
 
     render(){
@@ -46,6 +50,7 @@ class FormList extends React.Component{
                         />
                     </TouchableOpacity>     
                 </View>
+                {/* Pop-up for legal informations */}
                 <Modal
                         animationType="slide"
                         transparent={true}

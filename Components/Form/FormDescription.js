@@ -2,13 +2,14 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 class FormDescription extends React.Component{
-    //
     displayForm = (form) => {
-        this.props.navigation.navigate("Form", { form: form});
+        //Open a new screen with the form selected
+        this.props.navigation.navigate("Form", { form: form });
     }
 
     displaySensorsForm(form){
         return(
+            //Display all sensors use in the form 
             form.sensors.map((sensor) => {
                 return(<Text style={styles.text} key={sensor.toString()}> -{sensor}</Text>);
             })
@@ -16,7 +17,7 @@ class FormDescription extends React.Component{
     }
 
     render(){
-        const form = this.props.navigation.state.params.form;
+        const form = this.props.navigation.state.params.form; //Form
         return(
             <View style={styles.main_container}>
                 <View style={styles.title_container}>

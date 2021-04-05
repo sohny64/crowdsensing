@@ -8,7 +8,8 @@ class FormListItem extends React.Component{
     }
 
     _getColorNext(){
-        const colors = this.props.getColors();
+        const colors = this.props.getColors(); //Array with all forms color
+        //Get next form color
         let index = colors.indexOf(this.props.form.color);
         if(index == colors.length-1){
             return '#441d59';
@@ -17,14 +18,14 @@ class FormListItem extends React.Component{
     }
 
     render(){
-        const { form, displayFormDescription} = this.props;
+        const { form, displayFormDescription} = this.props; //Get props
         return(
             <View style={{backgroundColor: this._getColorNext()}}>
                 <TouchableOpacity style={[styles.main_container,{backgroundColor: form.color}]} onPress={() => displayFormDescription(form)}>
-                <Text style={styles.date}>{form.publication_date}</Text>
-                <Text style={styles.title}>{form.title}</Text>
-                <Image style={styles.image} source={form.image}/>
-            </TouchableOpacity>
+                    <Text style={styles.date}>{form.publication_date}</Text>
+                    <Text style={styles.title}>{form.title}</Text>
+                    <Image style={styles.image} source={form.image}/>
+                </TouchableOpacity>
             </View>
         );
     };
