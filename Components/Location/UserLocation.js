@@ -72,10 +72,14 @@ class UserLocation extends React.Component{
             })            
 
             await this._recordLocationInterval();
-            this.state.interval = setInterval(() => {
-                this._recordLocationInterval();
+            
+            this.setState({
+                recordButtonImage: require('../../Images/square.png'),
+            })
+
+            this.state.interval = setInterval(async () => {
+                await this._recordLocationInterval();
             }, 5000);
-            this.state.recordButtonImage = require('../../Images/square.png');
         }
     }
 
@@ -86,7 +90,7 @@ class UserLocation extends React.Component{
             this.state.recordedLocationsTimestamp = currentLocation.timestamp
         }
 
-        locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
+        var locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
         
         this.state.recordedLocations.push(locationJSON);
         this.setState({
@@ -214,7 +218,7 @@ class UserLocation extends React.Component{
                         onPress={() => this._resetMarkers()}
                     >
                         <Image
-                            source={require('../../Images/delete.png')}
+                            source={require('../../Images/gomme.png')}
                             style={styles.icon}
                         />
                     </TouchableOpacity>
