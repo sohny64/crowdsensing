@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Platform} from 'react-native'
 import { Stopwatch } from 'react-native-stopwatch-timer'
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
 import * as Permissions from 'expo-permissions';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -43,7 +44,7 @@ class Record extends React.Component{
             currentStepCount: 0,
             pastStepCount: 0,
 
-            //Tableau valeurs
+            //Array value
             tableauValeurs: [
                                 {
                                     time : 0,
@@ -390,7 +391,7 @@ class Record extends React.Component{
         console.log("---------------------------------")
         return(
             
-            <View style={styles.main_container}>
+            <ScrollView style={styles.main_container}>
                  <View style={styles.description_container}>
                     <Text style={styles.subhead}>Sensors selected :</Text>
                     {this.renderSmartphoneSensorList()}
@@ -401,7 +402,7 @@ class Record extends React.Component{
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
-            </View> 
+            </ScrollView> 
         );
     };
 }
@@ -420,7 +421,6 @@ const options = {
     text: {
       fontSize: 30,
       color: '#FFF',
-      marginLeft: 7,
     }
   };
 
@@ -445,14 +445,6 @@ const styles = StyleSheet.create({
         padding: 10
     },
 
-    button_container:{
-        flexDirection: "row",
-        bottom: 20,
-        right: 20,
-        position: 'absolute',
-        marginTop: 'auto',
-    },
-
     checkbox: {
         marginLeft: 5,
         marginRight: 5,
@@ -475,7 +467,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: 'auto',
-        marginBottom: 40
+        marginBottom: 10
     },
     text: {
         color: '#ffffff',
@@ -483,14 +475,9 @@ const styles = StyleSheet.create({
     },
     timer: {
         backgroundColor: '#331245',
-        width: '70%',
         alignItems: 'center',
         alignSelf: 'center',
-        marginBottom: 80,
-        flexDirection: "row",
-        bottom: 20,
-        right: 20,
-        position: 'absolute',
+        marginBottom: 10,
         marginTop: 'auto',     
     },
 

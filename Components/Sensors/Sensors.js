@@ -4,6 +4,10 @@ import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
 import * as Permissions from 'expo-permissions';
+import { ScrollView } from 'react-native-gesture-handler';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 class Sensors extends React.Component{
@@ -128,6 +132,7 @@ class Sensors extends React.Component{
                 renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.textCheckBoxBlock}
                 title={item.name}
                 checked={item.checked}
+                
                 />}
             />
         )
@@ -137,7 +142,7 @@ class Sensors extends React.Component{
 
     render(){
         return(
-            <View style={styles.main_container}>
+            <ScrollView style={styles.main_container}>
    
                 <View style={styles.description_container}>
                     <Text style={styles.subhead}>Phone Sensors :</Text>
@@ -149,24 +154,22 @@ class Sensors extends React.Component{
                 </View>
           
                 <View style={styles.button_container}>
-                <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
-                        <Text style={styles.text_button}>Start recording</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                        style={styles.button_history}
-                    >
-                        <Image
-                            source={require('../../Images/book.png')}
-                            style={styles.icon}
-                        />
+                    <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
+                            <Text style={styles.text_button}>Start recording</Text>
                     </TouchableOpacity>
-                    </View>
-                    <View>
-                {this.renderPopUp()}  
-            </View>
+                    
+                    <TouchableOpacity style={styles.button_history}>
+                            <Image
+                                source={require('../../Images/book.png')}
+                                style={styles.icon}
+                            />
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    {this.renderPopUp()}  
+                </View>
                   
-            </View>
+            </ScrollView>
 
             
         );
@@ -198,10 +201,7 @@ const styles = StyleSheet.create({
         },
         button_container:{
             flexDirection: "row",
-            bottom: 20,
-            right: 20,
-            position: 'absolute',
-            marginTop: 'auto',
+            marginEnd: 20
         },
         checkbox: {
             marginLeft: 5,
