@@ -38,6 +38,7 @@ class LocationHistory extends React.Component{
     }
 
     _getPosHistory= async () => {
+        console.log("entering");
         //Fetch all keys
         let keys = []
         let validKeys = []
@@ -45,6 +46,7 @@ class LocationHistory extends React.Component{
         let regex_keyValidity = /^(location_)/
         let regex_recordKey = /^(locationRecord_)/
         try {
+            console.log("trying");
             keys = await AsyncStorage.getAllKeys()
             keys.forEach(element => {
                 //Check key start by location and is defined
@@ -56,21 +58,16 @@ class LocationHistory extends React.Component{
                     }
                 }
             });
-
-            if(validKeys.length <= 0){
-                return;
-            }
-            
             //Trie du plus récent au moins récent
             validKeys.sort();
             validKeys.reverse();
 
             keysRecorded.sort();
-            keysRecorded.reverse();
+            keysRecorded.reverse();            
         } catch(e) {
             alert(e)
         }
-
+        console.log("yess");
         //Retrieve values
         let values;
         let valuesJSON = "[";
@@ -81,7 +78,13 @@ class LocationHistory extends React.Component{
             values.forEach(element => {
                 valuesJSON = valuesJSON + element[1] + ",";
             });
-            valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+            
+            if(valuesJSON != '['){
+                valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+            }else{
+                valuesJSON = valuesJSON + "]"; //empty array
+            }
+
             valuesJSON = JSON.parse(valuesJSON);
         } catch(e) {
             alert(e)
@@ -100,7 +103,13 @@ class LocationHistory extends React.Component{
             values.forEach(element => {
                 valuesJSON = valuesJSON + element[1] + ",";
             });
-            valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+
+            if(valuesJSON != '['){
+                valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
+            }else{
+                valuesJSON = valuesJSON + "]"; //empty array
+            }
+            
             valuesJSON = JSON.parse(valuesJSON);
             
         } catch(e) {
@@ -110,6 +119,7 @@ class LocationHistory extends React.Component{
             recordedLocations: valuesJSON,
             recordedKeys: keysRecorded
         })
+
     }
 
     componentDidMount(){
@@ -189,6 +199,14 @@ class LocationHistory extends React.Component{
         }
     }
 
+    _listEmptyComponent(){
+        return (
+            <Text style={styles.text_emptyList}>
+                No location found in this category
+            </Text>
+        )
+    }
+
     render(){
         return(
             <View style={styles.main_container}>
@@ -199,6 +217,7 @@ class LocationHistory extends React.Component{
                 <FlatList
                     data={this.state.data}
                     keyExtractor={(item) => item.timestamp.toString()}
+                    ListEmptyComponent={this._listEmptyComponent()}
                     renderItem={(location =>
                         <View style={styles.buttons_container}>
                             <TouchableOpacity 
@@ -252,7 +271,6 @@ class LocationHistory extends React.Component{
                         borderBottomColor: '#fff',
                         borderBottomWidth: 3,
                         marginTop: 20,
-                        marginBottom: 10
                     }}
                 />
                 <View style={{flex:1}}>
@@ -262,6 +280,7 @@ class LocationHistory extends React.Component{
                 <FlatList
                     data={this.state.recordedLocations}
                     keyExtractor={(item) => item[0][1].timestamp.toString()}
+                    ListEmptyComponent={this._listEmptyComponent()}
                     renderItem={(locationRecord =>
                         <View style={styles.buttons_container}>
                             <TouchableOpacity 
@@ -323,6 +342,12 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
 
+    text_emptyList: {
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 10,
+    },
+
     description_container: {
         backgroundColor: '#441d59',
         marginLeft: 10,
@@ -369,7 +394,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
-        marginLeft: 10
+        marginLeft: 10,
+        marginTop: 10,
     },
 
     icon: {
