@@ -26,7 +26,7 @@ class UserLocation extends React.Component{
             recordedLocations: [],
             recordedLocationsTimestamp: 0,
             isRecording: false,
-            recordButtonImage: require('../../Images/circle.png'),
+            recordButtonImage: require('../../Images/record-button-white.png'),
             interval: 0,
         }
     }
@@ -63,7 +63,7 @@ class UserLocation extends React.Component{
             this.setState({
                 recordedLocationsTimestamp: 0,
                 isRecording: false,
-                recordButtonImage: require('../../Images/circle.png'),
+                recordButtonImage: require('../../Images/record-button-white.png'),
             })
         } else {
             this.setState({
@@ -72,9 +72,9 @@ class UserLocation extends React.Component{
             })            
 
             await this._recordLocationInterval();
-            
+
             this.setState({
-                recordButtonImage: require('../../Images/square.png'),
+                recordButtonImage: require('../../Images/stop-button-white.png'),
             })
 
             this.state.interval = setInterval(async () => {
@@ -103,7 +103,7 @@ class UserLocation extends React.Component{
             let key = "locationRecord_" + JSON.stringify(this.state.recordedLocationsTimestamp);
             let value = JSON.stringify(this.state.recordedLocations);
             await AsyncStorage.setItem(key, value);
-            this.toast.show('Location saved !');
+            this.toast.show('Record saved !');
         } catch (e) {
           alert(e)
         }  
@@ -115,7 +115,7 @@ class UserLocation extends React.Component{
             let key = "location_" + JSON.stringify(this.state.currentLocation.timestamp);
             let value = JSON.stringify(this.state.currentLocation);
             await AsyncStorage.setItem(key, value);
-            this.toast.show('Record saved !');
+            this.toast.show('Location saved !');
         } catch (e) {
           alert(e)
         }  
@@ -184,18 +184,24 @@ class UserLocation extends React.Component{
                 
                 
                 <View style={styles.button_container}>
-                    <View style={styles.button_history_container}>
-                        <TouchableOpacity 
-                            style={styles.button_record}
-                            onPress={() => this._recordLocation()}
-                        >
-                            <Image
-                                source={this.state.recordButtonImage}
-                                style={styles.icon}
-                            />
-                        </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.button_record}
+                        onPress={() => this._recordLocation()}
+                    >
+                        <Image
+                            source={this.state.recordButtonImage}
+                            style={styles.icon}
+                        />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                        style={styles.button_save}
+                        onPress={ () => this._storeData()}
+                    >
+                        <Text style={styles.text_button}>Save position</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity 
+                    <TouchableOpacity 
                             style={styles.button_history}
                             onPress={() => this._displayHistory()}
                         >
@@ -203,14 +209,6 @@ class UserLocation extends React.Component{
                                 source={require('../../Images/book.png')}
                                 style={styles.icon}
                             />
-                        </TouchableOpacity>
-                    </View>
-                    
-                    <TouchableOpacity 
-                        style={styles.button_save}
-                        onPress={ () => this._storeData()}
-                    >
-                        <Text style={styles.text_button}>Save position</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity 
@@ -259,6 +257,14 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 20
     },
+    
+    button_record: {
+        padding: 10,
+        backgroundColor: '#862db3',
+        borderRadius: 100,
+        marginLeft: '5%'
+    },
+
     button_save: {
         padding: 10,
         backgroundColor: '#862db3',
@@ -267,27 +273,20 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '40%',
         marginRight: 10,
-        marginLeft: 10,
     },
 
     button_history: {
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 100,
+        marginLeft: '5%',
     },
 
     button_trash: {
         padding: 10,
         backgroundColor: '#cc0000',
         borderRadius: 100,
-        marginRight: 10
-    },
-
-    button_record: {
-        padding: 10,
-        backgroundColor: '#cc0000',
-        borderRadius: 100,
-        marginRight: 3
+        marginRight: '5%'
     },
 
     icon: {
