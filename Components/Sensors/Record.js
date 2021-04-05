@@ -13,12 +13,14 @@ class Record extends React.Component{
         super(props);
         this.state = {
 
+            //currentTime
+            currentTime: new Date().getTime(),
+
             //selected
             selected: [],
 
             //Stopwatch
             stopwatchStart: false,
-            totalDuration: 10000,
             stopwatchReset: false,
 
             //Accelerometer
@@ -44,7 +46,7 @@ class Record extends React.Component{
             currentStepCount: 0,
             pastStepCount: 0,
 
-            //Array value
+            //Array
             tableauValeurs: [
                                 {
                                     time : 0,
@@ -85,112 +87,62 @@ class Record extends React.Component{
 //---------------------------------------------------------------------------------------------------------------------
         
     _unsubscribe = () => {
-        this._subscription && this._subscription.remove();
-        this._subscription = null;
+
+        this._subscriptionAccelerometer && this._subscriptionAccelerometer.remove();
+        this._subscriptionAccelerometer = null;
+
+        this._subscriptionGyroscope && this._subscriptionGyroscope.remove();
+        this._subscriptionGyroscope = null;
+
+        this._subscriptionMagnetometer && this._subscriptionMagnetometer.remove();
+        this._subscriptionMagnetometer = null;
+
+        this._subscriptionBarometer && this._subscriptionBarometer.remove();
+        this._subscriptionBarometer = null;
+
+        this._subscriptionPedometer && this._subscriptionPedometer.remove();
+        this._subscriptionPedometer = null;
+
     };
 
     _subscribe = () => {
-        let temp=[]
-        this._subscription =
+        this._subscriptionAccelerometer =
             Accelerometer.addListener(accelerometerData => {
-                temp=[]
-                temp.push(
-                    {
-                        Accelerometer: {
-                            x:Object.values(accelerometerData)[2],
-                            y:Object.values(accelerometerData)[1],
-                            z:Object.values(accelerometerData)[0]
-                        },
-                    })
                 this.setState({
                 accelerometerX: Object.values(accelerometerData)[2],
                 accelerometerY: Object.values(accelerometerData)[1],
                 accelerometerZ: Object.values(accelerometerData)[0],
                 })
-            })
+            }) 
+        this._subscriptionGyroscope =
             Gyroscope.addListener(gyroscopeData => {
-                temp.push(
-                    {
-                        Gyroscope: {
-                            x:Object.values(gyroscopeData)[2],
-                            y:Object.values(gyroscopeData)[1],
-                            z:Object.values(gyroscopeData)[0]
-                        },
-                    })
                 this.setState({
                 gyroscopeX: Object.values(gyroscopeData)[2],
                 gyroscopeY: Object.values(gyroscopeData)[1],
                 gyroscopeZ: Object.values(gyroscopeData)[0],
                 })
-            })
+            }) 
+        this._subscriptionMagnetometer =
             Magnetometer.addListener(magnetometerData => {
-                temp.push(
-                    {
-                        Magnetometer: {
-                            x:Object.values(magnetometerData)[2],
-                            y:Object.values(magnetometerData)[1],
-                            z:Object.values(magnetometerData)[0]
-                        },
-                    })
                 this.setState({
                 magnetometerX: Object.values(magnetometerData)[2],
                 magnetometerY: Object.values(magnetometerData)[1],
                 magnetometerZ: Object.values(magnetometerData)[0],
                 })
-            })
+            }) 
+        this._subscriptionBarometer =
             Barometer.addListener(barometerData => {
-                temp.push(
-                    {
-                        Barometer: {
-                            pressure: Object.values(barometerData)[0],
-                            relativeAltitude: Object.values(barometerData)[1],
-                        },
-                    })
                 this.setState({
                   pressure: Object.values(barometerData)[0],
                   relativeAltitude: Object.values(barometerData)[1],
-                  tableauValeurs: temp
                 })
-            })
+            }) 
+        this._subscriptionPedometer =
             Pedometer.watchStepCount(result => {
-                temp.push(
-                    {
-                        Pedometer: {
-                            currentStepCount: result.steps,
-                        },
-                    })
                 this.setState({
                   currentStepCount: result.steps,
-                  
                 })
             })
-            
-
-    /*
-                    Gyroscope: {
-                        x:this.state.gyroscopeX,
-                        y:this.state.gyroscopeY,
-                        z:this.state.gyroscopeZ
-                    },
-    
-                    Magnetometer:   {
-                        x:this.state.magnetometerX,
-                        y:this.state.magnetometerY,
-                        z:this.state.magnetometerZ
-                    },   
-    
-                    Barometer:  {
-                        pressure:this.state.pressure,
-                        relativeAltitude:this.state.relativeAltitude
-                    },     
-    
-                    Pedometer: {    
-                        currrentStep:this.state.currentStepCount
-                    }          
-                }
-            )
-            this.setState({tableauValeurs:temp})*/
-        
     }
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -209,11 +161,12 @@ class Record extends React.Component{
         this.setState({selected:FormatData})
         this._subscribe()
         this.toggleStopwatch()
+        console.log(this.state.currentTime)
     }
 
 
     componentWillUnmount() {
-        this._unsubscribe();
+        this._unsubscribe()
       }
 
 
@@ -330,8 +283,11 @@ class Record extends React.Component{
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
-            this._slowGyroscope()
+            console.log(new Date().getTime())
+            this._unsubscribe()
             this.resetStopwatch()
+        }else{
+            this._subscribe()
         }
     }
 
@@ -377,32 +333,39 @@ class Record extends React.Component{
     renderStopWatch() {
         return (
             <View style={styles.timer}>
-            <Stopwatch laps msecs start={this.state.stopwatchStart}
+            <Stopwatch 
+                msecs={true}
+                start={this.state.stopwatchStart}
                 reset={this.state.stopwatchReset}
                 options={options}
-                getTime={this.getFormattedTime} />
+                />
             </View>
             )
     }
 
+
+
     render(){
-        console.log("---------------------------------")
-        console.log(this.state.tableauValeurs)
-        console.log("---------------------------------")
+        //console.log("---------------------------------")
+        //console.log(this.state.tableauValeurs)
+        //console.log("---------------------------------")
         return(
             
-            <ScrollView style={styles.main_container}>
-                 <View style={styles.description_container}>
-                    <Text style={styles.subhead}>Sensors selected :</Text>
-                    {this.renderSmartphoneSensorList()}
-                    
-                    
-                </View>
+            <View style={styles.main_container}>
+
+                <ScrollView >
+                    <View style={styles.description_container}>
+                        <Text style={styles.subhead}>Sensors selected :</Text>
+                        {this.renderSmartphoneSensorList()}  
+                    </View>
+                </ScrollView> 
+
                 {this.renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
                 </TouchableOpacity>
-            </ScrollView> 
+
+            </View>
         );
     };
 }

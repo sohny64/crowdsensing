@@ -145,37 +145,40 @@ class Sensors extends React.Component{
         LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']); // Ignore log notification by message
         LogBox.ignoreAllLogs();//Ignore all log notifications
         return(
-            <ScrollView style={styles.main_container}>
-   
-                <View style={styles.description_container}>
-                    <Text style={styles.subhead}>Phone Sensors :</Text>
-                    {this.renderSmartphoneSensors()}
-                </View>
-                <View style={styles.description_container}>
-                    <Text style={styles.subheadBlock}>Watch Sensors (not yet avaible):</Text>
-                    {this.renderWatchSensors()}
-                </View>
-          
+            <View style={styles.main_container}>
+
+                <ScrollView >
+    
+                    <View style={styles.description_container}>
+                        <Text style={styles.subhead}>Phone Sensors :</Text>
+                        {this.renderSmartphoneSensors()}
+                    </View>
+
+                    <View style={styles.description_container}>
+                        <Text style={styles.subheadBlock}>Watch Sensors (not yet avaible):</Text>
+                        {this.renderWatchSensors()}
+                    </View>
+
+                </ScrollView>
+
                 <View style={styles.button_container}>
                     <TouchableOpacity style={styles.button} onPress={() => this._displayRecord()}>
-                            <Text style={styles.text_button}>Start recording</Text>
+                        <Text style={styles.text_button}>Start recording</Text>
                     </TouchableOpacity>
-                    
+
                     <TouchableOpacity style={styles.button_history}>
-                            <Image
-                                source={require('../../Images/book.png')}
-                                style={styles.icon}
-                            />
+                        <Image
+                            source={require('../../Images/book.png')}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
                 </View>
+
                 <View>
                     {this.renderPopUp()}  
-                </View>
-                  
-            </ScrollView>
+                </View>  
             
-
-            
+            </View>
         );
     };
 }
