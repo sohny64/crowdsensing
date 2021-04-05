@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform} from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer'
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
+import * as Permissions from 'expo-permissions';
 
 
 
@@ -39,8 +40,40 @@ class Record extends React.Component{
             magnetometerZ: 0,
 
             //Pedometer
-            pastStepCount: 0,
             currentStepCount: 0,
+            pastStepCount: 0,
+
+            //Tableau valeurs
+            tableauValeurs: [
+                                {
+                                    time : 0,
+                                    Accelerometer: {
+                                                        x:0,
+                                                        y:0,
+                                                        z:0
+                                                   },
+
+                                    Gyroscope: {
+                                                        x:0,
+                                                        y:0,
+                                                        z:0
+                                                    },
+
+                                    Magnetometer:   {
+                                                        x:0,
+                                                        y:0,
+                                                        z:0
+                                                    },   
+                                    Barometer:  {
+                                                    pressure:0,
+                                                    relativeAltitude:0
+                                               },     
+
+                                    Pedometer: {    
+                                                    currrentStep:0
+                                               }                                    
+                                }
+                            ]
 
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -56,9 +89,18 @@ class Record extends React.Component{
     };
 
     _subscribe = () => {
-        
+        let temp=[]
         this._subscription =
             Accelerometer.addListener(accelerometerData => {
+                temp=[]
+                temp.push(
+                    {
+                        Accelerometer: {
+                            x:Object.values(accelerometerData)[2],
+                            y:Object.values(accelerometerData)[1],
+                            z:Object.values(accelerometerData)[0]
+                        },
+                    })
                 this.setState({
                 accelerometerX: Object.values(accelerometerData)[2],
                 accelerometerY: Object.values(accelerometerData)[1],
@@ -66,6 +108,14 @@ class Record extends React.Component{
                 })
             })
             Gyroscope.addListener(gyroscopeData => {
+                temp.push(
+                    {
+                        Gyroscope: {
+                            x:Object.values(gyroscopeData)[2],
+                            y:Object.values(gyroscopeData)[1],
+                            z:Object.values(gyroscopeData)[0]
+                        },
+                    })
                 this.setState({
                 gyroscopeX: Object.values(gyroscopeData)[2],
                 gyroscopeY: Object.values(gyroscopeData)[1],
@@ -73,6 +123,14 @@ class Record extends React.Component{
                 })
             })
             Magnetometer.addListener(magnetometerData => {
+                temp.push(
+                    {
+                        Magnetometer: {
+                            x:Object.values(magnetometerData)[2],
+                            y:Object.values(magnetometerData)[1],
+                            z:Object.values(magnetometerData)[0]
+                        },
+                    })
                 this.setState({
                 magnetometerX: Object.values(magnetometerData)[2],
                 magnetometerY: Object.values(magnetometerData)[1],
@@ -80,16 +138,58 @@ class Record extends React.Component{
                 })
             })
             Barometer.addListener(barometerData => {
+                temp.push(
+                    {
+                        Barometer: {
+                            pressure: Object.values(barometerData)[0],
+                            relativeAltitude: Object.values(barometerData)[1],
+                        },
+                    })
                 this.setState({
                   pressure: Object.values(barometerData)[0],
                   relativeAltitude: Object.values(barometerData)[1],
-                });
-              });
+                  tableauValeurs: temp
+                })
+            })
             Pedometer.watchStepCount(result => {
+                temp.push(
+                    {
+                        Pedometer: {
+                            currentStepCount: result.steps,
+                        },
+                    })
                 this.setState({
                   currentStepCount: result.steps,
-                });
-              });
+                  
+                })
+            })
+            
+
+    /*
+                    Gyroscope: {
+                        x:this.state.gyroscopeX,
+                        y:this.state.gyroscopeY,
+                        z:this.state.gyroscopeZ
+                    },
+    
+                    Magnetometer:   {
+                        x:this.state.magnetometerX,
+                        y:this.state.magnetometerY,
+                        z:this.state.magnetometerZ
+                    },   
+    
+                    Barometer:  {
+                        pressure:this.state.pressure,
+                        relativeAltitude:this.state.relativeAltitude
+                    },     
+    
+                    Pedometer: {    
+                        currrentStep:this.state.currentStepCount
+                    }          
+                }
+            )
+            this.setState({tableauValeurs:temp})*/
+        
     }
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -109,7 +209,7 @@ class Record extends React.Component{
         this._subscribe()
         this.toggleStopwatch()
     }
-    /* ------------------ */
+
 
     componentWillUnmount() {
         this._unsubscribe();
@@ -119,8 +219,6 @@ class Record extends React.Component{
 
 
 //---------------------------------------------------------------------------------------------------------------------
-
-
 
 
 
@@ -136,8 +234,8 @@ class Record extends React.Component{
     _fastAccelerometer(){
         Accelerometer.setUpdateInterval(50);
     };
-    
-    renderAccelerometer(){
+
+    _renderAccelerometer(){
         return (
             <View style={styles.containerSensor}>
               <Text style={styles.textSensor}>
@@ -146,7 +244,7 @@ class Record extends React.Component{
                 z: {round(this.state.accelerometerZ)}
               </Text>
             </View>
-        )
+         )
     }
 
     //Barometer
@@ -155,7 +253,7 @@ class Record extends React.Component{
         <View style={styles.containerSensor}>
           <Text style={styles.textSensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
             Relative Altitude:{' '}
-            {Platform.OS === 'ios' ? `${this.state.relativeAltitude} m` : `Only available on iOS`}
+            {Platform.OS === 'ios' ? `${round(this.state.relativeAltitude)} m` : `Only available on iOS`}
           </Text>
         </View>
         )
@@ -243,7 +341,7 @@ class Record extends React.Component{
     checkSwitch=(param)=>{
         switch(param) {
           case 'Accelerometer':
-              return ( this.renderAccelerometer() )
+            return ( this._renderAccelerometer() )
 
           case 'Barometer':
             return ( this.renderBarometer() )
@@ -287,7 +385,11 @@ class Record extends React.Component{
     }
 
     render(){
+        console.log("---------------------------------")
+        console.log(this.state.tableauValeurs)
+        console.log("---------------------------------")
         return(
+            
             <View style={styles.main_container}>
                  <View style={styles.description_container}>
                     <Text style={styles.subhead}>Sensors selected :</Text>
@@ -393,12 +495,11 @@ const styles = StyleSheet.create({
     },
 
     text_button:{
-    color: '#ffffff',
-    fontSize: 20
+        color: '#ffffff',
+        fontSize: 20
     },
 
     containerSensor: {
-        flex: 1,
         paddingHorizontal: 15,
       },
   

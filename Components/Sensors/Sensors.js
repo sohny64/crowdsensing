@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, Pressable} from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image,  Modal } from 'react-native';
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
+import * as Permissions from 'expo-permissions';
 
 
 class Sensors extends React.Component{
@@ -78,10 +79,10 @@ class Sensors extends React.Component{
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitle}>Sensors permissions</Text>
-                  <Text style={styles.modalText}>Allow this app to access this motion sensors? </Text>
-                  <Text style={styles.modalText}>Number of sensors concerned : {this.state.selectedSensors.length} </Text>
+                  <Text style={styles.modalText}>Allow this app to access motion sensors? </Text>
+                  <Text style={styles.modalText}> Concerned : {this.state.selectedSensors.length} </Text>
 
-                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._NextPage();}}>
+                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._NextPage()}}>
                     <Text style={styles.buttonText}>             Allow             </Text>
                   </TouchableOpacity>
 
@@ -131,8 +132,6 @@ class Sensors extends React.Component{
             />
         )
     }
-
-                   
 
 
 
