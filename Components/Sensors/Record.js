@@ -13,12 +13,14 @@ class Record extends React.Component{
         super(props);
         this.state = {
 
+            //currentTime
+            currentTime: new Date().getTime(),
+
             //selected
             selected: [],
 
             //Stopwatch
             stopwatchStart: false,
-            totalDuration: 10000,
             stopwatchReset: false,
 
             //Accelerometer
@@ -44,7 +46,7 @@ class Record extends React.Component{
             currentStepCount: 0,
             pastStepCount: 0,
 
-            //Array value
+            //Array
             tableauValeurs: [
                                 {
                                     time : 0,
@@ -85,6 +87,7 @@ class Record extends React.Component{
 //---------------------------------------------------------------------------------------------------------------------
         
     _unsubscribe = () => {
+
         this._subscriptionAccelerometer && this._subscriptionAccelerometer.remove();
         this._subscriptionAccelerometer = null;
 
@@ -99,6 +102,7 @@ class Record extends React.Component{
 
         this._subscriptionPedometer && this._subscriptionPedometer.remove();
         this._subscriptionPedometer = null;
+
     };
 
     _subscribe = () => {
@@ -139,8 +143,6 @@ class Record extends React.Component{
                   currentStepCount: result.steps,
                 })
             })
-        
-        
     }
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -159,6 +161,7 @@ class Record extends React.Component{
         this.setState({selected:FormatData})
         this._subscribe()
         this.toggleStopwatch()
+        console.log(this.state.currentTime)
     }
 
 
@@ -280,8 +283,11 @@ class Record extends React.Component{
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
+            console.log(new Date().getTime())
             this._unsubscribe()
             this.resetStopwatch()
+        }else{
+            this._subscribe()
         }
     }
 
@@ -327,18 +333,22 @@ class Record extends React.Component{
     renderStopWatch() {
         return (
             <View style={styles.timer}>
-            <Stopwatch laps msecs start={this.state.stopwatchStart}
+            <Stopwatch 
+                msecs={true}
+                start={this.state.stopwatchStart}
                 reset={this.state.stopwatchReset}
                 options={options}
-                getTime={this.getFormattedTime} />
+                />
             </View>
             )
     }
 
+
+
     render(){
-        console.log("---------------------------------")
-        console.log(this.state.tableauValeurs)
-        console.log("---------------------------------")
+        //console.log("---------------------------------")
+        //console.log(this.state.tableauValeurs)
+        //console.log("---------------------------------")
         return(
             
             <View style={styles.main_container}>
