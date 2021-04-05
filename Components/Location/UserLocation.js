@@ -26,6 +26,7 @@ class UserLocation extends React.Component{
             recordedLocations: [],
             recordedLocationsTimestamp: 0,
             isRecording: false,
+            recordButtonImage: require('../../Images/circle.png'),
             interval: 0,
         }
     }
@@ -59,6 +60,7 @@ class UserLocation extends React.Component{
             this.setState({
                 recordedLocationsTimestamp: 0,
                 isRecording: false,
+                recordButtonImage: require('../../Images/circle.png'),
             })
         } else {
             this.setState({
@@ -67,7 +69,7 @@ class UserLocation extends React.Component{
             })            
 
             this.state.interval = setInterval(async () => {
-                currentLocation = await Location.getCurrentPositionAsync();
+                var currentLocation = await Location.getCurrentPositionAsync();
 
                 if(this.state.recordedLocationsTimestamp == 0){
                     this.state.recordedLocationsTimestamp = currentLocation.timestamp
@@ -78,6 +80,7 @@ class UserLocation extends React.Component{
                 this.state.recordedLocations.push(locationJSON);
                 this.setState({
                     recordedLocations: this.state.recordedLocations,
+                    recordButtonImage: require('../../Images/square.png'),
                 });
                 console.log("recording");
             }, 5000);
@@ -176,7 +179,7 @@ class UserLocation extends React.Component{
                             onPress={() => this._recordLocation()}
                         >
                             <Image
-                                source={require('../../Images/book.png')}
+                                source={this.state.recordButtonImage}
                                 style={styles.icon}
                             />
                         </TouchableOpacity>
