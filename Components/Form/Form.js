@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
-import AudioRecorder from '../Sensors/AudioRecorder';
+import AudioRecorder from './RecorderSensor/Audio';
 
 class Form extends React.Component{
     constructor(props){
