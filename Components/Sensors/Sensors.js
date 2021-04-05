@@ -6,11 +6,11 @@ import { CheckBox } from 'react-native-elements';
 import * as Permissions from 'expo-permissions';
 import { ScrollView } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
+
 
 
 class Sensors extends React.Component{
+    
 
     constructor(props){
         super(props)
@@ -21,6 +21,7 @@ class Sensors extends React.Component{
             permissionsNeeded:[],
             modalVisible: false
         }
+        
     }
 
 
@@ -141,6 +142,8 @@ class Sensors extends React.Component{
 
 
     render(){
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']); // Ignore log notification by message
+        LogBox.ignoreAllLogs();//Ignore all log notifications
         return(
             <ScrollView style={styles.main_container}>
    
@@ -170,6 +173,7 @@ class Sensors extends React.Component{
                 </View>
                   
             </ScrollView>
+            
 
             
         );
