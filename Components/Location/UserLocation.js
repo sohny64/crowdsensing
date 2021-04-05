@@ -56,7 +56,10 @@ class UserLocation extends React.Component{
         if(this.state.isRecording){
             //Stop recording location
             clearInterval(this.state.interval);
-            await this._storeRecord();
+
+            if(this.state.recordedLocations.length > 0){
+                await this._storeRecord();
+            }            
             this.setState({
                 recordedLocationsTimestamp: 0,
                 isRecording: false,
@@ -68,23 +71,27 @@ class UserLocation extends React.Component{
                 recordedLocations: [],
             })            
 
-            this.state.interval = setInterval(async () => {
-                var currentLocation = await Location.getCurrentPositionAsync();
-
-                if(this.state.recordedLocationsTimestamp == 0){
-                    this.state.recordedLocationsTimestamp = currentLocation.timestamp
-                }
-
-                locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
-                
-                this.state.recordedLocations.push(locationJSON);
-                this.setState({
-                    recordedLocations: this.state.recordedLocations,
-                    recordButtonImage: require('../../Images/square.png'),
-                });
-                console.log("recording");
+            await this._recordLocationInterval();
+            this.state.interval = setInterval(() => {
+                this._recordLocationInterval();
             }, 5000);
+            this.state.recordButtonImage = require('../../Images/square.png');
         }
+    }
+
+     _recordLocationInterval = async () =>{
+        var currentLocation = await Location.getCurrentPositionAsync();
+
+        if(this.state.recordedLocationsTimestamp == 0){
+            this.state.recordedLocationsTimestamp = currentLocation.timestamp
+        }
+
+        locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
+        
+        this.state.recordedLocations.push(locationJSON);
+        this.setState({
+            recordedLocations: this.state.recordedLocations,
+        });
     }
 
     async _storeRecord(){

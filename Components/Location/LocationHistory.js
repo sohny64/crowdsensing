@@ -101,8 +101,6 @@ class LocationHistory extends React.Component{
                 valuesJSON = valuesJSON + element[1] + ",";
             });
             valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
-            console.log(valuesJSON);
-            console.log(keysRecorded);
             valuesJSON = JSON.parse(valuesJSON);
             
         } catch(e) {
