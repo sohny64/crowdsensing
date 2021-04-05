@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform, Modal, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Modal } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -181,7 +180,38 @@ class Record extends React.Component{
 
 //---------------------------------------------------------------------------------------------------------------------
 
+    /* RENDER EACH SENSORS CHECKED */ 
+    checkSwitch=(param)=>{
+        switch(param) {
+        case 'Accelerometer':
+            return ( this._renderAccelerometer() )
 
+        case 'Barometer':
+            return ( this.renderBarometer() )
+
+        case 'Gyroscope':
+            return ( this.renderGyroscope() )
+
+        case 'Magnetometer':
+            return ( this.renderMagnetometer() )
+            
+        case 'Pedometer':
+            return ( this.renderPedometer() )
+        }
+    }
+
+    _PreviousPage(){
+        this.props.navigation.navigate("Sensors", { 
+            selectedSensors: this.state.selectedSensors,
+            permissionsNeeded: this.state.permissionsNeeded 
+        });
+    }
+
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+    }
+
+//---------------------------------------------------------------------------------------------------------------------
 
     //Accelerometer
     _slowAccelerometer(){
@@ -196,31 +226,6 @@ class Record extends React.Component{
         Accelerometer.setUpdateInterval(50);
     };
 
-    _renderAccelerometer(){
-        return (
-            <View style={styles.containerSensor}>
-              <Text style={styles.textSensor}>
-                x: {round(this.state.accelerometerX)}{"\n"}
-                y: {round(this.state.accelerometerY)}{"\n"}
-                z: {round(this.state.accelerometerZ)}
-              </Text>
-            </View>
-         )
-    }
-
-    //Barometer
-    renderBarometer (){
-        return(
-        <View style={styles.containerSensor}>
-          <Text style={styles.textSensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
-            Relative Altitude:{' '}
-            {Platform.OS === 'ios' ? `${round(this.state.relativeAltitude)} m` : `Only available on iOS`}
-          </Text>
-        </View>
-        )
-    }
-    
-
     //Gyroscope
     _slowGyroscope(){
         Gyroscope.setUpdateInterval(350);
@@ -233,17 +238,6 @@ class Record extends React.Component{
     _stopGyroscope(){
         Gyroscope.setUpdateInterval(100000);
     };
-    
-    renderGyroscope() {
-        return(
-        <View style={styles.containerSensor}>
-          <Text style={styles.textSensor}>
-            x: {round(this.state.gyroscopeX)}{"\n"}
-            y: {round(this.state.gyroscopeY)}{"\n"}
-            z: {round(this.state.gyroscopeZ)}
-          </Text>
-        </View>
-    )}
 
     //Magnetometer
     _slowMagnetometer(){
@@ -258,26 +252,6 @@ class Record extends React.Component{
         Magnetometer.setUpdateInterval(50);
     };
 
-    renderMagnetometer(){
-      return (
-        <View style={styles.containerSensor}>
-          <Text style={styles.textSensor}>
-            x: {round(this.state.magnetometerX)}{"\n"}
-            y: {round(this.state.magnetometerY)}{"\n"}
-            z: {round(this.state.magnetometerZ)}
-          </Text>
-        </View>
-    )};
-
-    //Pedometer
-    renderPedometer() {
-        return (
-          <View style={styles.containerSensor}>
-              
-            <Text style={styles.textSensor} >{Platform.OS === 'ios' ? `${this.state.currentStepCount} m` : `Only available on iOS`}</Text>
-          </View>
-        );
-    }
 
     //StopWatch
     toggleStopwatch() {
@@ -299,28 +273,61 @@ class Record extends React.Component{
         }
     }
 
+//--------------------------------------------------------------------------------------------------------------------- 
+      
+    _renderAccelerometer(){
+        return (
+            <View style={styles.containerSensor}>
+              <Text style={styles.textSensor}>
+                x: {round(this.state.accelerometerX)}{"\n"}
+                y: {round(this.state.accelerometerY)}{"\n"}
+                z: {round(this.state.accelerometerZ)}
+              </Text>
+            </View>
+         )
+    }
 
-//---------------------------------------------------------------------------------------------------------------------
+    renderBarometer (){
+        return(
+        <View style={styles.containerSensor}>
+          <Text style={styles.textSensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
+            Relative Altitude:{' '}
+            {Platform.OS === 'ios' ? `${round(this.state.relativeAltitude)} m` : `Only available on iOS`}
+          </Text>
+        </View>
+        )
+    }
 
-    /* RENDER EACH SENSORS CHECKED */ 
-    checkSwitch=(param)=>{
-        switch(param) {
-          case 'Accelerometer':
-            return ( this._renderAccelerometer() )
+    renderGyroscope() {
+        return(
+        <View style={styles.containerSensor}>
+          <Text style={styles.textSensor}>
+            x: {round(this.state.gyroscopeX)}{"\n"}
+            y: {round(this.state.gyroscopeY)}{"\n"}
+            z: {round(this.state.gyroscopeZ)}
+          </Text>
+        </View>
+    )}
 
-          case 'Barometer':
-            return ( this.renderBarometer() )
+    renderMagnetometer(){
+        return (
+          <View style={styles.containerSensor}>
+            <Text style={styles.textSensor}>
+              x: {round(this.state.magnetometerX)}{"\n"}
+              y: {round(this.state.magnetometerY)}{"\n"}
+              z: {round(this.state.magnetometerZ)}
+            </Text>
+          </View>
+    )}
 
-          case 'Gyroscope':
-            return ( this.renderGyroscope() )
-
-          case 'Magnetometer':
-            return ( this.renderMagnetometer() )
+    renderPedometer() {
+        return (
+          <View style={styles.containerSensor}>
               
-          case 'Pedometer':
-            return ( this.renderPedometer() )
-        }
-      }
+            <Text style={styles.textSensor} >{Platform.OS === 'ios' ? `${this.state.currentStepCount} m` : `Only available on iOS`}</Text>
+          </View>
+        );
+    }
 
     renderSmartphoneSensorList(){
         return this.state.selected.map((item,key) => {
@@ -337,18 +344,6 @@ class Record extends React.Component{
           })
     }
 
-    _PreviousPage(){
-        this.props.navigation.navigate("Sensors", { 
-            selectedSensors: this.state.selectedSensors,
-            permissionsNeeded: this.state.permissionsNeeded 
-        });
-}
-
-
-    setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
-    }
-
     renderPopUp() {
         const { modalVisible } = this.state;
         return (
@@ -360,15 +355,14 @@ class Record extends React.Component{
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Sensors permissions</Text>
-                  <Text style={styles.modalText}>Allow this app to access motion sensors? </Text>
+                  <Text style={styles.modalTitle}>Save data</Text>
                     <Input 
                         style={styles.input}
                         placeholder='MySaveName'
                         onChangeText={value => this.setState({ nameSave: value })}
                         />
-                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._PreviousPage()}}>
-                    <Text style={styles.buttonText}>             Save             </Text>
+                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._PreviousPage();}}>
+                    <Text style={styles.buttonText}>Save</Text>
                   </TouchableOpacity>
 
 
@@ -392,12 +386,7 @@ class Record extends React.Component{
             )
     }
 
-
-
     render(){
-        //console.log("---------------------------------")
-        //console.log(this.state.tableauValeurs)
-        //console.log("---------------------------------")
         return(
             
             <View style={styles.main_container}>
@@ -415,9 +404,8 @@ class Record extends React.Component{
                 </TouchableOpacity>
 
                 <View>
-                    {this.renderPopUp()}  
-                </View>  
-
+                    {this.renderPopUp()}                 
+                </View>
             </View>
         );
     };
@@ -544,8 +532,9 @@ const styles = StyleSheet.create({
         textAlign: "center"
       },
       buttonAllowed: {
-        textAlign: "center",
-        width:'80%',
+        alignSelf:"center",
+        alignItems: "center",
+        width:'40%',
         marginTop:0,
         backgroundColor: "#D47FA6",
         borderRadius: 20,
