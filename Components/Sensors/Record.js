@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Modal, TextInput } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
-import * as Permissions from 'expo-permissions';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -12,6 +13,12 @@ class Record extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+
+            //Save
+            nameSave: null,
+
+            //Popup
+            modalVisible: false,
 
             //currentTime
             currentTime: new Date().getTime(),
@@ -284,6 +291,7 @@ class Record extends React.Component{
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
             console.log(new Date().getTime())
+            this.setModalVisible();
             this._unsubscribe()
             this.resetStopwatch()
         }else{
@@ -328,7 +336,48 @@ class Record extends React.Component{
             )
           })
     }
-    /* ------------------ */
+
+    _PreviousPage(){
+        this.props.navigation.navigate("Sensors", { 
+            selectedSensors: this.state.selectedSensors,
+            permissionsNeeded: this.state.permissionsNeeded 
+        });
+}
+
+
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+    }
+
+    renderPopUp() {
+        const { modalVisible } = this.state;
+        return (
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalTitle}>Sensors permissions</Text>
+                  <Text style={styles.modalText}>Allow this app to access motion sensors? </Text>
+                    <Input 
+                        style={styles.input}
+                        placeholder='MySaveName'
+                        onChangeText={value => this.setState({ nameSave: value })}
+                        />
+                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._PreviousPage()}}>
+                    <Text style={styles.buttonText}>             Save             </Text>
+                  </TouchableOpacity>
+
+
+                </View>
+              </View>
+            </Modal>
+          </View>
+        );
+      }
 
     renderStopWatch() {
         return (
@@ -362,8 +411,12 @@ class Record extends React.Component{
 
                 {this.renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
-                        <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
+                        <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop and save"}</Text>
                 </TouchableOpacity>
+
+                <View>
+                    {this.renderPopUp()}  
+                </View>  
 
             </View>
         );
@@ -457,6 +510,69 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 14,
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        marginTop: 22,
+        backgroundColor:"#ffffffaa"
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "#241332",
+        borderTopRightRadius:60,
+        borderBottomLeftRadius:60,
+        padding: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+        
+      },
+      modalText: {
+        marginTop: 10,
+        color: '#ffffff',
+        textAlign: "center"
+      },
+      modalTitle: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: "center"
+      },
+      buttonAllowed: {
+        textAlign: "center",
+        width:'80%',
+        marginTop:0,
+        backgroundColor: "#D47FA6",
+        borderRadius: 20,
+        padding: 10,
+
+      },
+      buttonDeny: {
+        width:'80%',
+        marginTop:10,
+        backgroundColor: "#61536C",
+        borderRadius: 20,
+        padding: 10,
+      },
+
+      buttonText:{
+        color: '#ffffff',
+        fontSize: 18
+      },
+
+      input: {
+        textAlign: "center",
+        marginTop:15,
+        width:'80%',
+        height: 40,
+        margin: 12,
+        color: '#ffffff'
+      },
 
 });
 
