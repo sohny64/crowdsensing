@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "crowdsensing",
-    "slug": "crowdsensing",
+    "name": "Crowdsensing",
+    "slug": "Crowdsensing",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.iutbayonne2021.Crowdsensing"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.iutbayonne2021.Crowdsensing"
     },
     "web": {
       "favicon": "./assets/favicon.png"

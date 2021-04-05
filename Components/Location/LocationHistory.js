@@ -38,7 +38,6 @@ class LocationHistory extends React.Component{
     }
 
     _getPosHistory= async () => {
-        console.log("entering");
         //Fetch all keys
         let keys = []
         let validKeys = []
@@ -46,7 +45,6 @@ class LocationHistory extends React.Component{
         let regex_keyValidity = /^(location_)/
         let regex_recordKey = /^(locationRecord_)/
         try {
-            console.log("trying");
             keys = await AsyncStorage.getAllKeys()
             keys.forEach(element => {
                 //Check key start by location and is defined
@@ -67,7 +65,6 @@ class LocationHistory extends React.Component{
         } catch(e) {
             alert(e)
         }
-        console.log("yess");
         //Retrieve values
         let values;
         let valuesJSON = "[";
