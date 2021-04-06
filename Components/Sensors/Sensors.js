@@ -25,7 +25,7 @@ class Sensors extends React.Component{
     }
 
 
-    onCheckedSmartphone(id){
+    _onCheckedSmartphone(id){
         const data=this.state.smartphoneData
         const index=data.findIndex(x => x.id === id)
         data[index].checked = !data[index].checked
@@ -39,7 +39,7 @@ class Sensors extends React.Component{
     }
     
     /*
-    onCheckedWatch(id){
+    _onCheckedWatch(id){
         const data=this.state.watchData
         const index=data.findIndex(x => x.id === id)
         data[index].checked = !data[index].checked
@@ -53,11 +53,11 @@ class Sensors extends React.Component{
 
     }*/
 
-    getSelectedSensors(){
+    _getSelectedSensors(){
         console.log(this.state.selectedSensors)
     }
 
-    getPermissionsNeeded(){
+    _getPermissionsNeeded(){
         console.log(this.state.permissionsNeeded)
     }
 
@@ -68,31 +68,31 @@ class Sensors extends React.Component{
             });
     }
 
-    setModalVisible = (visible) => {
+    _setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     }
 
-    renderPopUp() {
+    _renderPopUp() {
         const { modalVisible } = this.state;
         return (
-          <View style={styles.centeredView}>
+          <View style={styles.centered_view}>
             <Modal
               animationType="fade"
               transparent={true}
               visible={modalVisible}
             >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Sensors permissions</Text>
-                  <Text style={styles.modalText}>Allow this app to access motion sensors? </Text>
-                  <Text style={styles.modalText}> Concerned : {this.state.selectedSensors.length} </Text>
+              <View style={styles.centered_view}>
+                <View style={styles.modal_view}>
+                  <Text style={styles.modal_title}>Sensors permissions</Text>
+                  <Text style={styles.modal_text}>Allow this app to access motion sensors? </Text>
+                  <Text style={styles.modal_text}> Concerned : {this.state.selectedSensors.length} </Text>
 
-                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._NextPage()}}>
-                    <Text style={styles.buttonText}>             Allow             </Text>
+                  <TouchableOpacity style={styles.button_allowed} onPress={() => {this._setModalVisible(false); this._NextPage()}}>
+                    <Text style={styles.button_text}>             Allow             </Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.buttonDeny} onPress={() => this.setModalVisible(false)}>
-                    <Text style={styles.buttonText}>             Deny             </Text>
+                  <TouchableOpacity style={styles.button_deny} onPress={() => this._setModalVisible(false)}>
+                    <Text style={styles.button_text}>             Deny             </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -104,33 +104,33 @@ class Sensors extends React.Component{
     _displayRecord = () => {
 
             if(this.state.selectedSensors.length > 0){
-                this.setModalVisible();
+                this._setModalVisible();
             }
             else{
                 alert("None sensors selected!")
             }
     }
 
-    renderSmartphoneSensors(){
+    _renderSmartphoneSensors(){
             return(
                 <FlatList
                     data={smartphoneSensorData}
                     keyExtractor= {(item) => item.id.toString()}
-                    renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.textCheckBox}
+                    renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.text_checkbox}
                     title={item.name}
                     checked={item.checked}
-                    onPress={()=>this.onCheckedSmartphone(item.id)}  
+                    onPress={()=>this._onCheckedSmartphone(item.id)}  
                     />}
                 />
             )
     }
     
-    renderWatchSensors(){
+    _renderWatchSensors(){
         return(
             <FlatList
                 data={watchSensorData}
                 keyExtractor= {(item) => item.id.toString()}
-                renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.textCheckBoxBlock}
+                renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.text_checkbox_block}
                 title={item.name}
                 checked={item.checked}
                 
@@ -151,12 +151,12 @@ class Sensors extends React.Component{
     
                     <View style={styles.description_container}>
                         <Text style={styles.subhead}>Phone Sensors :</Text>
-                        {this.renderSmartphoneSensors()}
+                        {this._renderSmartphoneSensors()}
                     </View>
 
                     <View style={styles.description_container}>
-                        <Text style={styles.subheadBlock}>Watch Sensors (not yet avaible):</Text>
-                        {this.renderWatchSensors()}
+                        <Text style={styles.subhead_block}>Watch Sensors (not yet avaible):</Text>
+                        {this._renderWatchSensors()}
                     </View>
 
                 </ScrollView>
@@ -175,7 +175,7 @@ class Sensors extends React.Component{
                 </View>
 
                 <View>
-                    {this.renderPopUp()}  
+                    {this._renderPopUp()}  
                 </View>  
             
             </View>
@@ -185,59 +185,59 @@ class Sensors extends React.Component{
 
 const styles = StyleSheet.create({
     main_container: {
-            backgroundColor: '#331245',
-            flex: 1
-        },
-        subhead: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: '#ffffff',
-            marginBottom: 5
-        },
-        subheadBlock: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: '#939393',
-            marginBottom: 5
-        },
-        description_container: {
-            backgroundColor: '#441d59',
-            borderRadius: 20,
-            margin: 10,
-            padding: 10
-        },
-        button_container:{
-            flexDirection: "row",
-            marginEnd: 20
-        },
-        checkbox: {
-            marginLeft: 5,
-            marginRight: 5,
-            height: 50,
-            backgroundColor: '#441d59',
-            borderColor: '#441d59',
-            borderWidth: 1,
-            paddingLeft: 5,
+        backgroundColor: '#331245',
+        flex: 1
+    },
+    subhead: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginBottom: 5
+    },
+    subhead_block: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#939393',
+        marginBottom: 5
+    },
+    description_container: {
+        backgroundColor: '#441d59',
+        borderRadius: 20,
+        margin: 10,
+        padding: 10
+    },
+    button_container:{
+        flexDirection: "row",
+        marginEnd: 20
+    },
+    checkbox: {
+        marginLeft: 5,
+        marginRight: 5,
+        height: 50,
+        backgroundColor: '#441d59',
+        borderColor: '#441d59',
+        borderWidth: 1,
+        paddingLeft: 5,
             
-        },
-        textCheckBox: {
-            color: '#ffffff'
-        },
-        textCheckBoxBlock: {
-            color: '#939393'
-        },
-        button: {
-            padding: 10,
-            backgroundColor: '#862db3',
-            borderRadius: 20,
-            alignItems: 'center',
-            alignSelf: 'center',
-            width: '60%',
-            marginLeft:80
-        },
-        text_button:{
-            color: '#ffffff',
-            fontSize: 20
+    },
+    text_checkbox: {
+        color: '#ffffff'
+    },
+    text_checkbox_block: {
+        color: '#939393'
+    },
+    button: {
+        padding: 10,
+        backgroundColor: '#862db3',
+        borderRadius: 20,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '60%',
+        marginLeft:80
+    },
+    text_button:{
+        color: '#ffffff',
+        fontSize: 20
     },
     button_history: {
         marginLeft: 20,
@@ -245,22 +245,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderRadius: 100,
     },
-
     icon: {
         width: 30,
         height: 30,
         resizeMode: 'contain',
         alignItems: 'center',
     },
-
-    centeredView: {
+    centered_view: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
         backgroundColor:"#ffffffaa"
-      },
-      modalView: {
+    },
+    modal_view: {
         margin: 20,
         backgroundColor: "#241332",
         borderTopRightRadius:60,
@@ -275,40 +273,37 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-        
-      },
-      modalText: {
+    },
+    modal_text: {
         marginTop: 10,
         color: '#ffffff',
         textAlign: "center"
-      },
-      modalTitle: {
+    },
+    modal_title: {
         fontSize: 25,
         fontWeight: 'bold',
         color: '#ffffff',
         textAlign: "center"
-      },
-      buttonAllowed: {
+    },
+    button_allowed: {
         width:'80%',
         marginTop:35,
         backgroundColor: "#D47FA6",
         borderRadius: 20,
         padding: 10,
 
-      },
-      buttonDeny: {
+    },
+    button_deny: {
         width:'80%',
         marginTop:10,
         backgroundColor: "#61536C",
         borderRadius: 20,
         padding: 10,
-
-
-      },
-      buttonText:{
+    },
+    button_text:{
         color: '#ffffff',
         fontSize: 18
-      },
+    },
 });
 
 

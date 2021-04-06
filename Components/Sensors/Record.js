@@ -191,7 +191,7 @@ class Record extends React.Component{
         this.toggleStopwatch()
         this._interval = setInterval(() => {
             this.setState({compteur: this.state.compteur+1})
-            this.recordSensor()
+            this._recordSensor()
             console.log("_________________________")
             console.log(this.state.tableauValeurs)
             console.log("_________________________")
@@ -201,15 +201,13 @@ class Record extends React.Component{
         this._slowGyroscope()
         this._slowMagnetometer()
         this._subscribe()
-       
     }
 
 
     componentWillUnmount() {
         this._unsubscribe()
         clearInterval(this._interval);
-
-      }
+    }
 
 
 
@@ -217,22 +215,22 @@ class Record extends React.Component{
 //---------------------------------------------------------------------------------------------------------------------
 
     /* RENDER EACH SENSORS CHECKED */ 
-    checkSwitch=(param)=>{
+    _checkSwitch=(param)=>{
         switch(param) {
         case 'Accelerometer':
             return ( this._renderAccelerometer() )
 
         case 'Barometer':
-            return ( this.renderBarometer() )
+            return ( this._renderBarometer() )
 
         case 'Gyroscope':
-            return ( this.renderGyroscope() )
+            return ( this._renderGyroscope() )
 
         case 'Magnetometer':
-            return ( this.renderMagnetometer() )
+            return ( this._renderMagnetometer() )
             
         case 'Pedometer':
-            return ( this.renderPedometer() )
+            return ( this._renderPedometer() )
         }
     }
 
@@ -243,11 +241,11 @@ class Record extends React.Component{
         });
     }
 
-    setModalVisible = (visible) => {
+    _setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     }
 
-    recordSensor(){
+    _recordSensor(){
         if(this.state.compteur == 1){
             this.setState({
                 tableauValeurs: [{
@@ -372,7 +370,7 @@ class Record extends React.Component{
 
     handleTimerComplete(){
         if (this.state.stopwatchStart == true){
-            this.setModalVisible();
+            this._setModalVisible();
             this._unsubscribe()
             this.resetStopwatch()
             clearInterval(this._interval);
@@ -385,8 +383,8 @@ class Record extends React.Component{
       
     _renderAccelerometer(){
         return (
-            <View style={styles.containerSensor}>
-              <Text style={styles.textSensor}>
+            <View style={styles.container_sensor}>
+              <Text style={styles.text_sensor}>
                 x: {round(this.state.accelerometerX)}{"\n"}
                 y: {round(this.state.accelerometerY)}{"\n"}
                 z: {round(this.state.accelerometerZ)}
@@ -395,10 +393,10 @@ class Record extends React.Component{
          )
     }
 
-    renderBarometer (){
+    _renderBarometer (){
         return(
-        <View style={styles.containerSensor}>
-          <Text style={styles.textSensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
+        <View style={styles.container_sensor}>
+          <Text style={styles.text_sensor}>Pressure: {round(this.state.pressure * 100)} Pa {"\n"}
             Relative Altitude:{' '}
             {Platform.OS === 'ios' ? `${round(this.state.relativeAltitude)} m` : `Only available on iOS`}
           </Text>
@@ -406,10 +404,10 @@ class Record extends React.Component{
         )
     }
 
-    renderGyroscope() {
+    _renderGyroscope() {
         return(
-        <View style={styles.containerSensor}>
-          <Text style={styles.textSensor}>
+        <View style={styles.container_sensor}>
+          <Text style={styles.text_sensor}>
             x: {round(this.state.gyroscopeX)}{"\n"}
             y: {round(this.state.gyroscopeY)}{"\n"}
             z: {round(this.state.gyroscopeZ)}
@@ -417,10 +415,10 @@ class Record extends React.Component{
         </View>
     )}
 
-    renderMagnetometer(){
+    _renderMagnetometer(){
         return (
-          <View style={styles.containerSensor}>
-            <Text style={styles.textSensor}>
+          <View style={styles.container_sensor}>
+            <Text style={styles.text_sensor}>
               x: {round(this.state.magnetometerX)}{"\n"}
               y: {round(this.state.magnetometerY)}{"\n"}
               z: {round(this.state.magnetometerZ)}
@@ -428,48 +426,48 @@ class Record extends React.Component{
           </View>
     )}
 
-    renderPedometer() {
+    _renderPedometer() {
         return (
-          <View style={styles.containerSensor}>
+          <View style={styles.container_sensor}>
               
-            <Text style={styles.textSensor} >{this.state.currentStepCount}</Text>
+            <Text style={styles.text_sensor} >{this.state.currentStepCount}</Text>
           </View>
         );
     }
 
-    renderSmartphoneSensorList(){
+    _renderSmartphoneSensorList(){
         return this.state.selected.map((item,key) => {
             return (
                 <View key={key}>
                     <Text  style={styles.text}>{"\n"}
                                                {item.key}
                                                {"\n"}
-                                               {this.checkSwitch(item.key)}
+                                               {this._checkSwitch(item.key)}
                     </Text>
                 </View>
             )
           })
     }
 
-    renderPopUp() {
+    _renderPopUp() {
         const { modalVisible } = this.state;
         return (
-          <View style={styles.centeredView}>
+          <View style={styles.centered_view}>
             <Modal
               animationType="fade"
               transparent={true}
               visible={modalVisible}
             >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Save data</Text>
+              <View style={styles.centered_view}>
+                <View style={styles.modal_view}>
+                  <Text style={styles.modal_title}>Save data</Text>
                     <Input 
                         style={styles.input}
                         placeholder='MySaveName'
                         onChangeText={value => this.setState({ nameSave: value })}
                         />
-                  <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._PreviousPage();}}>
-                    <Text style={styles.buttonText}>Save</Text>
+                  <TouchableOpacity style={styles.button_allowed} onPress={() => {this._setModalVisible(false); this._PreviousPage();}}>
+                    <Text style={styles.button_text}>Save</Text>
                   </TouchableOpacity>
 
                 </View>
@@ -479,7 +477,7 @@ class Record extends React.Component{
         );
       }
 
-    renderStopWatch() {
+    _renderStopWatch() {
         return (
             <View style={styles.timer}>
             <Stopwatch 
@@ -499,17 +497,17 @@ class Record extends React.Component{
                 <ScrollView >
                     <View style={styles.description_container}>
                         <Text style={styles.subhead}>Sensors selected :</Text>
-                        {this.renderSmartphoneSensorList()}  
+                        {this._renderSmartphoneSensorList()}  
                     </View>
                 </ScrollView> 
 
-                {this.renderStopWatch()}
+                {this._renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
                         <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop and save"}</Text>
                 </TouchableOpacity>
 
                 <View>
-                    {this.renderPopUp()}                 
+                    {this._renderPopUp()}                 
                 </View>
             </View>
         );
@@ -539,7 +537,6 @@ const styles = StyleSheet.create({
             backgroundColor: '#331245',
             flex: 1
     },
-
     subhead: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -552,20 +549,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         margin: 20,
         padding: 10
-    },
-
-    checkbox: {
-        marginLeft: 5,
-        marginRight: 5,
-        height: 50,
-        backgroundColor: '#441d59',
-        borderColor: '#441d59',
-        borderWidth: 1,
-        paddingLeft: 5,        
-    },
-
-    textCheckBox: {
-        color: '#ffffff'
     },
         
     button: {
@@ -595,21 +578,21 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
 
-    containerSensor: {
+    container_sensor: {
         paddingHorizontal: 15,
-      },
+    },
   
-      textSensor: {
+    text_sensor: {
         color: '#ffffff',
         fontSize: 14,
     },
-    centeredView: {
+    centered_view: {
         flex: 1,
         justifyContent: "center",
         marginTop: 22,
         backgroundColor:"#ffffffaa"
-      },
-      modalView: {
+    },
+    modal_view: {
         margin: 20,
         backgroundColor: "#241332",
         borderTopRightRadius:60,
@@ -622,21 +605,15 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5
-        
-      },
-      modalText: {
-        marginTop: 10,
-        color: '#ffffff',
-        textAlign: "center"
-      },
-      modalTitle: {
+        elevation: 5 
+    },
+    modal_title: {
         fontSize: 25,
         fontWeight: 'bold',
         color: '#ffffff',
         textAlign: "center"
-      },
-      buttonAllowed: {
+    },
+    button_allowed: {
         alignSelf:"center",
         alignItems: "center",
         width:'40%',
@@ -645,28 +622,19 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
 
-      },
-      buttonDeny: {
-        width:'80%',
-        marginTop:10,
-        backgroundColor: "#61536C",
-        borderRadius: 20,
-        padding: 10,
-      },
-
-      buttonText:{
+    },
+    button_text:{
         color: '#ffffff',
         fontSize: 18
-      },
-
-      input: {
+    },
+    input: {
         textAlign: "center",
         marginTop:15,
         width:'80%',
         height: 40,
         margin: 12,
         color: '#ffffff'
-      },
+    },
 
 });
 
