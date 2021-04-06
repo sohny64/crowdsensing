@@ -7,7 +7,7 @@ export default data = [
         image: require("../Images/pollution.png"),
         duration: "5 min",
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
-        sensors: ["GPS Location", "Photo sensor"],
+        sensors: ["Photo sensor"],
         questions: [
             firstName= {
                 name: "firstName",
@@ -21,8 +21,8 @@ export default data = [
             },
             pollutionInCity= {
                 name: "pollutionInCity",
-                title: "Have you ever witnessed pollution in your city?",
-                type: "text",
+                title: "Take a picture of your city.",
+                type: "image",
             }
         ]
     },
@@ -34,7 +34,7 @@ export default data = [
         image: require("../Images/ecouteur.png"),
         duration: "15 min",
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
-        sensors: ["GPS Location", "Microphone sensor"],
+        sensors: ["Microphone sensor"],
         questions: [
             firstName= {
                 name: "firstName",
@@ -61,7 +61,7 @@ export default data = [
         image: require("../Images/pression.png"),
         duration: "10 min",
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
-        sensors: ["GPS Location", "Barometer"],
+        sensors: ["Barometer"],
         questions: [
             firstName= {
                 name: "firstName",
