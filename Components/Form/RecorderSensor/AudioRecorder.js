@@ -27,7 +27,7 @@ export default class AudioRecorder extends React.Component{
         this.setState({stopwatchStart: false, stopwatchReset: true});
     }
 
-    startRecording = async () =>  {
+    _startRecording = async () =>  {
         try {
             //Ask permission to use Audio sensor
             await Audio.requestPermissionsAsync();
@@ -51,7 +51,7 @@ export default class AudioRecorder extends React.Component{
         }
     }
 
-    stopRecording = async () => {
+    _stopRecording = async () => {
         const getAnswer = this.props.getAnswer; //Function to send record to the form
         const recording = this.state.recording; //Current recording
 
@@ -76,7 +76,7 @@ export default class AudioRecorder extends React.Component{
                     reset={this.state.stopwatchReset}
                     options={options}
                 />
-                <TouchableOpacity style={styles.button} onPress={this.state.isRecording ? () => this.stopRecording() : () => this.startRecording() }>
+                <TouchableOpacity style={styles.button} onPress={this.state.isRecording ? () => this._stopRecording() : () => this._startRecording() }>
                     <Text style={styles.text}>{this.state.isRecording ? 'Stop' : 'Start'}</Text>
                 </TouchableOpacity>
             </View>
