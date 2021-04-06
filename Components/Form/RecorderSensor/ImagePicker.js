@@ -30,8 +30,6 @@ export default class ImagePicker extends React.Component{
                 quality: 1,
               });
           
-              console.log(result);
-          
               if (!result.cancelled) {
                   //If picture has been picken -> send to the form
                 this.setImage(result.uri);

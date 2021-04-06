@@ -30,9 +30,7 @@ export default class AudioRecorder extends React.Component{
     startRecording = async () =>  {
         try {
             //Ask permission to use Audio sensor
-            console.log('Requesting permissions..');
             await Audio.requestPermissionsAsync();
-            await Audio.getPermissionsAsync();
             await Audio.setAudioModeAsync({
                 allowsRecordingIOS: true,
                 playsInSilentModeIOS: true,
@@ -49,7 +47,7 @@ export default class AudioRecorder extends React.Component{
 
         } catch (err) {
             //Send the error to the log
-            console.error('Failed to start recording', err);
+            alert('Sorry, we need audio permissions to make this work!')
         }
     }
 
