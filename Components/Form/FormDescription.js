@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 class FormDescription extends React.Component{
-    displayForm = (form) => {
+    _displayForm = (form) => {
         //Open a new screen with the form selected
         this.props.navigation.navigate("Form", { form: form });
     }
 
-    displaySensorsForm(form){
+    _displaySensorsForm(form){
         return(
             //Display all sensors use in the form 
             form.sensors.map((sensor) => {
@@ -34,10 +34,10 @@ class FormDescription extends React.Component{
                 <View style={styles.sensors_container}>
                     <Text style={styles.subhead}>Sensor used</Text>
                     <View>
-                        {this.displaySensorsForm(form)}
+                        {this._displaySensorsForm(form)}
                     </View>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => this.displayForm(form)}>
+                <TouchableOpacity style={styles.button} onPress={() => this._displayForm(form)}>
                         <Text style={styles.text_button}>Start</Text>
                 </TouchableOpacity>
             </View>

@@ -11,6 +11,7 @@ import Sensors from '../Components/Sensors/Sensors';
 import Record from '../Components/Sensors/Record';
 import { Icon, Text } from "react-native-elements";
 import { StyleSheet } from 'react-native';
+import RecordHistory from "../Components/Sensors/RecordHistory";
 
 //Top bar navigator
 const TabNavigator = createMaterialTopTabNavigator(
@@ -79,7 +80,10 @@ const StackNavigator = createStackNavigator(
         },
         Record:{
             screen: Record
-        }
+        },
+        RecordHistory:{
+            screen: RecordHistory
+        },
     }
 );
 

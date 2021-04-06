@@ -11,7 +11,7 @@ class FormList extends React.Component{
         }
     }
 
-    setInfoPopUpVisibility(){
+    _setInfoPopUpVisibility(){
         //Change the pop-up visibility
         this.setState({ modalVisible: !this.state.modalVisible });
     }
@@ -43,7 +43,7 @@ class FormList extends React.Component{
                 renderItem={({item}) => <FormListItem form={item} getColors={this.getColors} displayFormDescription={this.displayFormDescription}/>}
                 />
                 <View style={styles.button_container}>
-                    <TouchableOpacity style={styles.button_info} onPress={() => this.setInfoPopUpVisibility()}>
+                    <TouchableOpacity style={styles.button_info} onPress={() => this._setInfoPopUpVisibility()}>
                         <Image
                             source={require('../../Images/info.png')}
                             style={styles.icon}
@@ -58,7 +58,7 @@ class FormList extends React.Component{
                     <View style={styles.modal_view}>
                         <Text style={styles.modal_title}>Informations</Text>
                         <Text style={styles.modal_text}>Allow this app to access motion sensors? </Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.setInfoPopUpVisibility()}>
+                        <TouchableOpacity style={styles.button} onPress={() => this._setInfoPopUpVisibility()}>
                             <Text style={styles.button_text}>OK</Text>
                         </TouchableOpacity>
                     </View>

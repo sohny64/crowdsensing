@@ -21,7 +21,7 @@ class Form extends React.Component{
         this.setState({ answers: answers });
     }
 
-    submitForm(){
+    _submitForm(){
         //Currently this just displays form answer to the console in JSON format
         //But this will send it to a database in a future version
         console.log(JSON.stringify(this.state.answers));
@@ -29,7 +29,7 @@ class Form extends React.Component{
         this.toast.show('Form submit !');
     }
 
-    displayQuestionsForm(form){
+    _displayQuestionsForm(form){
         var input; //Input use to get data from the user
         return(
             //Get all questions from the form
@@ -78,8 +78,8 @@ class Form extends React.Component{
                         <Text style={styles.subhead}>Description</Text>
                         <Text style={styles.text}>{form.description}</Text>
                     </View>
-                    {this.displayQuestionsForm(form)}
-                    <TouchableOpacity style={styles.button} onPress={() => this.submitForm()}>
+                    {this._displayQuestionsForm(form)}
+                    <TouchableOpacity style={styles.button} onPress={() => this._submitForm()}>
                         <Text style={styles.text_button}>Submit</Text>
                     </TouchableOpacity>
                 </ScrollView>

@@ -10,13 +10,13 @@ export default class ImagePicker extends React.Component{
         }
     }
 
-    setImage(image){
+    _setImage(image){
         this.setState({ image: image });
     }
 
 
 
-    pickImage = async () => {
+    _pickImage = async () => {
         //Ask storage permission to user
         const { status } = await Picker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
@@ -32,13 +32,13 @@ export default class ImagePicker extends React.Component{
           
               if (!result.cancelled) {
                   //If picture has been picken -> send to the form
-                this.setImage(result.uri);
+                this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
               }
         }
     };
 
-    takePicture = async () => {
+    _takePicture = async () => {
         //Ask camera permission to user
         const { status } = await Picker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
@@ -56,7 +56,7 @@ export default class ImagePicker extends React.Component{
                 //If picture has been taken -> send to the form
                 this.setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
-              }
+            }
         }
     }
 
@@ -68,10 +68,10 @@ export default class ImagePicker extends React.Component{
             <View>
                 {image && <Image source={{uri: image}} style={styles.image}/>}
                 <View style={styles.buton_container}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.pickImage()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._pickImage()}>
                         <Text style={styles.text}>Pick from Gallery</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => this.takePicture()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this._takePicture()}>
                         <Text style={styles.text}>Take a picture</Text>
                     </TouchableOpacity>
                 </View>
