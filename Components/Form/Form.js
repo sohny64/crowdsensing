@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
 import AudioRecorder from './RecorderSensor/AudioRecorder';
@@ -39,7 +39,10 @@ class Form extends React.Component{
                     case "text":
                         input = <TextInput 
                             style={styles.text_input} 
-                            multiline
+                            returnKeyType="done"
+                            multiline={true}
+                            blurOnSubmit={true}
+                            onSubmitEditing={()=>{Keyboard.dismiss()}}
                             onChangeText={(answer) => this.getAnswer(answer, question)}
                         />
                         break;
