@@ -20,7 +20,7 @@ class Record extends React.Component{
             modalVisible: false,
 
             //currentTime
-            currentTime: new Date().getTime(),
+            currentTime: Date.now(),
 
             //selected
             selected: [],
@@ -53,7 +53,7 @@ class Record extends React.Component{
             pastStepCount: 0,
 
             //Array
-            tableauValeurs: [
+            tableauValeurs:
                                 {
                                     time : 0,
                                     Accelerometer: {
@@ -82,7 +82,7 @@ class Record extends React.Component{
                                                     currrentStep:0
                                                }                                    
                                 }
-                            ]
+        
 
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -167,12 +167,26 @@ class Record extends React.Component{
         this.setState({selected:FormatData})
         this._subscribe()
         this.toggleStopwatch()
-        console.log(this.state.currentTime)
+
+        this._interval = setInterval(() => {
+            this.recordSensor()
+            //console.log(this.state.tableauValeurs)
+            //console.log("---------------------")
+            //console.log(this.state.tableauValeurs[0].Accelerometer.x)
+            //console.log(this.state.tableauValeurs[1].y)
+            //console.log(this.state.tableauValeurs[1].z)
+            //console.log("---------------------")
+
+        }, 350);
+
+       
     }
 
 
     componentWillUnmount() {
         this._unsubscribe()
+        clearInterval(this._interval);
+
       }
 
 
@@ -211,6 +225,42 @@ class Record extends React.Component{
         this.setState({ modalVisible: visible });
     }
 
+    recordSensor(){
+        this.setState({
+            tableauValeurs: [{
+                time : Date.now()-this.state.currentTime,
+                Accelerometer: {
+                    x:this.state.accelerometerX,
+                    y:this.state.accelerometerY,
+                    z:this.state.accelerometerZ,
+                },
+
+                Gyroscope: {
+                    x:this.state.gyroscopeX,
+                    y:this.state.gyroscopeX,
+                    z:this.state.gyroscopeX,
+                },
+
+                Magnetometer:   {
+                    x:this.state.magnetometerX,
+                    y:this.state.magnetometerY,
+                    z:this.state.magnetometerZ,
+                },   
+
+                Barometer:  {
+                    pressure:this.state.pressure,
+                    relativeAltitude:this.state.relativeAltitude
+                           },     
+
+                Pedometer: {    
+                    currrentStep:this.state.currentStepCount
+                }                                    
+            }
+        ]
+
+        })
+    }
+
 //---------------------------------------------------------------------------------------------------------------------
 
     //Accelerometer
@@ -218,8 +268,8 @@ class Record extends React.Component{
         Accelerometer.setUpdateInterval(350);
     };
     
-    _stopAccelerometer(){
-        Accelerometer.setUpdateInterval(100000);
+    _mediumAccelerometer(){
+        Accelerometer.setUpdateInterval(150);
     };
     
     _fastAccelerometer(){
@@ -333,7 +383,6 @@ class Record extends React.Component{
         return this.state.selected.map((item,key) => {
             return (
                 <View key={key}>
-                    
                     <Text  style={styles.text}>{"\n"}
                                                {item.key}
                                                {"\n"}
@@ -364,7 +413,6 @@ class Record extends React.Component{
                   <TouchableOpacity style={styles.buttonAllowed} onPress={() => {this.setModalVisible(false); this._PreviousPage();}}>
                     <Text style={styles.buttonText}>Save</Text>
                   </TouchableOpacity>
-
 
                 </View>
               </View>
