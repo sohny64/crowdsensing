@@ -14,6 +14,11 @@ class Form extends React.Component{
         this.getAnswer = this.getAnswer.bind(this);
     }
 
+    _displayFormList = () => {
+        //Open a new screen with the form selected
+        this.props.navigation.navigate("Forms");
+    }
+
     getAnswer = (answer, question) => {
         //Add the aswer param to the answers
         const answers = this.state.answers;
@@ -27,6 +32,9 @@ class Form extends React.Component{
         console.log(JSON.stringify(this.state.answers));
         //Show a toast to inform the user that the form are submit
         this.toast.show('Form submit !');
+        //Wait 500ms that the toast has been shown
+        setTimeout(() => {  this._displayFormList(); }, 500);
+        
     }
 
     _displayQuestionsForm(form){
