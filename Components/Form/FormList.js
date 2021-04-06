@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, FlatList, TouchableOpacity, Image, Modal, Text } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 import forms from '../../Helpers/formData'
 import FormListItem from './FormListItem';
 
@@ -56,8 +57,10 @@ class FormList extends React.Component{
                         transparent={true}
                         visible={this.state.modalVisible}>
                     <View style={styles.modal_view}>
-                        <Text style={styles.modal_title}>Informations</Text>
-                        <Text style={styles.modal_text}>Allow this app to access motion sensors? </Text>
+                        <Text style={styles.modal_title}>Legal information</Text>
+                        <ScrollView style={styles.modal_scroll}>
+                            <Text style={styles.modal_text}>Add user rights informations and recovered data informations</Text>
+                        </ScrollView>
                         <TouchableOpacity style={styles.button} onPress={() => this._setInfoPopUpVisibility()}>
                             <Text style={styles.button_text}>OK</Text>
                         </TouchableOpacity>
@@ -95,12 +98,12 @@ const styles = StyleSheet.create({
     modal_view: {
         margin: 20,
         height: '95%',
-        backgroundColor: "#241332",
+        backgroundColor: '#241332',
         borderTopRightRadius:60,
         borderBottomLeftRadius:60,
         padding: 25,
-        alignItems: "center",
-        shadowColor: "#000",
+        alignItems: 'center',
+        shadowColor: '#000000',
         shadowOffset: {
           width: 0,
           height: 2
@@ -113,7 +116,8 @@ const styles = StyleSheet.create({
     modal_text: {
         marginTop: 10,
         color: '#ffffff',
-        textAlign: "center"
+        textAlign: 'center',
+        textAlign: 'justify'
     },
     modal_title: {
         fontSize: 25,
@@ -127,13 +131,15 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',
-        width: '60%',
-        marginTop: 'auto',
-        marginBottom: 20
+        width: '60%'
     },
     button_text: {
         color: '#ffffff'
+    },
+    modal_scroll: {
+        marginBottom: 10
     }
+
 });
 
 export default FormList;

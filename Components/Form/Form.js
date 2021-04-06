@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
 import AudioRecorder from './RecorderSensor/AudioRecorder';
@@ -12,6 +12,11 @@ class Form extends React.Component{
             answers: {},
         }
         this.getAnswer = this.getAnswer.bind(this);
+    }
+
+    _displayFormList = () => {
+        //Open a new screen with the form selected
+        this.props.navigation.navigate("Forms");
     }
 
     getAnswer = (answer, question) => {
@@ -27,6 +32,9 @@ class Form extends React.Component{
         console.log(JSON.stringify(this.state.answers));
         //Show a toast to inform the user that the form are submit
         this.toast.show('Form submit !');
+        //Wait 500ms that the toast has been shown
+        setTimeout(() => {  this._displayFormList(); }, 500);
+        
     }
 
     _displayQuestionsForm(form){
@@ -39,7 +47,10 @@ class Form extends React.Component{
                     case "text":
                         input = <TextInput 
                             style={styles.text_input} 
-                            multiline
+                            returnKeyType="done"
+                            multiline={true}
+                            blurOnSubmit={true}
+                            onSubmitEditing={()=>{Keyboard.dismiss()}}
                             onChangeText={(answer) => this.getAnswer(answer, question)}
                         />
                         break;

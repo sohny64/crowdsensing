@@ -54,7 +54,7 @@ export default class ImagePicker extends React.Component{
           
               if (!result.cancelled) {
                 //If picture has been taken -> send to the form
-                this.setImage(result.uri);
+                this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
             }
         }
