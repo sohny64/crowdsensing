@@ -117,9 +117,7 @@ class Record extends React.Component{
     _subscribe = () => {
         const smartphoneSensors = this.props.navigation.state.params.selectedSensors
         let Temps = smartphoneSensors
-        console.log(Temps.length)
         for(let i=0;i<Temps.length;i++){
-            console.log(Temps[i])
            switch(Temps[i]){
                 case 'Accelerometer':
                     this._subscriptionAccelerometer =
@@ -171,7 +169,6 @@ class Record extends React.Component{
             }  
         }
     }
-
     
 
     /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
@@ -192,9 +189,6 @@ class Record extends React.Component{
         this._interval = setInterval(() => {
             this.setState({compteur: this.state.compteur+1})
             this.recordSensor()
-            console.log("_________________________")
-            console.log(this.state.tableauValeurs)
-            console.log("_________________________")
         }, 500);
 
         this._slowAccelerometer()
@@ -220,7 +214,7 @@ class Record extends React.Component{
     checkSwitch=(param)=>{
         switch(param) {
         case 'Accelerometer':
-            return ( this._renderAccelerometer() )
+            return ( this.renderAccelerometer() )
 
         case 'Barometer':
             return ( this.renderBarometer() )
@@ -383,7 +377,17 @@ class Record extends React.Component{
 
 //--------------------------------------------------------------------------------------------------------------------- 
       
-    _renderAccelerometer(){
+   renderTime(){
+        return (
+            <View>
+                <Text>
+                
+                </Text>      
+            </View>
+        )
+    }
+
+    renderAccelerometer(){
         return (
             <View style={styles.containerSensor}>
               <Text style={styles.textSensor}>
@@ -516,6 +520,11 @@ class Record extends React.Component{
     };
 }
 
+function millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
 
 function round(n) {
     if (!n) {
