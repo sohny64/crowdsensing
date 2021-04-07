@@ -32,7 +32,7 @@ class Form extends React.Component{
         //But this will send it to a database in a future version
         console.log(JSON.stringify(this.state.answers));
         //Show a toast to inform the user that the form are submit
-        this.toast.show('Form submit !');
+        this.toast.show('Form submitted !');
         //Wait 500ms that the toast has been shown
         setTimeout(() => {  this._displayFormList(); }, 500);
         
