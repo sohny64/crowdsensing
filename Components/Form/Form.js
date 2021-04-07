@@ -15,7 +15,7 @@ class Form extends React.Component{
     }
 
     _displayFormList = () => {
-        //Open a new screen with the form selected
+        //Return to FormList sreen
         this.props.navigation.navigate("Forms");
     }
 
