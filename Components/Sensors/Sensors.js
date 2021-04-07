@@ -110,6 +110,13 @@ class Sensors extends React.Component{
             }
     }
 
+    _displayHistory = () => {
+        this.props.navigation.navigate("RecordHistory", { 
+            tableauValeurs: this.state.tableauValeurs,
+            nameSave: this.state.nameSave 
+        });
+    }
+
     _renderSmartphoneSensors(){
             return(
                 <FlatList
@@ -132,7 +139,6 @@ class Sensors extends React.Component{
                 renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.text_checkbox_block}
                 title={item.name}
                 checked={item.checked}
-                
                 />}
             />
         )
@@ -165,7 +171,7 @@ class Sensors extends React.Component{
                         <Text style={styles.text_button}>Start recording</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button_history}>
+                    <TouchableOpacity style={styles.button_history}  onPress={() => this._displayHistory()}>
                         <Image
                             source={require('../../Images/book.png')}
                             style={styles.icon}
