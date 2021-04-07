@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Share, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
+import { set } from 'react-native-reanimated';
 
 class RecordHistory extends React.Component{
 
@@ -98,7 +99,7 @@ class RecordHistory extends React.Component{
     _askToDelete(item){
         Alert.alert(
             "Warning!",
-            "Are you sure you want to delete the location?",
+            "Are you sure you want to delete the record?" ,
             [
                 {
                     text: "Cancel",
@@ -113,6 +114,8 @@ class RecordHistory extends React.Component{
             ]
         );
     }
+
+
 
     _deleteRecord = async (item) => {
         var regex;
@@ -139,7 +142,6 @@ class RecordHistory extends React.Component{
             return false;
         }
     }
-
 
     _renderTitle(){
         return(
@@ -239,25 +241,40 @@ class RecordHistory extends React.Component{
         )
     }
 
-    _renderAllDetail(record){
-        return (
-            <View>
-                {this._renderAccelerometer(record)}
-                {this._renderGyroscope(record)}
-                {this._renderMagnetometer(record)}
-                {this._renderBarometer(record)}
-                {this._renderPedometer(record)}
-                {this._renderDetailButtonUp(record)}
-                {this._renderDeleteButton(record)}
-            </View>
-        )
+
+    _renderAll(record){
+        let affiche
+        this.state.selected.find((element) => {
+            if (element.key == record.item.nameSave){
+                if(element.visible){
+                    affiche =   <View>
+                                    {this._renderAccelerometer(record)}
+                                    {this._renderGyroscope(record)}
+                                    {this._renderMagnetometer(record)}
+                                    {this._renderBarometer(record)}
+                                    {this._renderPedometer(record)}
+                                    {this._renderDetailButtonUp(record)}
+                                </View>
+                }else{
+                    affiche =  <View>
+                                    {this._renderDetailButtonDown(record)}
+                                </View>
+                }
+            }
+        })
+        return( 
+                <View>
+                    {affiche}     
+                </View>
+            )            
+              
     }
 
     _renderDetailButtonDown(record){
         return(
             <TouchableOpacity 
                 style={styles.button_arrow}
-                    onPress={() => record.visible = false}
+                    onPress={() => this._checkArray(record)}
             >
                 <Image
                     source={require('../../Images/down.png')}
@@ -267,11 +284,37 @@ class RecordHistory extends React.Component{
         )
     }
 
+    _checkArray(record){
+        this.state.selected.find((element) => {
+            if (element.key == record.item.nameSave){   
+                if(element.visible == true ){  
+                    let elementId = element.id
+                    //console.log(elementId)
+                    this.setState(prevState => ({
+                        selected: prevState.selected.map(
+                            el => el.id === elementId? { ...el, visible: false }: el
+                        )
+                    }))
+                }
+                else{
+                    let elementId = element.id
+                    //console.log(elementId)
+                    this.setState(prevState => ({
+                        selected: prevState.selected.map(
+                            el => el.id === elementId? { ...el, visible: true }: el
+                        )
+                    }))
+    
+                }
+            }
+        })  
+    }
+
     _renderDetailButtonUp(record){
         return(
             <TouchableOpacity 
                 style={styles.button_arrow}
-                    onPress={() => record.visible = false}
+                    onPress={() => this._checkArray(record)}
             >
                 <Image
                     source={require('../../Images/up.png')}
@@ -294,31 +337,25 @@ class RecordHistory extends React.Component{
             </TouchableOpacity>
         )
     }
-               
-    _renderListItem(){
-        return(
-            <FlatList 
-                data={this.state.data}
-                keyExtractor={(item) => item.nameSave.toString()}
-                ListEmptyComponent={this._listEmptyComponent()}
-                renderItem={(record =>
-                    <View style={styles.description_container}>
-
-                        {this._renderNameSave(record)}
-                        {this._renderAllDetail(record)}
-                    </View>
-                )}
-            />
-        )
-    }
-    
 
     render(){
         return (
             <View style={styles.main_container}>
-                {this._renderListItem()}
+                <FlatList 
+                data={this.state.data}
+                keyExtractor={(item) => item.nameSave.toString()}
+                ListEmptyComponent={this._listEmptyComponent()}
+                extraData={this.state.selected}
+                renderItem={(record =>
+                    <View style={styles.description_container}>
+                        
+                        {this._renderNameSave(record)}
+                        {this._renderAll(record)}
+
+                    </View>
+                )}
+            />
             </View>
-            
         )
     }
 
