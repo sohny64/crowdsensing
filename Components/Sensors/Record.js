@@ -241,6 +241,38 @@ class Record extends React.Component{
         return console.log(millisToMinutesAndSeconds(this.state.tableauValeurs[0].time))
     }
 
+    _makeAverage(){
+        let accelerometerX = this.state.tableauValeurs.Accelerometer.x / this.state.compteur
+        let accelerometerY = this.state.tableauValeurs.Accelerometer.y / this.state.compteur
+        let accelerometerZ = this.state.tableauValeurs.Accelerometer.z / this.state.compteur
+
+        let gyroscopeX = this.state.tableauValeurs.Gyroscope.x / this.state.compteur
+        let gyroscopeY = this.state.tableauValeurs.Gyroscope.y / this.state.compteur
+        let gyroscopeZ = this.state.tableauValeurs.Gyroscope.z / this.state.compteur
+
+        let magnetometerX = this.state.tableauValeurs.Magnetometer.x / this.state.compteur
+        let magnetometerY = this.state.tableauValeurs.Magnetometer.y / this.state.compteur
+        let magnetometerZ = this.state.tableauValeurs.Magnetometer.z / this.state.compteur
+
+        let pressure = this.state.tableauValeurs.Barometer.pressure / this.state.compteur
+        let relativeAltitude = this.state.tableauValeurs.Barometer.relativeAltitude / this.state.compteur
+
+         this.state.tableauValeurs.Accelerometer.x = accelerometerX
+         this.state.tableauValeurs.Accelerometer.y = accelerometerY
+         this.state.tableauValeurs.Accelerometer.y = accelerometerZ
+
+         this.state.tableauValeurs.Gyroscope.x = gyroscopeX
+         this.state.tableauValeurs.Gyroscope.y = gyroscopeY
+         this.state.tableauValeurs.Gyroscope.y = gyroscopeZ
+
+        this.state.tableauValeurs.Magnetometer.x = magnetometerX
+        this.state.tableauValeurs.Magnetometer.y = magnetometerY
+        this.state.tableauValeurs.Magnetometer.z = magnetometerZ
+
+        this.state.tableauValeurs.Barometer.pressure = pressure
+        this.state.tableauValeurs.Barometer.relativeAltitude = relativeAltitude
+    }
+
     _recordSensor(){
         if(this.state.compteur == 1){
             this.setState({
@@ -276,6 +308,7 @@ class Record extends React.Component{
                         currrentStep:this.state.currentStepCount
                     }                                    
                 }
+
             })
         }
         else if(this.state.compteur == 0){
@@ -289,31 +322,32 @@ class Record extends React.Component{
                     visible:false, 
                     currentTime: Date.now(), 
                     Accelerometer: {
-                        x:(this.state.tableauValeurs.Accelerometer.x+this.state.accelerometerX)/2,
-                        y:(this.state.tableauValeurs.Accelerometer.y+this.state.accelerometerY)/2,
-                        z:(this.state.tableauValeurs.Accelerometer.z+this.state.accelerometerZ)/2,
+                        x:this.state.tableauValeurs.Accelerometer.x+this.state.accelerometerX,
+                        y:this.state.tableauValeurs.Accelerometer.y+this.state.accelerometerY,
+                        z:this.state.tableauValeurs.Accelerometer.z+this.state.accelerometerZ,
                     },
 
                     Gyroscope: {
-                        x:(this.state.tableauValeurs.Gyroscope.x+this.state.gyroscopeX)/2,
-                        y:(this.state.tableauValeurs.Gyroscope.y+this.state.gyroscopeY)/2,
-                        z:(this.state.tableauValeurs.Gyroscope.z+this.state.gyroscopeZ)/2,
+                        x:this.state.tableauValeurs.Gyroscope.x+this.state.gyroscopeX,
+                        y:this.state.tableauValeurs.Gyroscope.y+this.state.gyroscopeY,
+                        z:this.state.tableauValeurs.Gyroscope.z+this.state.gyroscopeZ,
                     },
 
                     Magnetometer:   {
-                        x:(this.state.tableauValeurs.Magnetometer.x+this.state.magnetometerX)/2,
-                        y:(this.state.tableauValeurs.Magnetometer.y+this.state.magnetometerY)/2,
-                        z:(this.state.tableauValeurs.Magnetometer.z+this.state.magnetometerZ)/2,
+                        x:this.state.tableauValeurs.Magnetometer.x+this.state.magnetometerX,
+                        y:this.state.tableauValeurs.Magnetometer.y+this.state.magnetometerY,
+                        z:this.state.tableauValeurs.Magnetometer.z+this.state.magnetometerZ,
                     },   
 
                     Barometer:  {
-                        pressure:(this.state.tableauValeurs.Barometer.pressure+this.state.pressure)/2,
-                        relativeAltitude:(this.state.tableauValeurs.Barometer.relativeAltitude+this.state.relativeAltitude)/2,
+                        pressure:this.state.tableauValeurs.Barometer.pressure+this.state.pressure,
+                        relativeAltitude:this.state.tableauValeurs.Barometer.relativeAltitude+this.state.relativeAltitude,
                             },     
                     Pedometer: {    
                         currrentStep:this.state.currentStepCount
                     }                                    
                 }
+
             })
         }
         
@@ -376,6 +410,7 @@ class Record extends React.Component{
             this._unsubscribe()
             this.resetStopwatch()
             clearInterval(this._interval);
+            this._makeAverage()
         }else{
             this._subscribe()
         }

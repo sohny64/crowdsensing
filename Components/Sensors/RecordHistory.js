@@ -93,8 +93,6 @@ class RecordHistory extends React.Component{
             )
         }
         this.setState({selected:FormatData})
-
-    
     }
 
     _askToDelete(item){
@@ -438,6 +436,12 @@ const styles = StyleSheet.create({
     text: {
         color: '#ffffff',
         marginBottom: 5
+    },
+
+    detail_sensor: {
+        color: '#ffffff',
+        fontSize: 14,
+        marginLeft:20
     },
 
     text_emptyList: {
