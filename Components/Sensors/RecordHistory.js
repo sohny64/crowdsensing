@@ -141,11 +141,6 @@ class RecordHistory extends React.Component{
     }
 
 
-
-
-
- 
-
     _renderTitle(){
         return(
             <Text style={styles.title}>
@@ -323,6 +318,7 @@ class RecordHistory extends React.Component{
             <View style={styles.main_container}>
                 {this._renderListItem()}
             </View>
+            
         )
     }
 
