@@ -64,7 +64,8 @@ class Record extends React.Component{
                                 {
                                     time : 0,
                                     nameSave:undefined,
-                                    visible:false,                               
+                                    visible:false,
+                                    currentTime: Date.now(),                               
                                 }
         
 
@@ -174,7 +175,6 @@ class Record extends React.Component{
         this._interval = setInterval(() => {
             this.setState({compteur: this.state.compteur+1})
             this._recordSensor()
-            console.log(this.state.tableauValeurs)
         }, 500);
         this._slowAccelerometer()
         this._slowGyroscope()
@@ -193,14 +193,14 @@ class Record extends React.Component{
 
     _storeData = async () => {
         try {
-            let key = "sensorRecord_" + JSON.stringify(this.state.nameSave);
+            let key = "sensorRecord_" + JSON.stringify(this.state.tableauValeurs.time);
             let jsonValue = JSON.stringify(this.state.tableauValeurs)
             await AsyncStorage.setItem(key, jsonValue)
             this._PreviousPage();
           } catch (e) {
             console.log("erreur")
           }
-    };
+    }; 
 
     _changeNameSave(value){
         this.state.tableauValeurs.nameSave = value
@@ -247,7 +247,8 @@ class Record extends React.Component{
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
                     nameSave:undefined,   
-                    visible:false,  
+                    visible:false, 
+                    currentTime: Date.now(), 
                     Accelerometer: {
                         x:this.state.accelerometerX,
                         y:this.state.accelerometerY,
@@ -285,7 +286,8 @@ class Record extends React.Component{
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
                     nameSave:undefined,
-                    visible:false,  
+                    visible:false, 
+                    currentTime: Date.now(), 
                     Accelerometer: {
                         x:(this.state.tableauValeurs.Accelerometer.x+this.state.accelerometerX)/2,
                         y:(this.state.tableauValeurs.Accelerometer.y+this.state.accelerometerY)/2,

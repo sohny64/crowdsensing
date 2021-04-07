@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Share, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
-import { set } from 'react-native-reanimated';
+import moment from 'moment';
 
 class RecordHistory extends React.Component{
 
@@ -43,13 +43,13 @@ class RecordHistory extends React.Component{
             keys.forEach(element => {
 
                 if(!element.includes("undefined") && regex_Key.test(element)){
-                    keysRecorded.push(element)
+                    keysRecorded.push(element)    
                 }
-                
             });
 
             keysRecorded.sort();
-            keysRecorded.reverse();            
+            keysRecorded.reverse();   
+                     
         } catch(e) {
             alert(e)
         }
@@ -57,7 +57,7 @@ class RecordHistory extends React.Component{
         let values;
         let valuesJSON = "[";
         try {
-            values = await AsyncStorage.multiGet(keys)
+            values = await AsyncStorage.multiGet(keysRecorded)
 
             //Format values to respect JSON Format
             values.forEach(element => {
@@ -86,8 +86,9 @@ class RecordHistory extends React.Component{
             FormatData.push(
                 {
                     id:i,
-                    key:this.state.data[i].nameSave,
-                    visible:false
+                    key:this.state.data[i].time,
+                    visible:false,
+                    visibleSetting:false
                 }
             )
         }
@@ -115,18 +116,59 @@ class RecordHistory extends React.Component{
         );
     }
 
+    _checkArray(record){
+        this.state.selected.find((element) => {
+            if (element.key == record.item.time){   
+                if(element.visible == true ){  
+                    let elementId = element.id
+                    this.setState(prevState => ({
+                        selected: prevState.selected.map(
+                            el => el.id === elementId? { ...el, visible: false }: el
+                        )
+                    }))
+                }
+                else{
+                    let elementId = element.id
+                    this.setState(prevState => ({
+                        selected: prevState.selected.map(
+                            el => el.id === elementId? { ...el, visible: true }: el
+                        )
+                    }))
+    
+                }
+            }
+        })  
+    }
 
+    _onShare = async (item) => {
+        try {
+          const result = await Share.share({
+            message:
+                JSON.stringify(item),
+          });
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+    }
 
     _deleteRecord = async (item) => {
         var regex;
         var key;
-        regex = new RegExp(item.nameSave);
+        regex = new RegExp(item.time);
         key = this.state.keys.find(value => regex.test(value));
-        console.log(this.state.keysRecorded)
         data = this.state.data;
         var index;
         for(var i=0 ; i<data.length ; i++){
-            if(data[i].nameSave == item.nameSave){
+            if(data[i].time == item.time){
                 index = i;
             }
         }
@@ -143,19 +185,45 @@ class RecordHistory extends React.Component{
         }
     }
 
-    _renderTitle(){
-        return(
-            <Text style={styles.title}>
-            Record informations
-            </Text>
-        )
+    _getDate(timestamp){
+        return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
     }
 
     _renderNameSave(record){
         return(
-            <Text style={styles.subhead}>
-                {record.item.nameSave} - {millisToMinutesAndSeconds(record.item.time)} min{"\n"}
-            </Text>
+            <View style={styles.main_container}>
+                    <View style={styles.buttons_container}>
+
+                        <View style={styles.description_container2}>
+                            <Text style={styles.subhead}>
+                                {record.item.nameSave}
+                            </Text>
+                            <Text style={styles.text}>
+                                {this._getDate(record.item.currentTime)}{"\n"}
+                                {millisToMinutesAndSeconds(record.item.time)} min
+                            </Text>
+                        </View>
+                        <View style={styles.buttons_container}>
+                            {this._renderOnShare(record)}
+                            {this._renderDeleteButton(record)}
+                        </View>
+                    </View>
+
+            </View>
+        )
+    }
+
+    _renderOnShare(record){
+        return(
+            <TouchableOpacity 
+            style={styles.button_share}
+            onPress={() => this._onShare(record.item)}
+            >
+                <Image
+                    source={require('../../Images/share.png')}
+                    style={styles.icon}
+                />
+            </TouchableOpacity>
         )
     }
 
@@ -245,7 +313,7 @@ class RecordHistory extends React.Component{
     _renderAll(record){
         let affiche
         this.state.selected.find((element) => {
-            if (element.key == record.item.nameSave){
+            if (element.key == record.item.time){
                 if(element.visible){
                     affiche =   <View>
                                     {this._renderAccelerometer(record)}
@@ -284,32 +352,6 @@ class RecordHistory extends React.Component{
         )
     }
 
-    _checkArray(record){
-        this.state.selected.find((element) => {
-            if (element.key == record.item.nameSave){   
-                if(element.visible == true ){  
-                    let elementId = element.id
-                    //console.log(elementId)
-                    this.setState(prevState => ({
-                        selected: prevState.selected.map(
-                            el => el.id === elementId? { ...el, visible: false }: el
-                        )
-                    }))
-                }
-                else{
-                    let elementId = element.id
-                    //console.log(elementId)
-                    this.setState(prevState => ({
-                        selected: prevState.selected.map(
-                            el => el.id === elementId? { ...el, visible: true }: el
-                        )
-                    }))
-    
-                }
-            }
-        })  
-    }
-
     _renderDetailButtonUp(record){
         return(
             <TouchableOpacity 
@@ -338,15 +380,23 @@ class RecordHistory extends React.Component{
         )
     }
 
+
+
     render(){
+
         return (
             <View style={styles.main_container}>
+                                  <Text style={styles.title}>
+                        Sensors saves{"\n"}
+                    </Text>
                 <FlatList 
                 data={this.state.data}
-                keyExtractor={(item) => item.nameSave.toString()}
+                keyExtractor={(item) => item.time.toString()}
                 ListEmptyComponent={this._listEmptyComponent()}
                 extraData={this.state.selected}
                 renderItem={(record =>
+
+
                     <View style={styles.description_container}>
                         
                         {this._renderNameSave(record)}
@@ -382,12 +432,7 @@ const styles = StyleSheet.create({
 
     buttons_container: {
         flexDirection: "row",
-        width: '100%',
         flex:1,
-    },
-
-    detail_sensor:{
-        marginLeft: 20
     },
 
     text: {
@@ -399,21 +444,23 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginLeft: 10,
         marginTop: 10,
-        fontSize:25
     },
 
     description_container: {
         backgroundColor: '#441d59',
-        margin: 10,
+        padding: 10,
+        margin:10,
+        borderRadius:10  
+    },
+
+    description_container2: {
+        backgroundColor: '#441d59',
         padding: 10,
     },
 
     button_container: {
         flexDirection: "row",
         backgroundColor: '#441d59',
-        marginRight: 10,
-        marginTop: 10,
-        padding: 10,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -421,21 +468,23 @@ const styles = StyleSheet.create({
 
     button_share: {
         backgroundColor: '#441d59',
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'flex-end'
     },
 
     button_delete: {
         backgroundColor: '#441d59',
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-end'
     },
 
     button_arrow: {
         backgroundColor: '#441d59',
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     history_container: {
@@ -467,11 +516,7 @@ const styles = StyleSheet.create({
         height: 35,
         resizeMode: 'contain',
     },
-    icon_delete: {
-        width: 35,
-        height: 35,
-        resizeMode: 'contain',
-    },
 });
+
 
 export default RecordHistory;
