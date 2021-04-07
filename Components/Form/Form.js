@@ -4,6 +4,7 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
 import AudioRecorder from './RecorderSensor/AudioRecorder';
 import ImagePicker from './RecorderSensor/ImagePicker';
+import PressureRecorder from './RecorderSensor/PressureRecorder';
 
 class Form extends React.Component{
     constructor(props){
@@ -61,6 +62,10 @@ class Form extends React.Component{
 
                     case "image":
                         input = <ImagePicker question={question} getAnswer={this.getAnswer}/>
+                        break;
+
+                    case "pressure":
+                        input = <PressureRecorder question={question} getAnswer={this.getAnswer}/>
                         break;
                 
                     default:
