@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image,  Modal } fro
 import smartphoneSensorData from '../../Helpers/smartphoneSensorData'
 import watchSensorData from '../../Helpers/watchSensorData'
 import { CheckBox } from 'react-native-elements';
-import * as Permissions from 'expo-permissions';
 import { ScrollView } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
 

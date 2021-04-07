@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
-import { Stopwatch } from 'react-native-stopwatch-timer'
+import { Stopwatch } from 'react-native-stopwatch-timer';
+import { LogBox } from 'react-native';
 
 export default class AudioRecorder extends React.Component{
     constructor(props){
@@ -68,6 +69,8 @@ export default class AudioRecorder extends React.Component{
     }
 
     render(){
+        LogBox.ignoreLogs(['Warning: componentWillReceiveProps has been renamed, and is not recommended for use.']); // Ignore log notification by message
+        LogBox.ignoreAllLogs();//Ignore all log notifications
         return(
             <View>
                  <Stopwatch

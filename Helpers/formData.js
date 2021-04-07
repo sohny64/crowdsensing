@@ -75,8 +75,8 @@ export default data = [
             },
             pressure= {
                 name: "pressure",
-                title: "What is your current atmospheric pressure ?",
-                type: "text",
+                title: "Your current atmospheric pressure",
+                type: "pressure",
             }
         ]
     }
