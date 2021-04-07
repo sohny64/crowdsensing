@@ -12,12 +12,14 @@ class RecordHistory extends React.Component{
             keys: [],
             recordedLocations: {},
             recordedKeys: {},
+            selected:[]
         }
         
     }
 
     componentDidMount(){
         this._getSensorHistory();
+        
     }
 
     _listEmptyComponent(){
@@ -76,6 +78,20 @@ class RecordHistory extends React.Component{
         } catch(e) {
             alert(e)
         }
+
+        let Temps = this.state.keys
+        let FormatData=[]
+        for(let i=0;i<Temps.length;i++){
+            FormatData.push(
+                {
+                    id:i,
+                    key:this.state.data[i].nameSave,
+                    visible:false
+                }
+            )
+        }
+        this.setState({selected:FormatData})
+
     
     }
 
@@ -123,6 +139,166 @@ class RecordHistory extends React.Component{
             return false;
         }
     }
+
+
+
+
+
+ 
+
+    _renderTitle(){
+        return(
+            <Text style={styles.title}>
+            Record informations
+            </Text>
+        )
+    }
+
+    _renderNameSave(record){
+        return(
+            <Text style={styles.subhead}>
+                {record.item.nameSave} - {millisToMinutesAndSeconds(record.item.time)} min{"\n"}
+            </Text>
+        )
+    }
+
+    _renderAccelerometer(record){
+        return (
+            <View>
+                <Text style={styles.text}>
+                    Accelerometer: 
+                </Text>
+                <View style={styles.detail_sensor}>
+                    <Text style={styles.text}>
+                        x : {round(record.item.Accelerometer.x)}{"\n"}
+                        y : {round(record.item.Accelerometer.y)}{"\n"}
+                        z : {round(record.item.Accelerometer.z)}{"\n"}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    _renderGyroscope(record){
+        return (
+            <View>
+                <Text style={styles.text}>
+                    Gyroscope: 
+                </Text>
+                <View style={styles.detail_sensor}>
+                    <Text style={styles.text}>
+                        x : {round(record.item.Gyroscope.x)}{"\n"}
+                        y : {round(record.item.Gyroscope.y)}{"\n"}
+                        z : {round(record.item.Gyroscope.z)}{"\n"}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    _renderMagnetometer(record){
+        return (
+            <View>
+                <Text style={styles.text}>
+                    Magnetometer: 
+                </Text>
+                <View style={styles.detail_sensor}>
+                    <Text style={styles.text}>
+                        x : {round(record.item.Magnetometer.x)}{"\n"}
+                        y : {round(record.item.Magnetometer.y)}{"\n"}
+                        z : {round(record.item.Magnetometer.z)}{"\n"}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    _renderBarometer(record){
+        return (
+            <View>
+                <Text style={styles.text}>
+                    Barometer: 
+                </Text>
+                <View style={styles.detail_sensor}>
+                    <Text style={styles.text}>
+                        pressure : {round(record.item.Barometer.pressure)} hPa{"\n"}
+                        relativeAltitude : {round(record.item.Barometer.relativeAltitude)} m{"\n"}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    _renderPedometer(record){
+        return (
+            <View>
+                <Text style={styles.text}>
+                    Pedometer: 
+                </Text>
+                <View style={styles.detail_sensor}>
+                    <Text style={styles.text}>
+                        Steps : {round(record.item.Pedometer.currrentStep)}{"\n"}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    _renderAllDetail(record){
+        return (
+            <View>
+                {this._renderAccelerometer(record)}
+                {this._renderGyroscope(record)}
+                {this._renderMagnetometer(record)}
+                {this._renderBarometer(record)}
+                {this._renderPedometer(record)}
+                {this._renderDetailButtonUp(record)}
+                {this._renderDeleteButton(record)}
+            </View>
+        )
+    }
+
+    _renderDetailButtonDown(record){
+        return(
+            <TouchableOpacity 
+                style={styles.button_arrow}
+                    onPress={() => record.visible = false}
+            >
+                <Image
+                    source={require('../../Images/down.png')}
+                    style={styles.icon_delete}
+                />
+            </TouchableOpacity>
+        )
+    }
+
+    _renderDetailButtonUp(record){
+        return(
+            <TouchableOpacity 
+                style={styles.button_arrow}
+                    onPress={() => record.visible = false}
+            >
+                <Image
+                    source={require('../../Images/up.png')}
+                    style={styles.icon_delete}
+                />
+            </TouchableOpacity>
+        )
+    }
+
+    _renderDeleteButton(record){
+        return(
+            <TouchableOpacity 
+                style={styles.button_delete}
+                    onPress={() => this._askToDelete(record.item)}
+            >
+                <Image
+                    source={require('../../Images/delete_red.png')}
+                    style={styles.icon_delete}
+                />
+            </TouchableOpacity>
+        )
+    }
                
     _renderListItem(){
         return(
@@ -132,68 +308,9 @@ class RecordHistory extends React.Component{
                 ListEmptyComponent={this._listEmptyComponent()}
                 renderItem={(record =>
                     <View style={styles.description_container}>
-                        <Text style={styles.title}>
-                            Record informations
-                        </Text>
-                                <TouchableOpacity 
-                                    style={styles.button_delete}
-                                    onPress={() => this._askToDelete(record.item)}
-                                >
-                                    <Image
-                                        source={require('../../Images/delete_red.png')}
-                                        style={styles.icon_delete}
-                                    />
-                                </TouchableOpacity>
-                        <Text style={styles.subhead}>
-                            {record.item.nameSave} - {millisToMinutesAndSeconds(record.item.time)} min{"\n"}
-                        </Text>
-                        <Text style={styles.text}>
-                            Accelerometer: 
-                        </Text>
-                        <View style={styles.detail_sensor}>
-                            <Text style={styles.text}>
-                                x : {round(record.item.Accelerometer.x)}{"\n"}
-                                y : {round(record.item.Accelerometer.y)}{"\n"}
-                                z : {round(record.item.Accelerometer.z)}{"\n"}
-                            </Text>
-                        </View>
-                        <Text style={styles.text}>
-                            Gyroscope: 
-                        </Text>
-                        <View style={styles.detail_sensor}>
-                            <Text style={styles.text}>
-                                x : {round(record.item.Gyroscope.x)}{"\n"}
-                                y : {round(record.item.Gyroscope.y)}{"\n"}
-                                z : {round(record.item.Gyroscope.z)}{"\n"}
-                            </Text>
-                        </View>
-                        <Text style={styles.text}>
-                            Magnetometer: 
-                        </Text>
-                        <View style={styles.detail_sensor}>
-                            <Text style={styles.text}>
-                                x : {round(record.item.Magnetometer.x)}{"\n"}
-                                y : {round(record.item.Magnetometer.y)}{"\n"}
-                                z : {round(record.item.Magnetometer.z)}{"\n"}
-                            </Text>
-                        </View>
-                        <Text style={styles.text}>
-                            Barometer: 
-                        </Text>
-                        <View style={styles.detail_sensor}>
-                            <Text style={styles.text}>
-                                pressure : {round(record.item.Barometer.pressure)} hPa{"\n"}
-                                relativeAltitude : {round(record.item.Barometer.relativeAltitude)} m{"\n"}
-                            </Text>
-                        </View>
-                        <Text style={styles.text}>
-                            Pedometer: 
-                        </Text>
-                        <View style={styles.detail_sensor}>
-                            <Text style={styles.text}>
-                            Steps : {round(record.item.Pedometer.currrentStep)}{"\n"}
-                            </Text>
-                        </View>
+
+                        {this._renderNameSave(record)}
+                        {this._renderAllDetail(record)}
                     </View>
                 )}
             />
@@ -279,8 +396,13 @@ const styles = StyleSheet.create({
     button_delete: {
         backgroundColor: '#441d59',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    },
+
+    button_arrow: {
+        backgroundColor: '#441d59',
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     history_container: {

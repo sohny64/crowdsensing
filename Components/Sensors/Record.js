@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform, Modal } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Modal, DeviceEventEmitter  } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer'
 import { Input } from 'react-native-elements';
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 
 class Record extends React.Component{
@@ -16,6 +15,8 @@ class Record extends React.Component{
 
             //Compteur
             compteur:0,
+
+            visible:false,
 
             //Save
             nameSave: null,
@@ -47,6 +48,8 @@ class Record extends React.Component{
             gyroscopeY: 0,
             gyroscopeZ: 0,
 
+            humidity:0,
+
             //Magnetometer
             magnetometerX: 0,
             magnetometerY: 0,
@@ -60,7 +63,8 @@ class Record extends React.Component{
             tableauValeurs:
                                 {
                                     time : 0,
-                                    nameSave:undefined,                               
+                                    nameSave:undefined,
+                                    visible:false,                               
                                 }
         
 
@@ -148,6 +152,7 @@ class Record extends React.Component{
                     break
             }  
         }
+        
     }
     
 
@@ -242,6 +247,7 @@ class Record extends React.Component{
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
                     nameSave:undefined,   
+                    visible:false,  
                     Accelerometer: {
                         x:this.state.accelerometerX,
                         y:this.state.accelerometerY,
@@ -279,6 +285,7 @@ class Record extends React.Component{
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
                     nameSave:undefined,
+                    visible:false,  
                     Accelerometer: {
                         x:(this.state.tableauValeurs.Accelerometer.x+this.state.accelerometerX)/2,
                         y:(this.state.tableauValeurs.Accelerometer.y+this.state.accelerometerY)/2,
@@ -373,7 +380,6 @@ class Record extends React.Component{
     }
 
 //--------------------------------------------------------------------------------------------------------------------- 
-
 
 
     _renderAccelerometer(){
