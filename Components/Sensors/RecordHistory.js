@@ -18,20 +18,15 @@ class RecordHistory extends React.Component{
         
     }
 
+
+
+
     componentDidMount(){
         this._getSensorHistory();
-        
     }
 
-    _listEmptyComponent(){
-        return (
-            <View style={{alignItems: "center", margin: 100}}>
-                <Text style={styles.text_emptyList}>
-                    No record found
-                </Text>
-            </View>
-        )
-    }
+
+//---------------------------------------------------------------------------------------------------------------------
 
     _getSensorHistory= async () => {
         //Fetch all keys
@@ -95,6 +90,41 @@ class RecordHistory extends React.Component{
         this.setState({selected:FormatData})
     }
 
+    _listEmptyComponent(){
+        return (
+            <View style={{alignItems: "center", margin: 100}}>
+                <Text style={styles.text_emptyList}>
+                    No record found
+                </Text>
+            </View>
+        )
+    }
+
+    _deleteRecord = async (item) => {
+        var regex;
+        var key;
+        regex = new RegExp(item.time);
+        key = this.state.keys.find(value => regex.test(value));
+        data = this.state.data;
+        var index;
+        for(var i=0 ; i<data.length ; i++){
+            if(data[i].time == item.time){
+                index = i;
+            }
+        }
+        data.splice(index,1);
+        this.setState({
+            data: data,
+        })    
+
+        //Remove from storage
+        try {
+            await AsyncStorage.removeItem(key.toString())
+        } catch(e) {
+            return false;
+        }
+    }
+
     _askToDelete(item){
         Alert.alert(
             "Warning!",
@@ -114,6 +144,7 @@ class RecordHistory extends React.Component{
         );
     }
 
+    //Change state of visible on each save element
     _checkArray(record){
         this.state.selected.find((element) => {
             if (element.key == record.item.time){   
@@ -158,35 +189,16 @@ class RecordHistory extends React.Component{
         }
     }
 
-    _deleteRecord = async (item) => {
-        var regex;
-        var key;
-        regex = new RegExp(item.time);
-        key = this.state.keys.find(value => regex.test(value));
-        data = this.state.data;
-        var index;
-        for(var i=0 ; i<data.length ; i++){
-            if(data[i].time == item.time){
-                index = i;
-            }
-        }
-        data.splice(index,1);
-        this.setState({
-            data: data,
-        })    
 
-        //Remove from storage
-        try {
-            await AsyncStorage.removeItem(key.toString())
-        } catch(e) {
-            return false;
-        }
-    }
 
     _getDate(timestamp){
         return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
     }
 
+
+
+// Render methods ---------------------------------------------------------------------------------------------------------------------
+    
     _renderNameSave(record){
         return(
             <View style={styles.main_container}>
@@ -208,20 +220,6 @@ class RecordHistory extends React.Component{
                     </View>
 
             </View>
-        )
-    }
-
-    _renderOnShare(record){
-        return(
-            <TouchableOpacity 
-            style={styles.button_share}
-            onPress={() => this._onShare(record.item)}
-            >
-                <Image
-                    source={require('../../Images/share.png')}
-                    style={styles.icon}
-                />
-            </TouchableOpacity>
         )
     }
 
@@ -307,35 +305,6 @@ class RecordHistory extends React.Component{
         )
     }
 
-
-    _renderAll(record){
-        let affiche
-        this.state.selected.find((element) => {
-            if (element.key == record.item.time){
-                if(element.visible){
-                    affiche =   <View>
-                                    {this._renderAccelerometer(record)}
-                                    {this._renderGyroscope(record)}
-                                    {this._renderMagnetometer(record)}
-                                    {this._renderBarometer(record)}
-                                    {this._renderPedometer(record)}
-                                    {this._renderDetailButtonUp(record)}
-                                </View>
-                }else{
-                    affiche =  <View>
-                                    {this._renderDetailButtonDown(record)}
-                                </View>
-                }
-            }
-        })
-        return( 
-                <View>
-                    {affiche}     
-                </View>
-            )            
-              
-    }
-
     _renderDetailButtonDown(record){
         return(
             <TouchableOpacity 
@@ -378,7 +347,46 @@ class RecordHistory extends React.Component{
         )
     }
 
+    _renderOnShare(record){
+        return(
+            <TouchableOpacity 
+            style={styles.button_share}
+            onPress={() => this._onShare(record.item)}
+            >
+                <Image
+                    source={require('../../Images/share.png')}
+                    style={styles.icon}
+                />
+            </TouchableOpacity>
+        )
+    }
 
+    _renderAll(record){
+        let affiche
+        this.state.selected.find((element) => {
+            if (element.key == record.item.time){
+                if(element.visible){
+                    affiche =   <View>
+                                    {this._renderAccelerometer(record)}
+                                    {this._renderGyroscope(record)}
+                                    {this._renderMagnetometer(record)}
+                                    {this._renderBarometer(record)}
+                                    {this._renderPedometer(record)}
+                                    {this._renderDetailButtonUp(record)}
+                                </View>
+                }else{
+                    affiche =  <View>
+                                    {this._renderDetailButtonDown(record)}
+                                </View>
+                }
+            }
+        })
+        return( 
+                <View>
+                    {affiche}     
+                </View>
+            )                 
+    }
 
     render(){
 
@@ -409,6 +417,8 @@ class RecordHistory extends React.Component{
 
 }
 
+// Functions ---------------------------------------------------------------------------------------------------------------------
+
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -421,6 +431,9 @@ function round(n) {
     }
     return Math.floor(n * 100) / 100;
   }
+
+
+// CSS ---------------------------------------------------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
     main_container: {
