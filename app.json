@@ -18,14 +18,19 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.iutbayonne2021.Crowdsensing"
+      "bundleIdentifier": "com.iutbayonne.crowdsensing"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.iutbayonne2021.Crowdsensing"
+      "package": "com.iutbayonne.crowdsensing",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCwrG_oWQ-6sbTdZHTsXh4HVI1lkM7GkT0"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
