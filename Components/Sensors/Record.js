@@ -7,13 +7,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+// I direcly use all component sensors in this class because it's hard to update component value in other class
+
 class Record extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
 
-            //Compteur
+            //For make an average of data
             compteur:0,
 
             visible:false,
@@ -59,7 +61,7 @@ class Record extends React.Component{
             currentStepCount: 0,
             pastStepCount: 0,
 
-            //Array
+            //Array which save data
             tableauValeurs:
                                 {
                                     time : 0,
@@ -77,6 +79,7 @@ class Record extends React.Component{
 
 //---------------------------------------------------------------------------------------------------------------------
         
+    //Stop recording sensors
     _unsubscribe = () => {
 
         this._subscriptionAccelerometer && this._subscriptionAccelerometer.remove();
@@ -96,8 +99,9 @@ class Record extends React.Component{
 
     }
 
+    //Start recording sensors
     _subscribe = () => {
-        const smartphoneSensors = this.props.navigation.state.params.selectedSensors
+        const smartphoneSensors = this.props.navigation.state.params.selectedSensors //selected sensors
         let Temps = smartphoneSensors
         let test = []
         for(let i=0;i<Temps.length;i++){
@@ -157,8 +161,8 @@ class Record extends React.Component{
     }
     
 
-    /* FORMAT THE SELECTSENSORS ARRAW TO A MAP */ 
     componentDidMount(){
+        //Format the selectsensors array into a map
         const smartphoneSensors = this.props.navigation.state.params.selectedSensors
         let Temps = smartphoneSensors
         let FormatData=[]
@@ -171,14 +175,22 @@ class Record extends React.Component{
             )
         }
         this.setState({selected:FormatData})
+
+        //Start stopwatch
         this.toggleStopwatch()
+
+        //Record sensors each 5s
         this._interval = setInterval(() => {
             this.setState({compteur: this.state.compteur+1})
-            this._recordSensor()
+            this._saveDatasensor()
         }, 500);
+
+        //Reduce refresh speed of sensors
         this._slowAccelerometer()
         this._slowGyroscope()
         this._slowMagnetometer()
+
+
         this._subscribe()
     }
 
@@ -191,6 +203,7 @@ class Record extends React.Component{
 
 //---------------------------------------------------------------------------------------------------------------------
 
+    //Store sensors data in storage
     _storeData = async () => {
         try {
             let key = "sensorRecord_" + JSON.stringify(this.state.tableauValeurs.time);
@@ -206,7 +219,7 @@ class Record extends React.Component{
         this.state.tableauValeurs.nameSave = value
     }
 
-    /* RENDER EACH SENSORS CHECKED */ 
+    //Render each sensors
     _checkSwitch=(param)=>{
         switch(param) {
         case 'Accelerometer':
@@ -226,6 +239,7 @@ class Record extends React.Component{
         }
     }
 
+    //Navigate to Sensors page
     _PreviousPage(){
         this.props.navigation.navigate("Sensors", { 
             tableauValeurs: this.state.tableauValeurs,
@@ -233,14 +247,17 @@ class Record extends React.Component{
         });
     }
 
+    //Show or hide the save popUp
     _setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     }
 
+    //function if you want to know the record duration
     _GetDuration(){
         return console.log(millisToMinutesAndSeconds(this.state.tableauValeurs[0].time))
     }
 
+    //Make an average of tableauValeurs Array 
     _makeAverage(){
         let accelerometerX = this.state.tableauValeurs.Accelerometer.x / this.state.compteur
         let accelerometerY = this.state.tableauValeurs.Accelerometer.y / this.state.compteur
@@ -257,13 +274,13 @@ class Record extends React.Component{
         let pressure = this.state.tableauValeurs.Barometer.pressure / this.state.compteur
         let relativeAltitude = this.state.tableauValeurs.Barometer.relativeAltitude / this.state.compteur
 
-         this.state.tableauValeurs.Accelerometer.x = accelerometerX
-         this.state.tableauValeurs.Accelerometer.y = accelerometerY
-         this.state.tableauValeurs.Accelerometer.y = accelerometerZ
+        this.state.tableauValeurs.Accelerometer.x = accelerometerX
+        this.state.tableauValeurs.Accelerometer.y = accelerometerY
+        this.state.tableauValeurs.Accelerometer.y = accelerometerZ
 
-         this.state.tableauValeurs.Gyroscope.x = gyroscopeX
-         this.state.tableauValeurs.Gyroscope.y = gyroscopeY
-         this.state.tableauValeurs.Gyroscope.y = gyroscopeZ
+        this.state.tableauValeurs.Gyroscope.x = gyroscopeX
+        this.state.tableauValeurs.Gyroscope.y = gyroscopeY
+        this.state.tableauValeurs.Gyroscope.y = gyroscopeZ
 
         this.state.tableauValeurs.Magnetometer.x = magnetometerX
         this.state.tableauValeurs.Magnetometer.y = magnetometerY
@@ -273,7 +290,8 @@ class Record extends React.Component{
         this.state.tableauValeurs.Barometer.relativeAltitude = relativeAltitude
     }
 
-    _recordSensor(){
+    //Save all data sensors in an array
+    _saveDatasensor(){
         if(this.state.compteur == 1){
             this.setState({
                 tableauValeurs: {
@@ -353,7 +371,7 @@ class Record extends React.Component{
         
     }
 
-//---------------------------------------------------------------------------------------------------------------------
+// SENSORS FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
 
     //Accelerometer
     _slowAccelerometer(){
@@ -416,7 +434,7 @@ class Record extends React.Component{
         }
     }
 
-//--------------------------------------------------------------------------------------------------------------------- 
+// RENDER METHODS --------------------------------------------------------------------------------------------------------------------- 
 
 
     _renderAccelerometer(){
@@ -551,6 +569,9 @@ class Record extends React.Component{
     };
 }
 
+
+// Functions ---------------------------------------------------------------------------------------------------------------------
+
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -563,8 +584,9 @@ function round(n) {
     }
     return Math.floor(n * 100) / 100;
   }
+  
 
-     /* CSS */
+// CSS ---------------------------------------------------------------------------------------------------------------------
 
 const options = {
     text: {
