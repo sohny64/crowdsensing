@@ -1,4 +1,4 @@
-# Crowdsensing
+# Crowdsensing <img src="https://github.com/gabRpt/crowdsensing/blob/main/assets/icon.png" width="25" height="25" />
 Le Crowdsensing est une technique dans laquelle un grand groupe d'individus
 possédant des appareils mobiles capables de collecter des informations (tels que le GPS, la
 luminosité, la caméra...) partagent collectivement ces données pour mesurer, cartographier,
@@ -19,8 +19,7 @@ De plus, la mobilité des humains aide à couvrir une plus grande zone et son in
 permet de mieux comprendre le contexte des données récoltées par rapport aux réseaux de
 capteurs traditionnels.
 
-Modules à installer :
-    react-navigation
-    react-native-gesture-handler
-    react-native-screens
-    react-native-reanimated
+## Documentation
+- [Manuel d'installation](https://github.com/gabRpt/crowdsensing/blob/main/docs/Manuel%20d'installation.pdf)
+- [Manuel de l'utilisateur](https://github.com/gabRpt/crowdsensing/blob/main/docs/Manuel%20de%20l'utilisateur.pdf)
+- [Manuel de maintenance](https://github.com/gabRpt/crowdsensing/blob/main/docs/Manuel%20de%20maintenance.pdf)
