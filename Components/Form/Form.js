@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-easy-toast';
 import AudioRecorder from './RecorderSensor/AudioRecorder';
@@ -30,12 +30,29 @@ class Form extends React.Component{
     _submitForm(){
         //Currently this just displays form answer to the console in JSON format
         //But this will send it to a database in a future version
-        console.log(JSON.stringify(this.state.answers));
-        //Show a toast to inform the user that the form are submit
+        //console.log(JSON.stringify(this.state.answers));
+        fetch("http://192.168.0.16:3000/send-data",{
+            method:"post",
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(
+                this.state.answers
+            )
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            Alert.alert(`${data.name} is saved successfuly`)
+            navigation.navigate("FormList")
+        })
+        .catch(err=>{
+          Alert.alert("someting went wrong")
+      })
+        //Show a toast to inform the user that the form is submitted
         this.toast.show('Form submitted !');
         //Wait 500ms that the toast has been shown
         setTimeout(() => {  this._displayFormList(); }, 500);
-        
+
     }
 
     _displayQuestionsForm(form){
@@ -46,8 +63,8 @@ class Form extends React.Component{
                 //Get input type
                 switch (question.type) {
                     case "text":
-                        input = <TextInput 
-                            style={styles.text_input} 
+                        input = <TextInput
+                            style={styles.text_input}
                             returnKeyType="done"
                             multiline={true}
                             blurOnSubmit={true}
@@ -55,7 +72,7 @@ class Form extends React.Component{
                             onChangeText={(answer) => this.getAnswer(answer, question)}
                         />
                         break;
-                    
+
                     case "audioRecord":
                         input = <AudioRecorder question={question} getAnswer={this.getAnswer}/>
                        break;
@@ -67,7 +84,7 @@ class Form extends React.Component{
                     case "pressure":
                         input = <PressureRecorder question={question} getAnswer={this.getAnswer}/>
                         break;
-                
+
                     default:
                         break;
                 }
@@ -99,9 +116,9 @@ class Form extends React.Component{
                         <Text style={styles.text_button}>Submit</Text>
                     </TouchableOpacity>
                 </ScrollView>
-                <Toast ref={(toast) => this.toast = toast}/> 
+                <Toast ref={(toast) => this.toast = toast}/>
             </View>
-            
+
         );
     };
 }

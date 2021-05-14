@@ -36,7 +36,7 @@ const TabNavigator = createMaterialTopTabNavigator(
             indicatorStyle: { backgroundColor: '#ababab'},
             showLabel: true,
             showIcon: true,
-            
+
         },
         defaultNavigationOptions: ({ navigation }) => ({
             tabBarIcon: () => {
@@ -60,7 +60,7 @@ const TabNavigator = createMaterialTopTabNavigator(
             }
           })
     },
-    
+
 );
 
 //Stack navigator
