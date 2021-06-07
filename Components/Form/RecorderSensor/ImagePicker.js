@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import * as Picker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import {parse, stringify} from 'flatted';
 
 export default class ImagePicker extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            image: undefined
+            image: null
         }
     }
 
@@ -14,50 +16,66 @@ export default class ImagePicker extends React.Component{
         this.setState({ image: image });
     }
 
+    getPermissionAsync = async () => {
+          const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+          if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
+          const { status1 } = await Permissions.askAsync(Permissions.CAMERA);
+          if (status1 !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
+    };
 
+    useEffect(){
+        getPermissionAsync();
+    };
 
     _pickImage = async () => {
         //Ask storage permission to user
-        const { status } = await Picker.requestMediaLibraryPermissionsAsync();
+        /*const { status } = await Picker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
-        } else {
+        } else {*/
             //If permission allowed -> pick picture from storage
             let result = await Picker.launchImageLibraryAsync({
-                mediaTypes: Picker.MediaTypeOptions.All,
-                allowsEditing: true,
+                mediaTypes: Picker.MediaTypeOptions.Images,
+                allowsEditing: false,
+                base64: true,
                 aspect: [4, 3],
                 quality: 1,
               });
-          
+
               if (!result.cancelled) {
-                  //If picture has been picken -> send to the form
+                  //If picture has been picked -> send to the form
+                console.log(stringify(result));
                 this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
               }
-        }
+        //}
     };
 
     _takePicture = async () => {
         //Ask camera permission to user
-        const { status } = await Picker.requestCameraPermissionsAsync();
+        /*const { status } = await Picker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
-        } else {
+        } else {*/
             //If permission allowed -> Take picture
             let result = await Picker.launchCameraAsync({
-                mediaTypes: Picker.MediaTypeOptions.All,
-                allowsEditing: true,
+                mediaTypes: Picker.MediaTypeOptions.Images,
+                allowsEditing: false,
+                base64: true,
                 aspect: [4, 3],
                 quality: 1,
               });
-          
+
               if (!result.cancelled) {
                 //If picture has been taken -> send to the form
                 this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
             }
-        }
+        //}
     }
 
 

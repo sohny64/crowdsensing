@@ -5,6 +5,7 @@ import Toast from 'react-native-easy-toast';
 import AudioRecorder from './RecorderSensor/AudioRecorder';
 import ImagePicker from './RecorderSensor/ImagePicker';
 import PressureRecorder from './RecorderSensor/PressureRecorder';
+import {parse, stringify} from 'flatted';
 
 class Form extends React.Component{
     constructor(props){
@@ -28,25 +29,29 @@ class Form extends React.Component{
     }
 
     _submitForm(){
-        //Currently this just displays form answer to the console in JSON format
-        //But this will send it to a database in a future version
         //console.log(JSON.stringify(this.state.answers));
-        fetch("http://192.168.0.16:3000/send-data",{
+
+        const data = new FormData();
+        data.append('firstName', this.state.answers.firstName);
+        data.append('lastName', this.state.answers.lastName);
+        data.append('pollutionInCity', this.state.answers.pollutionInCity);
+
+        fetch("http://192.168.0.16:3000/send-data/pollution",{
             method:"post",
+            body:data,
             headers:{
-              'Content-Type': 'application/json'
+              'Content-Type': 'multipart/form-data',
             },
-            body:JSON.stringify(
-                this.state.answers
-            )
         })
-        .then(res=>res.json())
+        .then(res=>res.text())
         .then(data=>{
-            Alert.alert(`${data.name} is saved successfuly`)
-            navigation.navigate("FormList")
+            Alert.alert(`Data saved successfuly`)
+            console.log(stringify(this.state.answers.pollutionInCity))
+            this.props.navigation.navigate("FormList")
         })
         .catch(err=>{
-          Alert.alert("someting went wrong")
+          Alert.alert("Something went wrong")
+          console.log(err);
       })
         //Show a toast to inform the user that the form is submitted
         this.toast.show('Form submitted !');
