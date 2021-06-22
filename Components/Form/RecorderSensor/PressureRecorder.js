@@ -10,7 +10,7 @@ export default class PressureRecorder extends React.Component{
         this.state = {
             pressure: null,
         }
-        
+
     }
 
     _subscription = null
@@ -20,7 +20,7 @@ export default class PressureRecorder extends React.Component{
         this._unsubscribe()
     }
 
-    //Stop barometer 
+    //Stop barometer
     _unsubscribe = () => {
         this._subscription && this._subscription.remove();
         this._subscription = null;

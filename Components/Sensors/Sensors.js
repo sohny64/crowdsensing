@@ -9,7 +9,7 @@ import { LogBox } from 'react-native';
 
 
 class Sensors extends React.Component{
-    
+
 
     constructor(props){
         super(props)
@@ -20,7 +20,7 @@ class Sensors extends React.Component{
             permissionsNeeded:[],
             modalVisible: false
         }
-        
+
     }
 
 
@@ -32,11 +32,11 @@ class Sensors extends React.Component{
             this.state.selectedSensors.push(data[index].name)
         }
         else{
-            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);  
+            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);
         }
         this.setState(data)
     }
-    
+
     /*
     _onCheckedWatch(id){
         const data=this.state.watchData
@@ -46,7 +46,7 @@ class Sensors extends React.Component{
             this.state.selectedSensors.push(data[index].name)
         }
         else{
-            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);  
+            this.state.selectedSensors.splice(this.state.selectedSensors.indexOf(data[index].name), 1);
         }
         this.setState(data)
 
@@ -61,9 +61,9 @@ class Sensors extends React.Component{
     }
 
     _NextPage(){
-            this.props.navigation.navigate("Record", { 
+            this.props.navigation.navigate("Record", {
                 selectedSensors: this.state.selectedSensors,
-                permissionsNeeded: this.state.permissionsNeeded 
+                permissionsNeeded: this.state.permissionsNeeded
             });
     }
 
@@ -111,9 +111,9 @@ class Sensors extends React.Component{
     }
 
     _displayHistory = () => {
-        this.props.navigation.navigate("RecordHistory", { 
+        this.props.navigation.navigate("RecordHistory", {
             tableauValeurs: this.state.tableauValeurs,
-            nameSave: this.state.nameSave 
+            nameSave: this.state.nameSave
         });
     }
 
@@ -125,12 +125,12 @@ class Sensors extends React.Component{
                     renderItem={({item}) => <CheckBox containerStyle ={styles.checkbox} textStyle={styles.text_checkbox}
                     title={item.name}
                     checked={item.checked}
-                    onPress={()=>this._onCheckedSmartphone(item.id)}  
+                    onPress={()=>this._onCheckedSmartphone(item.id)}
                     />}
                 />
             )
     }
-    
+
     _renderWatchSensors(){
         return(
             <FlatList
@@ -153,7 +153,7 @@ class Sensors extends React.Component{
             <View style={styles.main_container}>
 
                 <ScrollView >
-    
+
                     <View style={styles.description_container}>
                         <Text style={styles.subhead}>Phone Sensors :</Text>
                         {this._renderSmartphoneSensors()}
@@ -180,9 +180,9 @@ class Sensors extends React.Component{
                 </View>
 
                 <View>
-                    {this._renderPopUp()}  
-                </View>  
-            
+                    {this._renderPopUp()}
+                </View>
+
             </View>
         );
     };
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         borderColor: '#441d59',
         borderWidth: 1,
         paddingLeft: 5,
-            
+
     },
     text_checkbox: {
         color: '#ffffff'

@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import CameraRoll from "@react-native-community/cameraroll";
 import * as Picker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import {parse, stringify} from 'flatted';
@@ -25,6 +26,10 @@ export default class ImagePicker extends React.Component{
           if (status1 !== 'granted') {
             alert('Sorry, we need camera roll permissions to make this work!');
           }
+          const { status2 } = await Permissions.askAsync(Permissions.WRITE_EXTERNAL_STORAGE);
+          if (status2 !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
     };
 
     useEffect(){
@@ -39,7 +44,7 @@ export default class ImagePicker extends React.Component{
         } else {*/
             //If permission allowed -> pick picture from storage
             let result = await Picker.launchImageLibraryAsync({
-                mediaTypes: Picker.MediaTypeOptions.Images,
+                mediaTypes: Picker.MediaTypeOptions.All,
                 allowsEditing: false,
                 base64: true,
                 aspect: [4, 3],
@@ -48,7 +53,6 @@ export default class ImagePicker extends React.Component{
 
               if (!result.cancelled) {
                   //If picture has been picked -> send to the form
-                console.log(stringify(result));
                 this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
               }
@@ -63,17 +67,21 @@ export default class ImagePicker extends React.Component{
         } else {*/
             //If permission allowed -> Take picture
             let result = await Picker.launchCameraAsync({
-                mediaTypes: Picker.MediaTypeOptions.Images,
+                mediaTypes: Picker.MediaTypeOptions.All,
                 allowsEditing: false,
                 base64: true,
                 aspect: [4, 3],
                 quality: 1,
+                storageOptions: {
+                  cameraRoll: false
+                }
               });
 
               if (!result.cancelled) {
                 //If picture has been taken -> send to the form
                 this._setImage(result.uri);
                 this.props.getAnswer(result.uri, this.props.question);
+
             }
         //}
     }

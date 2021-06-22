@@ -9,16 +9,6 @@ export default data = [
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
         sensors: ["Photo sensor"],
         questions: [
-            firstName= {
-                name: "firstName",
-                title: "First name",
-                type: "text"
-            },
-            lastName= {
-                name: "lastName",
-                title: "Last name",
-                type: "text"
-            },
             pollutionInCity= {
                 name: "pollutionInCity",
                 title: "Take a picture of your city.",
@@ -36,16 +26,6 @@ export default data = [
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
         sensors: ["Microphone sensor"],
         questions: [
-            firstName= {
-                name: "firstName",
-                title: "First name",
-                type: "text"
-            },
-            lastName= {
-                name: "lastName",
-                title: "Last name",
-                type: "text"
-            },
             soundPollutionInCity= {
                 name: "soundPollutionInCity",
                 title: "Record sound in your city",
@@ -63,16 +43,6 @@ export default data = [
         description: "You will have to take a few pictures facing the sky of your city. This data will allow us to calculate the pollution of the cities from the colours of the sky and the clouds.",
         sensors: ["Barometer"],
         questions: [
-            firstName= {
-                name: "firstName",
-                title: "First name",
-                type: "text"
-            },
-            lastName= {
-                name: "lastName",
-                title: "Last name",
-                type: "text"
-            },
             pressure= {
                 name: "pressure",
                 title: "Your current atmospheric pressure",

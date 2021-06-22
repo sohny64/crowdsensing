@@ -15,7 +15,7 @@ class RecordHistory extends React.Component{
             recordedKeys: {},
             selected:[]
         }
-        
+
     }
 
 
@@ -38,13 +38,13 @@ class RecordHistory extends React.Component{
             keys.forEach(element => {
 
                 if(!element.includes("undefined") && regex_Key.test(element)){
-                    keysRecorded.push(element)    
+                    keysRecorded.push(element)
                 }
             });
 
             keysRecorded.sort();
-            keysRecorded.reverse();   
-                     
+            keysRecorded.reverse();
+
         } catch(e) {
             alert(e)
         }
@@ -58,7 +58,7 @@ class RecordHistory extends React.Component{
             values.forEach(element => {
                 valuesJSON = valuesJSON + element[1] + ",";
             });
-            
+
             if(valuesJSON != '['){
                 valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
             }else{
@@ -70,7 +70,7 @@ class RecordHistory extends React.Component{
                 data: valuesJSON,
                 keys: keysRecorded
             })
-            
+
         } catch(e) {
             alert(e)
         }
@@ -115,7 +115,7 @@ class RecordHistory extends React.Component{
         data.splice(index,1);
         this.setState({
             data: data,
-        })    
+        })
 
         //Remove from storage
         try {
@@ -136,7 +136,7 @@ class RecordHistory extends React.Component{
                         return false;
                     },
                 },
-                { 
+                {
                     text: "OK",
                     onPress: () => this._deleteRecord(item)
                 }
@@ -147,8 +147,8 @@ class RecordHistory extends React.Component{
     //Change state of visible on each save element
     _checkArray(record){
         this.state.selected.find((element) => {
-            if (element.key == record.item.time){   
-                if(element.visible == true ){  
+            if (element.key == record.item.time){
+                if(element.visible == true ){
                     let elementId = element.id
                     this.setState(prevState => ({
                         selected: prevState.selected.map(
@@ -163,10 +163,10 @@ class RecordHistory extends React.Component{
                             el => el.id === elementId? { ...el, visible: true }: el
                         )
                     }))
-    
+
                 }
             }
-        })  
+        })
     }
 
     _onShare = async (item) => {
@@ -198,7 +198,7 @@ class RecordHistory extends React.Component{
 
 
 // Render methods ---------------------------------------------------------------------------------------------------------------------
-    
+
     _renderNameSave(record){
         return(
             <View style={styles.main_container}>
@@ -227,7 +227,7 @@ class RecordHistory extends React.Component{
         return (
             <View>
                 <Text style={styles.text}>
-                    Accelerometer: 
+                    Accelerometer:
                 </Text>
                 <View style={styles.detail_sensor}>
                     <Text style={styles.text}>
@@ -244,7 +244,7 @@ class RecordHistory extends React.Component{
         return (
             <View>
                 <Text style={styles.text}>
-                    Gyroscope: 
+                    Gyroscope:
                 </Text>
                 <View style={styles.detail_sensor}>
                     <Text style={styles.text}>
@@ -261,7 +261,7 @@ class RecordHistory extends React.Component{
         return (
             <View>
                 <Text style={styles.text}>
-                    Magnetometer: 
+                    Magnetometer:
                 </Text>
                 <View style={styles.detail_sensor}>
                     <Text style={styles.text}>
@@ -278,7 +278,7 @@ class RecordHistory extends React.Component{
         return (
             <View>
                 <Text style={styles.text}>
-                    Barometer: 
+                    Barometer:
                 </Text>
                 <View style={styles.detail_sensor}>
                     <Text style={styles.text}>
@@ -294,7 +294,7 @@ class RecordHistory extends React.Component{
         return (
             <View>
                 <Text style={styles.text}>
-                    Pedometer: 
+                    Pedometer:
                 </Text>
                 <View style={styles.detail_sensor}>
                     <Text style={styles.text}>
@@ -307,7 +307,7 @@ class RecordHistory extends React.Component{
 
     _renderDetailButtonDown(record){
         return(
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.button_arrow}
                     onPress={() => this._checkArray(record)}
             >
@@ -321,7 +321,7 @@ class RecordHistory extends React.Component{
 
     _renderDetailButtonUp(record){
         return(
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.button_arrow}
                     onPress={() => this._checkArray(record)}
             >
@@ -335,7 +335,7 @@ class RecordHistory extends React.Component{
 
     _renderDeleteButton(record){
         return(
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.button_delete}
                     onPress={() => this._askToDelete(record.item)}
             >
@@ -349,7 +349,7 @@ class RecordHistory extends React.Component{
 
     _renderOnShare(record){
         return(
-            <TouchableOpacity 
+            <TouchableOpacity
             style={styles.button_share}
             onPress={() => this._onShare(record.item)}
             >
@@ -381,11 +381,11 @@ class RecordHistory extends React.Component{
                 }
             }
         })
-        return( 
+        return(
                 <View>
-                    {affiche}     
+                    {affiche}
                 </View>
-            )                 
+            )
     }
 
     render(){
@@ -395,7 +395,7 @@ class RecordHistory extends React.Component{
                                   <Text style={styles.title}>
                         Sensors saves{"\n"}
                     </Text>
-                <FlatList 
+                <FlatList
                 data={this.state.data}
                 keyExtractor={(item) => item.time.toString()}
                 ListEmptyComponent={this._listEmptyComponent()}
@@ -404,7 +404,7 @@ class RecordHistory extends React.Component{
 
 
                     <View style={styles.description_container}>
-                        
+
                         {this._renderNameSave(record)}
                         {this._renderAll(record)}
 
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#441d59',
         padding: 10,
         margin:10,
-        borderRadius:10  
+        borderRadius:10
     },
 
     description_container2: {

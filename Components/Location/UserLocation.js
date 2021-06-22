@@ -59,7 +59,7 @@ class UserLocation extends React.Component{
 
             if(this.state.recordedLocations.length > 0){
                 await this._storeRecord();
-            }            
+            }
             this.setState({
                 recordedLocationsTimestamp: 0,
                 isRecording: false,
@@ -69,7 +69,7 @@ class UserLocation extends React.Component{
             this.setState({
                 isRecording: true,
                 recordedLocations: [],
-            })            
+            })
 
             await this._recordLocationInterval();
 
@@ -91,7 +91,7 @@ class UserLocation extends React.Component{
         }
 
         var locationJSON = ["location_" + JSON.stringify(currentLocation.timestamp),currentLocation];
-        
+
         this.state.recordedLocations.push(locationJSON);
         this.setState({
             recordedLocations: this.state.recordedLocations,
@@ -106,7 +106,7 @@ class UserLocation extends React.Component{
             this.toast.show('Record saved !');
         } catch (e) {
           alert(e)
-        }  
+        }
     }
 
     _storeData = async () => {
@@ -118,7 +118,7 @@ class UserLocation extends React.Component{
             this.toast.show('Location saved !');
         } catch (e) {
           alert(e)
-        }  
+        }
     }
 
     _getDate(timestamp){
@@ -134,7 +134,7 @@ class UserLocation extends React.Component{
         this.state.mapMarkers.push(coordinate);
         this.setState({
             mapMarkers: this.state.mapMarkers
-        }); 
+        });
     }
 
     _displayHistory = () => {
@@ -146,15 +146,15 @@ class UserLocation extends React.Component{
             mapMarkers: []
         })
     }
-    
+
     render(){
         /*let Arr = this.state.mapMarkers.map((a, i) => {
             return <Text>{a.latitude}</Text>
-        }) */ 
+        }) */
         return(
             <View style={styles.main_container}>
                 <MapView
-                    style={styles.map} 
+                    style={styles.map}
                     region={this.state.region}
                     showsUserLocation={true}
                     followsUserLocation={true}
@@ -163,7 +163,7 @@ class UserLocation extends React.Component{
                     <MapView.Marker
                         key = {i}
                         coordinate={{
-                            latitude: marker.latitude, 
+                            latitude: marker.latitude,
                             longitude: marker.longitude,
                         }}
                         image={require('../../Images/pin.png')}
@@ -179,12 +179,12 @@ class UserLocation extends React.Component{
                     </Callout>
                     </MapView.Marker>
                 )}
-                 
+
                 </MapView>
-                
-                
+
+
                 <View style={styles.button_container}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.button_record}
                         onPress={() => this._recordLocation()}
                     >
@@ -193,15 +193,15 @@ class UserLocation extends React.Component{
                             style={styles.icon}
                         />
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity 
+
+                    <TouchableOpacity
                         style={styles.button_save}
                         onPress={ () => this._storeData()}
                     >
                         <Text style={styles.text_button}>Save position</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
+                    <TouchableOpacity
                             style={styles.button_history}
                             onPress={() => this._displayHistory()}
                         >
@@ -211,7 +211,7 @@ class UserLocation extends React.Component{
                             />
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.button_trash}
                         onPress={() => this._resetMarkers()}
                     >
@@ -221,8 +221,8 @@ class UserLocation extends React.Component{
                         />
                     </TouchableOpacity>
                 </View>
-                <Toast ref={(toast) => this.toast = toast} position='center'/>                
-            </View>            
+                <Toast ref={(toast) => this.toast = toast} position='center'/>
+            </View>
         );
     };
 }
@@ -252,12 +252,12 @@ const styles = StyleSheet.create({
         height: (Dimensions.get('window').height),
         marginBottom: 0
       },
-    
+
     text_button:{
         color: '#ffffff',
         fontSize: 20
     },
-    
+
     button_record: {
         padding: 10,
         backgroundColor: '#862db3',

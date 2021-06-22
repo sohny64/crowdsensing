@@ -40,11 +40,11 @@ class Record extends React.Component{
             accelerometerX: 0,
             accelerometerY: 0,
             accelerometerZ: 0,
-            
+
             //Barometer
             pressure:0,
-            relativeAltitude:0,           
-            
+            relativeAltitude:0,
+
             //Gyroscope
             gyroscopeX: 0,
             gyroscopeY: 0,
@@ -67,9 +67,9 @@ class Record extends React.Component{
                                     time : 0,
                                     nameSave:undefined,
                                     visible:false,
-                                    currentTime: Date.now(),                               
+                                    currentTime: Date.now(),
                                 }
-        
+
 
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -78,7 +78,7 @@ class Record extends React.Component{
 
 
 //---------------------------------------------------------------------------------------------------------------------
-        
+
     //Stop recording sensors
     _unsubscribe = () => {
 
@@ -108,8 +108,8 @@ class Record extends React.Component{
            switch(Temps[i]){
                 case 'Accelerometer':
                     this.setState({tableauValeurs: test})
-        
-                    this._subscriptionAccelerometer =   
+
+                    this._subscriptionAccelerometer =
                         Accelerometer.addListener(accelerometerData => {
                             this.setState({
                                 accelerometerX: Object.values(accelerometerData)[2],
@@ -126,7 +126,7 @@ class Record extends React.Component{
                                 gyroscopeY: Object.values(gyroscopeData)[1],
                                 gyroscopeZ: Object.values(gyroscopeData)[0],
                             })
-                        }) 
+                        })
                     break
                 case 'Magnetometer':
                     this._subscriptionMagnetometer =
@@ -136,7 +136,7 @@ class Record extends React.Component{
                                 magnetometerY: Object.values(magnetometerData)[1],
                                 magnetometerZ: Object.values(magnetometerData)[0],
                             })
-                        }) 
+                        })
                         break
                 case 'Barometer':
                     this._subscriptionBarometer =
@@ -145,7 +145,7 @@ class Record extends React.Component{
                                 pressure: Object.values(barometerData)[0],
                                 relativeAltitude: Object.values(barometerData)[1],
                             })
-                        }) 
+                        })
                         break
                 case 'Pedometer':
                     this._subscriptionPedometer =
@@ -155,11 +155,11 @@ class Record extends React.Component{
                             })
                         })
                     break
-            }  
+            }
         }
-        
+
     }
-    
+
 
     componentDidMount(){
         //Format the selectsensors array into a map
@@ -213,7 +213,7 @@ class Record extends React.Component{
           } catch (e) {
             console.log("erreur")
           }
-    }; 
+    };
 
     _changeNameSave(value){
         this.state.tableauValeurs.nameSave = value
@@ -233,7 +233,7 @@ class Record extends React.Component{
 
         case 'Magnetometer':
             return ( this._renderMagnetometer() )
-            
+
         case 'Pedometer':
             return ( this._renderPedometer() )
         }
@@ -241,9 +241,9 @@ class Record extends React.Component{
 
     //Navigate to Sensors page
     _PreviousPage(){
-        this.props.navigation.navigate("Sensors", { 
+        this.props.navigation.navigate("Sensors", {
             tableauValeurs: this.state.tableauValeurs,
-            nameSave: this.state.nameSave 
+            nameSave: this.state.nameSave
         });
     }
 
@@ -257,7 +257,7 @@ class Record extends React.Component{
         return console.log(millisToMinutesAndSeconds(this.state.tableauValeurs[0].time))
     }
 
-    //Make an average of tableauValeurs Array 
+    //Make an average of tableauValeurs Array
     _makeAverage(){
         let accelerometerX = this.state.tableauValeurs.Accelerometer.x / this.state.compteur
         let accelerometerY = this.state.tableauValeurs.Accelerometer.y / this.state.compteur
@@ -296,9 +296,9 @@ class Record extends React.Component{
             this.setState({
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
-                    nameSave:undefined,   
-                    visible:false, 
-                    currentTime: Date.now(), 
+                    nameSave:undefined,
+                    visible:false,
+                    currentTime: Date.now(),
                     Accelerometer: {
                         x:this.state.accelerometerX,
                         y:this.state.accelerometerY,
@@ -315,16 +315,16 @@ class Record extends React.Component{
                         x:this.state.magnetometerX,
                         y:this.state.magnetometerY,
                         z:this.state.magnetometerZ,
-                    },   
+                    },
 
                     Barometer:  {
                         pressure:this.state.pressure,
                         relativeAltitude:this.state.relativeAltitude
-                            },     
+                            },
 
-                    Pedometer: {    
+                    Pedometer: {
                         currrentStep:this.state.currentStepCount
-                    }                                    
+                    }
                 }
 
             })
@@ -337,8 +337,8 @@ class Record extends React.Component{
                 tableauValeurs: {
                     time : Date.now()-this.state.currentTime,
                     nameSave:undefined,
-                    visible:false, 
-                    currentTime: Date.now(), 
+                    visible:false,
+                    currentTime: Date.now(),
                     Accelerometer: {
                         x:this.state.tableauValeurs.Accelerometer.x+this.state.accelerometerX,
                         y:this.state.tableauValeurs.Accelerometer.y+this.state.accelerometerY,
@@ -355,20 +355,20 @@ class Record extends React.Component{
                         x:this.state.tableauValeurs.Magnetometer.x+this.state.magnetometerX,
                         y:this.state.tableauValeurs.Magnetometer.y+this.state.magnetometerY,
                         z:this.state.tableauValeurs.Magnetometer.z+this.state.magnetometerZ,
-                    },   
+                    },
 
                     Barometer:  {
                         pressure:this.state.tableauValeurs.Barometer.pressure+this.state.pressure,
                         relativeAltitude:this.state.tableauValeurs.Barometer.relativeAltitude+this.state.relativeAltitude,
-                            },     
-                    Pedometer: {    
+                            },
+                    Pedometer: {
                         currrentStep:this.state.currentStepCount
-                    }                                    
+                    }
                 }
 
             })
         }
-        
+
     }
 
 // SENSORS FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
@@ -377,11 +377,11 @@ class Record extends React.Component{
     _slowAccelerometer(){
         Accelerometer.setUpdateInterval(150);
     };
-    
+
     _mediumAccelerometer(){
         Accelerometer.setUpdateInterval(150);
     };
-    
+
     _fastAccelerometer(){
         Accelerometer.setUpdateInterval(50);
     };
@@ -390,11 +390,11 @@ class Record extends React.Component{
     _slowGyroscope(){
         Gyroscope.setUpdateInterval(150);
     };
-    
+
     _fastGyroscope(){
         Gyroscope.setUpdateInterval(50);
     };
-    
+
     _stopGyroscope(){
         Gyroscope.setUpdateInterval(100000);
     };
@@ -403,11 +403,11 @@ class Record extends React.Component{
     _slowMagnetometer(){
         Magnetometer.setUpdateInterval(150);
     };
-      
+
     _stopMagnetometer(){
         Magnetometer.setUpdateInterval(100000);
     };
-    
+
     _fastMagnetometer(){
         Magnetometer.setUpdateInterval(50);
     };
@@ -417,7 +417,7 @@ class Record extends React.Component{
     toggleStopwatch() {
         this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false})
     }
-    
+
     resetStopwatch() {
         this.setState({stopwatchStart: false, stopwatchReset: true})
     }
@@ -434,7 +434,7 @@ class Record extends React.Component{
         }
     }
 
-// RENDER METHODS --------------------------------------------------------------------------------------------------------------------- 
+// RENDER METHODS ---------------------------------------------------------------------------------------------------------------------
 
 
     _renderAccelerometer(){
@@ -485,7 +485,7 @@ class Record extends React.Component{
     _renderPedometer() {
         return (
           <View style={styles.container_sensor}>
-              
+
             <Text style={styles.text_sensor} >{this.state.currentStepCount}</Text>
           </View>
         );
@@ -517,7 +517,7 @@ class Record extends React.Component{
               <View style={styles.centered_view}>
                 <View style={styles.modal_view}>
                   <Text style={styles.modal_title}>Save data</Text>
-                    <Input 
+                    <Input
                         style={styles.input}
                         placeholder='MySaveName'
                         onChangeText={value => {this.setState({ nameSave: value }); this._changeNameSave(value);}}
@@ -535,7 +535,7 @@ class Record extends React.Component{
     _renderStopWatch() {
         return (
             <View style={styles.timer}>
-            <Stopwatch 
+            <Stopwatch
                 msecs={true}
                 start={this.state.stopwatchStart}
                 reset={this.state.stopwatchReset}
@@ -552,9 +552,9 @@ class Record extends React.Component{
                 <ScrollView >
                     <View style={styles.description_container}>
                         <Text style={styles.subhead}>Sensors selected :</Text>
-                        {this._renderSmartphoneSensorList()}  
+                        {this._renderSmartphoneSensorList()}
                     </View>
-                </ScrollView> 
+                </ScrollView>
 
                 {this._renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
@@ -562,7 +562,7 @@ class Record extends React.Component{
                 </TouchableOpacity>
 
                 <View>
-                    {this._renderPopUp()}                 
+                    {this._renderPopUp()}
                 </View>
             </View>
         );
@@ -584,7 +584,7 @@ function round(n) {
     }
     return Math.floor(n * 100) / 100;
   }
-  
+
 
 // CSS ---------------------------------------------------------------------------------------------------------------------
 
@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
         margin: 20,
         padding: 10
     },
-        
+
     button: {
         padding: 10,
         backgroundColor: '#862db3',
@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginBottom: 10,
-        marginTop: 'auto',     
+        marginTop: 'auto',
     },
 
     text_button:{
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
     container_sensor: {
         paddingHorizontal: 15,
     },
-  
+
     text_sensor: {
         color: '#ffffff',
         fontSize: 14,
@@ -669,7 +669,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5 
+        elevation: 5
     },
     modal_title: {
         fontSize: 25,
@@ -705,4 +705,3 @@ const styles = StyleSheet.create({
 /* ------------------ */
 
 export default Record;
-

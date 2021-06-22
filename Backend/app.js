@@ -98,10 +98,8 @@ app.get('/decibel',(req,res)=>{
 })
 
 //Pressure
-app.post('/send-data/pressure', /*upload.single('pollutionInCity'),*/ (req,res)=>{
+app.post('/send-data/pressure', (req,res)=>{
      const pressure = new Pressure({
-       firstName:req.body.firstName,
-       lastName:req.body.lastName,
        pressure: req.body.pressure
      })
      pressure.save()
