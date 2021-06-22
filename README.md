@@ -1,14 +1,13 @@
-# Crowdsensing <img src="https://github.com/gabRpt/crowdsensing/blob/main/assets/icon.png" width="25" height="25" />
+# Crowdsensing <img src="https://github.com/sohny64/crowdsensing/blob/main/assets/icon.png" width="25" height="25" />
 Le Crowdsensing est une technique dans laquelle un grand groupe d'individus
 possédant des appareils mobiles capables de collecter des informations (tels que le GPS, la
 luminosité, la caméra...) partagent collectivement ces données pour mesurer, cartographier,
 analyser, estimer ou prédire.
 
-Le projet “Crowdsensing” nous a été proposé en semestre 3 par M.Chbeir et M.Allani,
-ce n’est donc pas une reprise du projet de 1ère année. Ce projet est une petite partie d’un
-plus gros projet nommé OpenCEMS visant à apporter des solutions concrètes à la collecte de
-données massives dans un environnement connecté en anticipation de l’arrivée de la 5G
-notamment grâce aux objets connectés et d’automatiser la prise de décision.
+Ce projet est une petite partie d’unplus gros projet nommé OpenCEMS visant à apporter 
+des solutions concrètes à la collecte dedonnées massives dans un environnement connecté 
+en anticipation de l’arrivée de la 5G notamment grâce aux objets connectés et 
+d’automatiser la prise de décision.
 
 Dans ce cadre, le projet Crowdsensing permettra de récolter les données d’une foule de
 capteurs présents dans les smartphones et/ou les montres connectées.
