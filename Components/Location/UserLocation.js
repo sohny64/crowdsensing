@@ -51,6 +51,9 @@ class UserLocation extends React.Component{
             }
         })
     }
+    useEffect(){
+        _getLocation();
+    };
 
     async _recordLocation() {
         if(this.state.isRecording){
@@ -254,20 +257,20 @@ const styles = StyleSheet.create({
       },
 
     text_button:{
-        color: '#ffffff',
+        color: '#fff',
         fontSize: 20
     },
 
     button_record: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#daa520',
         borderRadius: 100,
         marginLeft: '5%'
     },
 
     button_save: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#daa520',
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',

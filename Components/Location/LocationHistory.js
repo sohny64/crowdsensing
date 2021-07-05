@@ -61,7 +61,7 @@ class LocationHistory extends React.Component{
             validKeys.reverse();
 
             keysRecorded.sort();
-            keysRecorded.reverse();            
+            keysRecorded.reverse();
         } catch(e) {
             alert(e)
         }
@@ -75,7 +75,7 @@ class LocationHistory extends React.Component{
             values.forEach(element => {
                 valuesJSON = valuesJSON + element[1] + ",";
             });
-            
+
             if(valuesJSON != '['){
                 valuesJSON = valuesJSON.slice(0, -1) + "]"; //Removing the last ,
             }else{
@@ -106,9 +106,9 @@ class LocationHistory extends React.Component{
             }else{
                 valuesJSON = valuesJSON + "]"; //empty array
             }
-            
+
             valuesJSON = JSON.parse(valuesJSON);
-            
+
         } catch(e) {
             alert(e)
         }
@@ -128,7 +128,7 @@ class LocationHistory extends React.Component{
     }
 
     _returnToMapWithLocation = (latitude, longitude, timestamp) => {
-        this.props.navigation.state.params.returnData(latitude, 
+        this.props.navigation.state.params.returnData(latitude,
                                                       longitude,
                                                       timestamp);
         this.props.navigation.goBack(null);
@@ -145,7 +145,7 @@ class LocationHistory extends React.Component{
                         return false;
                     },
                 },
-                { 
+                {
                     text: "OK",
                     onPress: () => this._deleteLocation(item,isARecord)
                 }
@@ -185,7 +185,7 @@ class LocationHistory extends React.Component{
             data.splice(index,1);
             this.setState({
                 data: data,
-            })    
+            })
         }
 
         //Remove from storage
@@ -217,7 +217,7 @@ class LocationHistory extends React.Component{
                     ListEmptyComponent={this._listEmptyComponent()}
                     renderItem={(location =>
                         <View style={styles.buttons_container}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={styles.history_container}
                                 onPress={() => this._returnToMapWithLocation(location.item.coords.latitude,
                                                                             location.item.coords.longitude,
@@ -240,7 +240,7 @@ class LocationHistory extends React.Component{
                                 </View>
                             </TouchableOpacity>
                             <View style={styles.button_container}>
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     style={styles.button_share}
                                     onPress={() => this._onShare(location.item)}
                                 >
@@ -249,7 +249,7 @@ class LocationHistory extends React.Component{
                                         style={styles.icon}
                                     />
                                 </TouchableOpacity>
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     style={styles.button_delete}
                                     onPress={() => this._askToDelete(location.item,false)}
                                 >
@@ -265,7 +265,7 @@ class LocationHistory extends React.Component{
                 </View>
                 <View
                     style={{
-                        borderBottomColor: '#fff',
+                        borderBottomColor: '#000',
                         borderBottomWidth: 3,
                         marginTop: 20,
                     }}
@@ -280,7 +280,7 @@ class LocationHistory extends React.Component{
                     ListEmptyComponent={this._listEmptyComponent()}
                     renderItem={(locationRecord =>
                         <View style={styles.buttons_container}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={styles.history_container}
                             >
                                 <View style={styles.description_container}>
@@ -294,7 +294,7 @@ class LocationHistory extends React.Component{
                             </TouchableOpacity>
 
                             <View style={styles.button_container}>
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     style={styles.button_share}
                                     onPress={() => this._onShare(locationRecord.item)}
                                 >
@@ -303,7 +303,7 @@ class LocationHistory extends React.Component{
                                         style={styles.icon}
                                     />
                                 </TouchableOpacity>
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     style={styles.button_delete}
                                     onPress={() => this._askToDelete(locationRecord.item,true)}
                                 >
@@ -317,14 +317,14 @@ class LocationHistory extends React.Component{
                     )}
                 />
                 </View>
-            </View> 
+            </View>
         );
     };
 }
 
 const styles = StyleSheet.create({
     main_container: {
-        backgroundColor: '#331245',
+        backgroundColor: '#c19000',
         flex: 1,
     },
 
@@ -335,43 +335,47 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: '#ffffff',
+        color: '#b4b4b4',
         marginBottom: 5
     },
 
     text_emptyList: {
-        color: '#ffffff',
+        color: '#000',
         marginLeft: 10,
         marginTop: 10,
     },
 
     description_container: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#7d5e11',
         marginLeft: 10,
         marginTop: 10,
         padding: 10,
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10
     },
 
     button_container: {
         flexDirection: "row",
-        backgroundColor: '#441d59',
+        backgroundColor: '#7d5e11',
         marginRight: 10,
         marginTop: 10,
         padding: 10,
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderBottomRightRadius: 10,
+        borderTopRightRadius: 10
     },
 
     button_share: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#7d5e11',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
 
     button_delete: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#7d5e11',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -384,13 +388,13 @@ const styles = StyleSheet.create({
     subhead: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: '#fff',
     },
 
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: '#000',
         marginLeft: 10,
         marginTop: 10,
     },

@@ -1,4 +1,4 @@
-# Crowdsensing <img src="https://github.com/gabRpt/crowdsensing/blob/main/assets/icon.png" width="25" height="25" />
+# Crowdsensing <img src="https://github.com/sohny64/crowdsensing/blob/main/assets/icon.png" width="25" height="25" />
 Le Crowdsensing est une technique dans laquelle un grand groupe d'individus
 possédant des appareils mobiles capables de collecter des informations (tels que le GPS, la
 luminosité, la caméra...) partagent collectivement ces données pour mesurer, cartographier,

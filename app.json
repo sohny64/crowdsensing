@@ -4,9 +4,9 @@
     "slug": "Crowdsensing",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icone.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icone.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.iutbayonne.crowdsensing",

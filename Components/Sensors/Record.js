@@ -5,9 +5,10 @@ import { Input } from 'react-native-elements';
 import { Accelerometer, Barometer, Gyroscope, Magnetometer, Pedometer } from 'expo-sensors';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native';
 
 
-// I direcly use all component sensors in this class because it's hard to update component value in other class
+// I directly use all component sensors in this class because it's hard to update component value in other class
 
 class Record extends React.Component{
 
@@ -323,7 +324,7 @@ class Record extends React.Component{
                             },
 
                     Pedometer: {
-                        currrentStep:this.state.currentStepCount
+                        currentStep:this.state.currentStepCount
                     }
                 }
 
@@ -362,7 +363,7 @@ class Record extends React.Component{
                         relativeAltitude:this.state.tableauValeurs.Barometer.relativeAltitude+this.state.relativeAltitude,
                             },
                     Pedometer: {
-                        currrentStep:this.state.currentStepCount
+                        currentStep:this.state.currentStepCount
                     }
                 }
 
@@ -485,7 +486,6 @@ class Record extends React.Component{
     _renderPedometer() {
         return (
           <View style={styles.container_sensor}>
-
             <Text style={styles.text_sensor} >{this.state.currentStepCount}</Text>
           </View>
         );
@@ -546,6 +546,7 @@ class Record extends React.Component{
     }
 
     render(){
+      LogBox.ignoreAllLogs();
         return(
             <View style={styles.main_container}>
 
@@ -558,7 +559,7 @@ class Record extends React.Component{
 
                 {this._renderStopWatch()}
                 <TouchableOpacity style={styles.button} onPress={ () => { this.toggleStopwatch(); this.handleTimerComplete();} }>
-                        <Text style={styles.text_button}>{!this.state.stopwatchStart ? "Start" : "Stop and save"}</Text>
+                        <Text style={styles.text_button}> {!this.state.stopwatchStart ? "Start" : "Stop and save"}</Text>
                 </TouchableOpacity>
 
                 <View>
@@ -598,7 +599,7 @@ const options = {
 const styles = StyleSheet.create({
 
     main_container: {
-            backgroundColor: '#331245',
+            backgroundColor: '#22573e',
             flex: 1
     },
     subhead: {
@@ -609,7 +610,7 @@ const styles = StyleSheet.create({
     },
 
     description_container: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         borderRadius: 20,
         margin: 20,
         padding: 10
@@ -617,7 +618,7 @@ const styles = StyleSheet.create({
 
     button: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#1b3b2b',
         borderRadius: 20,
         width: '70%',
         alignItems: 'center',
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     timer: {
-        backgroundColor: '#331245',
+        backgroundColor: '#1b3b2b',
         alignItems: 'center',
         alignSelf: 'center',
         marginBottom: 10,
@@ -658,18 +659,10 @@ const styles = StyleSheet.create({
     },
     modal_view: {
         margin: 20,
-        backgroundColor: "#241332",
+        backgroundColor: "#183225",
         borderTopRightRadius:60,
         borderBottomLeftRadius:60,
-        padding: 25,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
+        padding: 25
     },
     modal_title: {
         fontSize: 25,

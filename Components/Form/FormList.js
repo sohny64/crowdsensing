@@ -23,7 +23,7 @@ class FormList extends React.Component{
     }
 
     getColors(){
-        
+
         let colors = []; //colors array
         let i = 0;
         //Get colors from all forms. It's use in the FormListItem for the design
@@ -31,7 +31,7 @@ class FormList extends React.Component{
             colors[i] = form.color;
             i++;
         });
-        return colors; 
+        return colors;
     }
 
     render(){
@@ -49,7 +49,7 @@ class FormList extends React.Component{
                             source={require('../../Images/info.png')}
                             style={styles.icon}
                         />
-                    </TouchableOpacity>     
+                    </TouchableOpacity>
                 </View>
                 {/* Pop-up for legal informations */}
                 <Modal
@@ -66,7 +66,7 @@ class FormList extends React.Component{
                         </TouchableOpacity>
                     </View>
                 </Modal>
-                
+
             </View>
         );
     }
@@ -75,7 +75,7 @@ class FormList extends React.Component{
 const styles = StyleSheet.create({
     main_container: {
         flex: 1,
-        backgroundColor: '#441d59',
+        backgroundColor: '#5075a2',
     },
     button_container: {
         position: 'absolute',
@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
         height: 30,
         resizeMode: 'contain',
     },
-    
+
     modal_view: {
         margin: 20,
         height: '95%',
-        backgroundColor: '#241332',
+        backgroundColor: '#2c3a4e',
         borderTopRightRadius:60,
         borderBottomLeftRadius:60,
         padding: 25,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 4,
         elevation: 5,
-        
+
     },
     modal_text: {
         marginTop: 10,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#1a2029',
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',

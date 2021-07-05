@@ -56,7 +56,6 @@ class Form extends React.Component{
         device_id: Math.floor(Math.random() * 100) + 1210,
         sensors:{
           pressure: this.state.answers.pressure.toString() + " Pa",
-          pollution: this.state.answers.pollutionInCity
         },
         datetime: date,
       }),
@@ -152,7 +151,7 @@ class Form extends React.Component{
 
 const styles = StyleSheet.create({
   main_container: {
-    backgroundColor: '#331245',
+    backgroundColor: '#2c3a4e',
     flex: 1
   },
   title_container: {
@@ -171,7 +170,7 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   container: {
-    backgroundColor: '#441d59',
+    backgroundColor: '#1a2029',
     borderRadius: 20,
     margin: 10,
     padding: 10
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
   },
   text_input: {
     color: '#ffffff',
-    backgroundColor: '#70388f',
+    backgroundColor: '#000',
     borderRadius: 20,
     fontSize: 16,
     paddingLeft: 10,
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    backgroundColor: '#862db3',
+    backgroundColor: '#1a2029',
     borderRadius: 20,
     alignItems: 'center',
     alignSelf: 'center',

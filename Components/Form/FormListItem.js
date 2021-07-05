@@ -12,7 +12,7 @@ class FormListItem extends React.Component{
         //Get next form color
         let index = colors.indexOf(this.props.form.color);
         if(index == colors.length-1){
-            return '#441d59';
+            return '#6394cf';
         }
         return colors[index+1];
     }
@@ -22,7 +22,7 @@ class FormListItem extends React.Component{
         return(
             <View style={{backgroundColor: this._getColorNext()}}>
                 <TouchableOpacity style={[styles.main_container,{backgroundColor: form.color}]} onPress={() => displayFormDescription(form)}>
-                    <Text style={styles.date}>{form.publication_date}</Text>
+                    <Text> </Text>
                     <Text style={styles.title}>{form.title}</Text>
                     <Image style={styles.image} source={form.image}/>
                 </TouchableOpacity>
@@ -32,29 +32,24 @@ class FormListItem extends React.Component{
 }
 
 const styles = StyleSheet.create({
-    
+
     main_container: {
         borderBottomLeftRadius: 120,
-    },
-    date: {
-        left: 20,
-        top: 10,
-        fontSize: 18,
-        color: '#ffffff'
     },
     title: {
         left: 50,
         top: 20,
         fontSize: 28,
         fontWeight: "bold",
-        color: '#ffffff'
+        color: '#000000'
     },
     image: {
         width: 90,
         height: 130,
         resizeMode: 'contain',
-        alignSelf: 'flex-end',
-        marginTop: 10,
+        alignSelf: 'center',
+        marginTop: 15,
+        marginBottom: 15,
         opacity: 0.8,
         marginEnd: 10
     }

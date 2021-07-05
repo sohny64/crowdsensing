@@ -16,7 +16,7 @@ export default class AudioRecorder extends React.Component{
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
-    }  
+    }
 
     toggleStopwatch() {
         //Stop the reset and start the stop watch
@@ -35,13 +35,13 @@ export default class AudioRecorder extends React.Component{
             await Audio.setAudioModeAsync({
                 allowsRecordingIOS: true,
                 playsInSilentModeIOS: true,
-            }); 
+            });
             //Start audio recording
             const recording = new Audio.Recording();
             await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
             await recording.startAsync();
             this.setState({ recording: recording, isRecording:true });
-          
+
             //Start and reset timer
             this.resetStopwatch()
             this.toggleStopwatch();
@@ -102,7 +102,7 @@ const options = {
 const styles = StyleSheet.create({
     button: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#2c3a4e',
         borderRadius: 20,
         alignItems: 'center',
         alignSelf: 'center',

@@ -9,7 +9,7 @@ class FormDescription extends React.Component{
 
     _displaySensorsForm(form){
         return(
-            //Display all sensors use in the form 
+            //Display all sensors use in the form
             form.sensors.map((sensor) => {
                 return(<Text style={styles.text} key={sensor.toString()}> -{sensor}</Text>);
             })
@@ -47,7 +47,7 @@ class FormDescription extends React.Component{
 
 const styles = StyleSheet.create({
     main_container: {
-        backgroundColor: '#331245',
+        backgroundColor: '#2c3a4e',
         flex: 1
     },
     title_container: {
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     duration_container: {
         flexDirection: 'row',
-        backgroundColor: '#441d59',
+        backgroundColor: '#1a2029',
         borderRadius: 18,
         margin: 10,
         padding: 10,
@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     description_container: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1a2029',
         borderRadius: 20,
         margin: 10,
         padding: 10
     },
     sensors_container: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1a2029',
         borderRadius: 20,
         margin: 10,
         padding: 10
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        backgroundColor: '#862db3',
+        backgroundColor: '#1a2029',
         borderRadius: 20,
         width: '70%',
         alignItems: 'center',

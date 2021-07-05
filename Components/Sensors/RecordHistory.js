@@ -437,7 +437,7 @@ function round(n) {
 
 const styles = StyleSheet.create({
     main_container: {
-        backgroundColor: '#331245',
+        backgroundColor: '#22573e',
         flex: 1,
     },
 
@@ -464,41 +464,41 @@ const styles = StyleSheet.create({
     },
 
     description_container: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         padding: 10,
         margin:10,
         borderRadius:10
     },
 
     description_container2: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         padding: 10,
     },
 
     button_container: {
         flexDirection: "row",
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
 
     button_share: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         flex: 2,
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
 
     button_delete: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
 
     button_arrow: {
-        backgroundColor: '#441d59',
+        backgroundColor: '#1b3b2b',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
